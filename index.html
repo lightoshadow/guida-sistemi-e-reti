@@ -624,6 +624,81 @@
   /* ── HIGHLIGHT ── */
   .highlight { background: rgba(245,158,11,.3); border-radius: 2px; }
 
+  /* ── SEARCH ENHANCEMENTS ── */
+  .search-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 480px;
+  }
+
+  .search-input-row #search {
+    max-width: none;
+    flex: 1;
+  }
+
+  .search-kbd {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 3px 7px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .search-hint {
+    display: none;
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 6px;
+    max-width: 480px;
+  }
+
+  .search-hint.visible { display: block; }
+
+  /* ── NO-RESULTS ── */
+  #no-results {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+  }
+
+  #no-results.visible { display: block; }
+
+  #no-results p {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  #no-results p em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  #no-results button {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+
+  #no-results button:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+  }
+
   /* ── SCROLL TO TOP ── */
   #back-top {
     position: fixed;
@@ -689,6 +764,7 @@
     <div class="nav-section">Riepilogo</div>
     <a href="#s15">📊 Argomenti più frequenti</a>
     <a href="#checklist">✅ Checklist di studio</a>
+    <a href="#prove-esame">📥 Prove d'esame</a>
     <div class="nav-section">Risorse</div>
     <a href="#libri">📚 Libri di testo</a>
     <a href="#siti">🌐 Siti web</a>
@@ -719,11 +795,21 @@
 
   <!-- Search -->
   <div class="search-wrap">
-    <input id="search" type="search" placeholder="Cerca argomento (es. VLAN, subnetting, firewall…)">
+    <div class="search-input-row">
+      <input id="search" type="search" placeholder="Cerca argomento (es. VLAN, subnetting, firewall…)">
+      <span class="search-kbd">/ per cercare</span>
+    </div>
+    <div class="search-hint" id="search-hint"></div>
   </div>
 
   <!-- Content -->
   <div class="content">
+
+    <!-- No-results message -->
+    <div id="no-results">
+      <p>Nessun argomento trovato per <em id="no-results-query"></em></p>
+      <button onclick="clearSearch()">Cancella ricerca</button>
+    </div>
 
     <!-- SECTION 1 -->
     <div class="section" id="s1">
@@ -1578,38 +1664,98 @@ window.addEventListener('scroll', () => {
 }, {passive:true});
 
 // ── SEARCH ──
-document.getElementById('search').addEventListener('input', function() {
-  const q = this.value.trim().toLowerCase();
+const searchInput = document.getElementById('search');
+const searchHint = document.getElementById('search-hint');
+const noResults = document.getElementById('no-results');
+const noResultsQuery = document.getElementById('no-results-query');
+
+function clearSearch() {
+  searchInput.value = '';
+  runSearch('');
+  searchInput.focus();
+}
+
+function runSearch(q) {
+  // Remove existing highlights
+  document.querySelectorAll('.section-body').forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/<mark class="highlight">(.*?)<\/mark>/gs, '$1');
+  });
+
   if (!q) {
     document.querySelectorAll('.topic-item').forEach(el => el.style.display = '');
-    document.querySelectorAll('.section-body').forEach(el => {
-      el.innerHTML = el.innerHTML.replace(/<mark class="highlight">(.*?)<\/mark>/g, '$1');
-    });
+    document.querySelectorAll('.section').forEach(sec => sec.style.display = '');
+    searchHint.classList.remove('visible');
+    noResults.classList.remove('visible');
     return;
   }
+
+  let matchedSections = 0;
+
   document.querySelectorAll('.section').forEach(sec => {
     const items = sec.querySelectorAll('.topic-item');
-    let anyVisible = false;
+    const sectionTitleEl = sec.querySelector('.section-title');
+    const sectionTitleText = sectionTitleEl ? sectionTitleEl.textContent.toLowerCase() : '';
+    const sectionMatches = sectionTitleText.includes(q);
+    let anyVisible = sectionMatches;
+
     items.forEach(item => {
       const text = item.textContent.toLowerCase();
-      if (text.includes(q)) {
+      if (text.includes(q) || sectionMatches) {
         item.style.display = '';
         anyVisible = true;
       } else {
         item.style.display = 'none';
       }
     });
-    // auto-open sections with results
+
     if (anyVisible) {
+      sec.style.display = '';
+      matchedSections++;
       const header = sec.querySelector('.section-header');
       const body = sec.querySelector('.section-body');
       if (header && body) {
         header.classList.add('open');
         body.classList.add('open');
       }
+    } else {
+      sec.style.display = 'none';
     }
   });
-}, {passive:true});
+
+  const matchedTopics = [...document.querySelectorAll('.topic-item')].filter(i => i.style.display !== 'none').length;
+
+  // Update hint
+  searchHint.textContent = `Trovati ${matchedTopics} argomenti in ${matchedSections} sezioni — premi Esc per cancellare`;
+  searchHint.classList.add('visible');
+
+  // No-results state
+  if (matchedTopics === 0 && matchedSections === 0) {
+    noResultsQuery.textContent = `«${searchInput.value.trim()}»`;
+    noResults.classList.add('visible');
+  } else {
+    noResults.classList.remove('visible');
+  }
+}
+
+searchInput.addEventListener('input', function() {
+  runSearch(this.value.trim().toLowerCase());
+}, {passive: true});
+
+// Esc key: clear search
+searchInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    clearSearch();
+  }
+});
+
+// '/' shortcut: focus search when not already in an input
+document.addEventListener('keydown', function(e) {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
 </script>
 </body>
 </html>
