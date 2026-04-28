@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistemi e Reti — Guida Esame di Stato</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d2e;
+    --bg3: #242740;
+    --border: #2e3250;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --green: #34d399;
+    --orange: #f59e0b;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --sidebar-w: 270px;
+    --radius: 10px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform .3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 20px 16px 14px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg2);
+    z-index: 1;
+  }
+
+  .sidebar-header .logo {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-header .subtitle {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  #sidebar nav { padding: 10px 0 20px; flex: 1; }
+
+  #sidebar nav a {
+    display: block;
+    padding: 7px 16px;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+  }
+
+  #sidebar nav a:hover,
+  #sidebar nav a.active {
+    color: var(--text);
+    background: var(--bg3);
+    border-left-color: var(--accent);
+  }
+
+  #sidebar nav .nav-section {
+    padding: 12px 16px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+  }
+
+  /* ── MAIN ── */
+  main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ── TOPBAR (mobile) ── */
+  #topbar {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #menu-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  #topbar .topbar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 40px;
+  }
+
+  .hero h1 {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .hero p {
+    color: var(--text2);
+    max-width: 720px;
+    font-size: 14px;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-blue { background: rgba(79,142,247,.15); color: var(--accent); border: 1px solid rgba(79,142,247,.3); }
+  .badge-green { background: rgba(52,211,153,.15); color: var(--green); border: 1px solid rgba(52,211,153,.3); }
+  .badge-orange { background: rgba(245,158,11,.15); color: var(--orange); border: 1px solid rgba(245,158,11,.3); }
+  .badge-purple { background: rgba(124,92,252,.15); color: var(--accent2); border: 1px solid rgba(124,92,252,.3); }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  #search {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 9px 14px 9px 36px;
+    font-size: 14px;
+    font-family: var(--font);
+    outline: none;
+    transition: border-color .2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.44 1.406a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+  }
+
+  #search:focus { border-color: var(--accent); }
+
+  /* ── CONTENT ── */
+  .content { padding: 32px 40px 60px; }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg2);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--bg2);
+    border-bottom: 1px solid transparent;
+    transition: background .15s;
+  }
+
+  .section-header:hover { background: var(--bg3); }
+
+  .section-header.open { border-bottom-color: var(--border); }
+
+  .section-num {
+    min-width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .section-chevron {
+    color: var(--text3);
+    font-size: 18px;
+    transition: transform .25s;
+  }
+
+  .section-header.open .section-chevron { transform: rotate(90deg); }
+
+  .section-body {
+    display: none;
+    padding: 20px 22px;
+  }
+
+  .section-body.open { display: block; }
+
+  .section-intro {
+    color: var(--text2);
+    font-size: 13.5px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── TOPIC ITEMS ── */
+  .topic-item {
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color .15s;
+  }
+
+  .topic-item:hover { border-color: rgba(79,142,247,.4); }
+
+  .topic-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .topic-name code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg3);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--orange);
+  }
+
+  .topic-desc {
+    color: var(--text2);
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .years-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+
+  .year-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .year-all { background: rgba(52,211,153,.15); color: var(--green); }
+  .year-multi { background: rgba(79,142,247,.15); color: var(--accent); }
+  .year-single { background: rgba(100,116,139,.12); color: var(--text3); }
+
+  /* ── FREQUENCY TABLE ── */
+  .freq-table-wrap { overflow-x: auto; }
+
+  .freq-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .freq-table th {
+    background: var(--bg3);
+    color: var(--text2);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .freq-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .freq-table tr:last-child td { border-bottom: none; }
+  .freq-table tr:hover td { background: var(--bg3); }
+
+  .freq-bar-wrap { display: flex; align-items: center; gap: 8px; }
+
+  .freq-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    min-width: 4px;
+  }
+
+  .freq-label { font-size: 11px; color: var(--text3); white-space: nowrap; }
+
+  .rank-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--bg3);
+    color: var(--text3);
+  }
+
+  .rank-num.top3 { background: linear-gradient(135deg, var(--orange), #f97316); color: #fff; }
+
+  /* ── CHECKLIST ── */
+  .checklist-section { margin-bottom: 24px; }
+
+  .checklist-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .12s;
+    margin-bottom: 2px;
+  }
+
+  .check-item:hover { background: var(--bg3); }
+
+  .check-item input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--green);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .check-item label {
+    font-size: 13.5px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: color .12s;
+    flex: 1;
+  }
+
+  .check-item.checked label {
+    color: var(--text3);
+    text-decoration: line-through;
+  }
+
+  .progress-wrap {
+    background: var(--bg3);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--green), var(--accent));
+    transition: width .4s ease;
+  }
+
+  .progress-text { font-size: 13px; color: var(--text2); white-space: nowrap; }
+
+  .progress-pct { font-weight: 700; color: var(--green); }
+
+  /* ── RESOURCES ── */
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .res-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color .15s, transform .15s;
+  }
+
+  .res-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .res-card a { text-decoration: none; }
+
+  .res-card .res-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .res-card .res-desc {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .res-card .res-tag {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .res-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .res-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .books-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 10px; }
+  .books-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--bg3);
+    color: var(--text3);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .books-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  .books-table tr:last-child td { border-bottom: none; }
+  .books-table tr:hover td { background: var(--bg3); }
+  .books-table .book-title { font-weight: 700; color: var(--text); }
+  .books-table .isbn { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+  .tool-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+
+  .tool-card .tool-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tool-card .tool-desc { font-size: 13px; color: var(--text2); margin-bottom: 10px; }
+
+  .tool-card ul { list-style: none; }
+  .tool-card ul li {
+    font-size: 13px;
+    color: var(--text2);
+    padding: 3px 0 3px 16px;
+    position: relative;
+  }
+  .tool-card ul li::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .tool-card code { font-family: var(--mono); font-size: 11.5px; background: var(--bg3); padding: 1px 5px; border-radius: 4px; color: var(--orange); }
+
+  .netacad-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .netacad-table th {
+    text-align: left; padding: 8px 12px;
+    background: var(--bg3); color: var(--text3);
+    font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .netacad-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text2); }
+  .netacad-table tr:last-child td { border-bottom: none; }
+  .level-base { color: var(--green); font-weight: 600; }
+  .level-mid { color: var(--orange); font-weight: 600; }
+
+  /* ── VIDEO CARDS ── */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .video-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    transition: border-color .15s;
+  }
+
+  .video-card:hover { border-color: var(--accent); }
+
+  .video-card .vc-name { font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+  .video-card .vc-lang { font-size: 11px; margin-bottom: 6px; }
+  .video-card .vc-desc { font-size: 12.5px; color: var(--text2); }
+
+  /* ── OVERLAY (mobile sidebar backdrop) ── */
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 99;
+  }
+
+  /* ── HIGHLIGHT ── */
+  .highlight { background: rgba(245,158,11,.3); border-radius: 2px; }
+
+  /* ── SCROLL TO TOP ── */
+  #back-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 200;
+    box-shadow: 0 4px 16px rgba(79,142,247,.4);
+  }
+
+  #back-top.visible { opacity: 1; pointer-events: all; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: none; }
+    #overlay.open { display: block; }
+    main { margin-left: 0; }
+    #topbar { display: flex; }
+    .hero { padding: 28px 20px; }
+    .search-wrap { padding: 12px 20px; top: 52px; }
+    .content { padding: 20px 16px 60px; }
+    .res-grid { grid-template-columns: 1fr; }
+    .video-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="overlay"></div>
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">📡 Sistemi e Reti</div>
+    <div class="subtitle">Guida Esame di Stato ITIS</div>
+  </div>
+  <nav id="nav">
+    <div class="nav-section">Argomenti</div>
+    <a href="#s1">1. Architettura di rete</a>
+    <a href="#s2">2. Indirizzamento IP & Subnetting</a>
+    <a href="#s3">3. LAN, VLAN & Cablaggio</a>
+    <a href="#s4">4. Reti Wireless (Wi-Fi)</a>
+    <a href="#s5">5. Routing e Switching</a>
+    <a href="#s6">6. Sicurezza delle reti</a>
+    <a href="#s7">7. Protocolli & Servizi</a>
+    <a href="#s8">8. VPN & Connessioni sicure</a>
+    <a href="#s9">9. Server & Infrastruttura</a>
+    <a href="#s10">10. Cloud & Virtualizzazione</a>
+    <a href="#s11">11. IoT</a>
+    <a href="#s12">12. Socket & Programmazione</a>
+    <a href="#s13">13. Fibra ottica & Radio</a>
+    <a href="#s14">14. Privacy & GDPR</a>
+    <div class="nav-section">Riepilogo</div>
+    <a href="#s15">📊 Argomenti più frequenti</a>
+    <a href="#checklist">✅ Checklist di studio</a>
+    <div class="nav-section">Risorse</div>
+    <a href="#libri">📚 Libri di testo</a>
+    <a href="#siti">🌐 Siti web</a>
+    <a href="#tools">🛠 Strumenti</a>
+    <a href="#video">🎬 Video & Canali</a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main>
+  <!-- Topbar (mobile) -->
+  <div id="topbar">
+    <button id="menu-btn" aria-label="Menu">☰</button>
+    <span class="topbar-title">Sistemi e Reti — Esame di Stato</span>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Sistemi e Reti<br>Esame di Stato ITIS</h1>
+    <p>Guida completa ricavata dall'analisi di tutte le tracce ufficiali, simulazioni e soluzioni dal 2016 al 2024. Ogni argomento riporta gli anni in cui è comparso per aiutarti a prioritizzare lo studio.</p>
+    <div class="hero-badges">
+      <span class="badge badge-blue">📋 15 tracce analizzate</span>
+      <span class="badge badge-green">📅 2016 – 2024</span>
+      <span class="badge badge-orange">🎯 ITIA + ITTL</span>
+      <span class="badge badge-purple">✅ Checklist interattiva</span>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <input id="search" type="search" placeholder="Cerca argomento (es. VLAN, subnetting, firewall…)">
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- SECTION 1 -->
+    <div class="section" id="s1">
+      <div class="section-header open" onclick="toggleSection(this)">
+        <div class="section-num">1</div>
+        <div class="section-title">Architettura di rete e progettazione</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body open">
+        <p class="section-intro">La progettazione dell'infrastruttura di rete è il fulcro di quasi ogni esame. Il candidato deve saper descrivere, disegnare e motivare l'architettura proposta.</p>
+        <div class="topic-item">
+          <div class="topic-name">Schema logico/fisico della rete</div>
+          <div class="topic-desc">Capacità di rappresentare graficamente switch, router, firewall, server, access point e le loro interconnessioni.</div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami 2016–2024</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Suddivisione in sottoreti con scopi diversi</div>
+          <div class="topic-desc">Rete amministrativa vs. didattica, ospiti vs. interna, IoT separata dalla rete dati — motivazione delle scelte di separazione logica e fisica.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">M047/2016</span><span class="year-tag year-multi">Sim-1/2-2018</span><span class="year-tag year-multi">2022 (tutte)</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Architettura multi-sede / campus</div>
+          <div class="topic-desc">Connessione tra edifici sullo stesso campus o tra sedi distanti tramite VPN, WAN, fibra o radio.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Suplettiva-2018</span><span class="year-tag year-multi">Sim-Zanichelli</span><span class="year-tag year-multi">Ordinaria-2019</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Data Center</div>
+          <div class="topic-desc">Centralizzazione dei server, ridondanza, fault tolerance, business continuity.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Suplettiva-2018</span><span class="year-tag year-multi">ITIA_ORD18</span><span class="year-tag year-multi">A038_ORD24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">DMZ (Demilitarized Zone)</div>
+          <div class="topic-desc">Zona per server pubblici (web, mail) separata dalla rete interna tramite firewall. Fondamentale per la sicurezza perimetrale.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">Sim-Majorana</span><span class="year-tag year-multi">Suppletiva-2024</span><span class="year-tag year-multi">ITIA_ORD18</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Topologie di rete</div>
+          <div class="topic-desc">Stella, bus, anello, albero — caratteristiche, vantaggi e applicazioni pratiche di ciascuna.</div>
+          <div class="years-wrap"><span class="year-tag year-single">simulazioni didattiche</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Cablaggio strutturato (EIA/TIA-568)</div>
+          <div class="topic-desc">Distribuzione orizzontale (CAT5e/CAT6/CAT6A), distribuzione verticale (dorsale in fibra), centri stella di piano, patch panel, armadi rack.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2022 (tutte)</span><span class="year-tag year-multi">Sim-1/2-2024</span><span class="year-tag year-multi">Suppletiva-2024</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Connettività ISP</div>
+          <div class="topic-desc">Scelta e confronto tra ADSL, FTTC, FTTH, fibra dedicata; gestione di una linea di backup.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">M047/2016</span><span class="year-tag year-multi">Sim-1-2018</span><span class="year-tag year-multi">Ordinaria-2022 III</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section" id="s2">
+      <div class="section-header open" onclick="toggleSection(this)">
+        <div class="section-num">2</div>
+        <div class="section-title">Indirizzamento IP e Subnetting</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body open">
+        <p class="section-intro">L'indirizzamento è presente in forma pratica in ogni singola traccia. Il candidato deve saper calcolare e assegnare indirizzi in modo corretto — senza calcolatore.</p>
+        <div class="topic-item">
+          <div class="topic-name">Classi di indirizzi IP e indirizzi privati</div>
+          <div class="topic-desc">RFC 1918: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code></div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Notazione CIDR e subnet mask</div>
+          <div class="topic-desc">Calcolo di indirizzo di rete, broadcast, range host, numero di host utilizzabili da una notazione CIDR.</div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Subnetting</div>
+          <div class="topic-desc">Divisione di uno spazio di indirizzi in sottoreti di dimensione appropriata al numero di host richiesto.</div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami</span><span class="year-tag year-multi">A038_ORD24 (piano /16)</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">VLSM (Variable Length Subnet Masking)</div>
+          <div class="topic-desc">Ottimizzazione dell'uso degli indirizzi assegnando maschere di lunghezza variabile in base alle dimensioni delle sottoreti.</div>
+          <div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2022 III (esplicito)</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">IPv4 statico vs. DHCP dinamico</div>
+          <div class="topic-desc">Quando usare indirizzi statici (server, stampanti) e quando il DHCP; configurazione scope e opzioni.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-all">tutti gli esami</span><span class="year-tag year-multi">Suplettiva-2018</span><span class="year-tag year-multi">Hoepli-sim</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">NAT / PAT e port forwarding</div>
+          <div class="topic-desc">Traduzione degli indirizzi privati verso un IP pubblico. Port forwarding per esporre servizi interni (HTTP 80, HTTPS 443, SSH 22).</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">A038_ORD24 (quesito III)</span><span class="year-tag year-multi">Sim-2016</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Tabelle di routing</div>
+          <div class="topic-desc">Lettura e compilazione manuale: destinazione, maschera, next-hop, interfaccia.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2022 (tutte)</span><span class="year-tag year-multi">Suplettiva-2018</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Piano di indirizzamento completo</div>
+          <div class="topic-desc">Presentazione in tabella: rete, maschera, gateway, range host, broadcast, uso.</div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section" id="s3">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">3</div>
+        <div class="section-title">Reti locali: LAN, VLAN e Cablaggio</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item">
+          <div class="topic-name">LAN Ethernet (802.3)</div>
+          <div class="topic-desc">Standard 802.3, velocità: Fast Ethernet 100 Mbps, Gigabit, 10 Gigabit. Switch, half-duplex/full-duplex, collision domain vs. broadcast domain.</div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">VLAN (Virtual LAN) — 802.1Q</div>
+          <div class="topic-desc">Configurazione di VLAN su switch amministrabili per separare il traffico logicamente. Porte access vs. trunk, tag 802.1Q, inter-VLAN routing.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">M047/2016</span><span class="year-tag year-multi">Sim-1/2-2018</span><span class="year-tag year-multi">Ordinaria-2022</span><span class="year-tag year-multi">Suppletiva-2024</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Switch amministrabile vs. non amministrabile</div>
+          <div class="topic-desc">Differenze di funzionalità e scenari d'uso. Lo switch administrabile supporta VLAN, STP, port mirroring, SNMP.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Sim-2-2024</span><span class="year-tag year-multi">Sim-Zanichelli</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">VoIP</div>
+          <div class="topic-desc">Integrazione della telefonia IP nella rete dati. VLAN dedicata per VoIP, QoS, standard SIP/H.323.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2022 II</span><span class="year-tag year-multi">Sim-1-2024</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Ridondanza LAN (STP, link aggregation)</div>
+          <div class="topic-desc">Spanning Tree Protocol per evitare loop, link aggregation (LACP) per aumentare la banda e la ridondanza.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2022 III</span><span class="year-tag year-multi">Suplettiva-2018</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section" id="s4">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">4</div>
+        <div class="section-title">Reti Wireless (Wi-Fi)</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item">
+          <div class="topic-name">Standard IEEE 802.11</div>
+          <div class="topic-desc">Confronto: 802.11b (11 Mbps), g (54 Mbps), n (300 Mbps), ac/Wi-Fi 5, ax/Wi-Fi 6. Bande 2.4 GHz e 5 GHz, canali non sovrapposti, interferenze.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Sim-1-2018</span><span class="year-tag year-multi">Sim-1-2019</span><span class="year-tag year-multi">Ordinaria-2022</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Sicurezza Wi-Fi: WEP → WPA3</div>
+          <div class="topic-desc">
+            <strong>WEP</strong>: obsoleto, chiave RC4 statica, vulnerabile.<br>
+            <strong>WPA/WPA2 Personal (PSK)</strong>: TKIP poi AES-CCMP.<br>
+            <strong>WPA2 Enterprise (802.1X)</strong>: autenticazione per utente via RADIUS.<br>
+            <strong>WPA3</strong>: SAE (Simultaneous Authentication of Equals), Forward Secrecy.
+          </div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Sim-1-2018 (WEP)</span><span class="year-tag year-multi">Sim-2-2024</span><span class="year-tag year-multi">A038_STR24 (quesito III)</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">BYOD (Bring Your Own Device)</div>
+          <div class="topic-desc">Gestione dispositivi personali: segmentazione su VLAN ospiti, captive portal, NAC, policy di accesso.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">M047/2016</span><span class="year-tag year-multi">Ordinaria-2022 I e III</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Captive Portal</div>
+          <div class="topic-desc">Autenticazione via browser per ospiti (hotel, scuola, università). Redirect HTTP, pagina di login, token temporaneo.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Sim-1-2024</span><span class="year-tag year-multi">Ordinaria-2024 (ITTL)</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Link budget wireless</div>
+          <div class="topic-desc">Calcolo del margine di collegamento: potenza TX, guadagno antenna, attenuazione percorso (FSPL), sensibilità RX, margine di fade.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Sim-1-2019</span><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">Sim-2-2019</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section" id="s5">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">5</div>
+        <div class="section-title">Routing e Switching</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item">
+          <div class="topic-name">Routing statico</div>
+          <div class="topic-desc">Configurazione manuale delle route: <code>ip route</code>, default gateway, next-hop. Obbligatorio in ogni esame.</div>
+          <div class="years-wrap"><span class="year-tag year-all">tutti gli esami</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Routing dinamico: RIP</div>
+          <div class="topic-desc">Distance-vector, max 15 hop, convergenza lenta, broadcast aggiornamenti ogni 30 s. Semplice ma limitato.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2016 (ITTL)</span><span class="year-tag year-multi">Hoepli-sim</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Routing dinamico: OSPF</div>
+          <div class="topic-desc">Link-state, algoritmo Dijkstra (SPF), gerarchico con aree, convergenza rapida, scalabile su reti grandi.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2016 (ITTL)</span><span class="year-tag year-multi">Sim-Zanichelli</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Inter-VLAN routing (router-on-a-stick)</div>
+          <div class="topic-desc">Sub-interfacce sul router per instradare il traffico tra VLAN diverse tramite un unico link trunk verso lo switch.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Suppletiva-2024</span><span class="year-tag year-multi">Sim-2-2024</span><span class="year-tag year-multi">Ordinaria-2022</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section" id="s6">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">6</div>
+        <div class="section-title">Sicurezza delle reti</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <p class="section-intro">La sicurezza è trasversale a tutte le tracce. Compare sia come parte integrante del progetto sia come quesito autonomo nella seconda parte.</p>
+        <div class="topic-item">
+          <div class="topic-name">Firewall</div>
+          <div class="topic-desc">Tipologie: packet filter, stateful inspection, application layer (proxy), Next-Gen Firewall (NGFW). Regole ACL, posizionamento in rete, zone trust/untrust.</div>
+          <div class="years-wrap"><span class="year-tag year-all">~12 esami</span><span class="year-tag year-multi">A038_STR24 (quesito IV)</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Crittografia simmetrica e asimmetrica</div>
+          <div class="topic-desc">Simmetrica: AES, 3DES — stessa chiave per cifrare/decifrare. Asimmetrica: RSA, Diffie-Hellman, ECC — coppia chiave pubblica/privata. Crittografia ibrida: combina entrambe.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">M047/2016 III</span><span class="year-tag year-multi">Sim-2-2024</span><span class="year-tag year-multi">Suplettiva-2019</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Firma digitale e PKI</div>
+          <div class="topic-desc">Hash del documento cifrato con chiave privata. Certificati X.509, Certification Authority, catena di fiducia.</div>
+          <div class="years-wrap"><span class="year-tag year-multi">Sim-2-2024 (quesito II)</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">SSL/TLS e HTTPS</div>
+          <div class="topic-desc">Handshake TLS: scambio certificati, negoziazione cifrario, sessione simmetrica. HTTPS = HTTP su TLS/443. Differenza con HTTP/80.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2024 (ITTL)</span><span class="year-tag year-multi">A038_ORD24</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Autenticazione (password, MFA, RADIUS)</div>
+          <div class="topic-desc">Password policy, autenticazione a due fattori (OTP, certificato, biometria), server RADIUS per autenticazione centralizzata (802.1X Wi-Fi e VPN).</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">A038_ORD24 (quesito II)</span><span class="year-tag year-multi">Sim-1-2024</span><span class="year-tag year-multi">Ordinaria-2016</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Attacchi e minacce</div>
+          <div class="topic-desc">
+            <strong>MitM</strong>: intercettazione/alterazione comunicazioni.<br>
+            <strong>Phishing</strong>: ingegneria sociale via email.<br>
+            <strong>Ransomware</strong>: cifratura dati, backup come difesa.<br>
+            <strong>Malware/Virus</strong>: rilevamento, antivirus, policy.<br>
+            <strong>DoS/DDoS</strong>: saturazione servizi.<br>
+            <strong>Spam</strong>: filtri antispam, greylisting.
+          </div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2022 I</span><span class="year-tag year-multi">Sim-1-2024</span><span class="year-tag year-multi">Sim-2-2024</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Business continuity e fault tolerance</div>
+          <div class="topic-desc">Ridondanza hardware, cluster, backup (full/incrementale/differenziale), disaster recovery, RTO (Recovery Time Objective), RPO (Recovery Point Objective).</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">ITIA_ORD18</span><span class="year-tag year-multi">A038_ORD24 I</span><span class="year-tag year-multi">Suplettiva-2018</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">IDS / IPS</div>
+          <div class="topic-desc">Intrusion Detection System (rilevamento passivo) vs. Intrusion Prevention System (blocco attivo). Posizionamento nella rete, firma vs. anomalia.</div>
+          <div class="years-wrap"><span class="year-tag year-single">materiali didattici, soluzioni simulazioni</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section" id="s7">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">7</div>
+        <div class="section-title">Protocolli applicativi e servizi di rete</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item">
+          <div class="topic-name">DHCP — Sequenza DORA</div>
+          <div class="topic-desc"><strong>Discover → Offer → Request → Acknowledge</strong>. Lease time, scope, opzioni (gateway, DNS, NTP). DHCP relay agent per subnet multiple.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2016</span><span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">Suplettiva-2018</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">DNS</div>
+          <div class="topic-desc">Risoluzione nomi → IP. Record: A, AAAA, MX, CNAME, PTR, NS, SOA. Zone primarie/secondarie, risoluzione ricorsiva e iterativa. Vulnerabilità: DNS poisoning, DNS hijacking.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">Sim-1-2024</span><span class="year-tag year-multi">A038_ORD24 IV</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">HTTP / HTTPS</div>
+          <div class="topic-desc">Metodi GET/POST, header principali, codici di stato (200, 301, 404, 500). Differenze HTTP vs HTTPS, porte 80 e 443.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2024</span><span class="year-tag year-multi">A038_ORD24 III</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">Posta elettronica: SMTP, IMAP, POP3</div>
+          <div class="topic-desc">SMTP (porta 25/587): invio e relay. IMAP (143/993): accesso al server, messaggi sincronizzati. POP3 (110/995): download locale. S/MIME, SPF, DKIM per sicurezza.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">ITIA_ORD18</span><span class="year-tag year-multi">A038_STR24</span><span class="year-tag year-multi">Hoepli-sim</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">SSH</div>
+          <div class="topic-desc">Accesso remoto sicuro (porta 22). Autenticazione a chiave pubblica/privata o password. Rimpiazza Telnet. Tunneling SSH.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">A038_ORD24 III</span><span class="year-tag year-multi">Suppletiva-2024</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">TCP vs UDP</div>
+          <div class="topic-desc">TCP: connesso, affidabile, controllo di flusso e congestione, three-way handshake (SYN → SYN-ACK → ACK). UDP: non connesso, veloce, nessuna garanzia di consegna.</div>
+          <div class="years-wrap"><span class="year-tag year-all">base teorica di tutti gli esami</span></div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">ICMP (ping, traceroute)</div>
+          <div class="topic-desc">Protocollo di diagnostica. Ping verifica raggiungibilità, traceroute mostra il percorso hop by hop (TTL decrementale).</div>
+          <div class="years-wrap"><span class="year-tag year-multi">A038_ORD24 (troubleshooting)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section" id="s8">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">8</div>
+        <div class="section-title">VPN e connessioni sicure tra sedi</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <p class="section-intro">La VPN è uno degli argomenti teorici più richiesti nella seconda parte delle prove.</p>
+        <div class="topic-item">
+          <div class="topic-name">VPN site-to-site</div>
+          <div class="topic-desc">Connessione permanente tra due sedi (es. sede principale ↔ filiale), tunnel cifrato su Internet pubblico, trasparente per gli utenti.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Sim-2016</span><span class="year-tag year-multi">AB42_ORD19</span><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">A038_STR24</span><span class="year-tag year-multi">Ordinaria-2022 I</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">VPN client-to-site (remote access)</div>
+          <div class="topic-desc">Dipendenti in smart working che si connettono alla rete aziendale da remoto. Client VPN sul dispositivo, autenticazione utente.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Ordinaria-2022 I</span><span class="year-tag year-multi">A038_STR24</span><span class="year-tag year-multi">AB42_ORD19</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">IPsec (ESP, AH)</div>
+          <div class="topic-desc">Cifratura a livello rete. Modalità tunnel (intero pacchetto IP incapsulato) e trasporto (solo payload cifrato). AH per integrità, ESP per cifratura+integrità.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">Suplettiva-2018</span><span class="year-tag year-multi">Sim-2016</span>
+          </div>
+        </div>
+        <div class="topic-item">
+          <div class="topic-name">SSL/TLS VPN e OpenVPN</div>
+          <div class="topic-desc">VPN basata su HTTPS (porta 443), attraversa facilmente i firewall. OpenVPN è l'implementazione open source più diffusa.</div>
+          <div class="years-wrap">
+            <span class="year-tag year-multi">AB42_ORD19</span><span class="year-tag year-multi">A038_STR24</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 9 -->
+    <div class="section" id="s9">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">9</div>
+        <div class="section-title">Server, servizi e infrastruttura</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item"><div class="topic-name">Web Server</div><div class="topic-desc">Hosting statico/dinamico, Apache/Nginx/IIS, virtual host, reverse proxy. Posizionamento in DMZ.</div><div class="years-wrap"><span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">A038_STR24</span><span class="year-tag year-multi">Suppletiva-2024</span></div></div>
+        <div class="topic-item"><div class="topic-name">Mail Server</div><div class="topic-desc">SMTP (invio), IMAP/POP3 (ricezione), filtro antispam, relay. Configurazione MX record DNS.</div><div class="years-wrap"><span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">A038_STR24 I</span><span class="year-tag year-multi">ITIA_ORD18</span></div></div>
+        <div class="topic-item"><div class="topic-name">File Server e Active Directory</div><div class="topic-desc">Condivisione file (SMB/CIFS), permessi NTFS. AD per gestione centralizzata utenti, GPO, autenticazione in dominio Windows.</div><div class="years-wrap"><span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">Sim-Majorana</span></div></div>
+        <div class="topic-item"><div class="topic-name">Proxy Server</div><div class="topic-desc">Forward proxy: filtra la navigazione e fa caching. Reverse proxy: bilancia il carico e protegge i server backend. Differenza da NAT.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2022 I</span><span class="year-tag year-multi">Suplettiva-2018 III</span></div></div>
+        <div class="topic-item"><div class="topic-name">Backup e disaster recovery</div><div class="topic-desc">Strategie: full (settimanale), incrementale (giornaliero), differenziale. Backup off-site, cloud backup, RTO e RPO.</div><div class="years-wrap"><span class="year-tag year-multi">A038_ORD24 I</span><span class="year-tag year-multi">ITIA_ORD18</span></div></div>
+        <div class="topic-item"><div class="topic-name">Videosorveglianza IP</div><div class="topic-desc">Telecamere IP (ONVIF), NVR, rete separata dalla rete dati (VLAN dedicata), connessione remota al centro di vigilanza.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2016 (ITTL)</span><span class="year-tag year-multi">Sim-2-2019</span></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION 10 -->
+    <div class="section" id="s10">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">10</div>
+        <div class="section-title">Cloud computing e Virtualizzazione</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item"><div class="topic-name">Modelli di servizio: IaaS, PaaS, SaaS</div><div class="topic-desc">IaaS (VM, storage), PaaS (piattaforma di sviluppo), SaaS (applicazione pronta). Cosa gestisce il cliente vs. il provider.</div><div class="years-wrap"><span class="year-tag year-multi">ITIA_ORD18</span><span class="year-tag year-multi">Suplettiva-2018</span></div></div>
+        <div class="topic-item"><div class="topic-name">Cloud pubblico, privato, ibrido</div><div class="topic-desc">Pubblico: AWS, Azure, GCP. Privato: data center interno. Ibrido: combinazione. Confronto costi, controllo, scalabilità, sicurezza.</div><div class="years-wrap"><span class="year-tag year-multi">ITIA_ORD18</span><span class="year-tag year-multi">Suplettiva-2018 II</span></div></div>
+        <div class="topic-item"><div class="topic-name">Virtualizzazione: hypervisor tipo 1 e tipo 2</div><div class="topic-desc">Tipo 1 (bare metal): VMware ESXi, Microsoft Hyper-V — direttamente sull'hardware, più efficiente. Tipo 2 (hosted): VirtualBox, VMware Workstation — sopra un OS, più semplice.</div><div class="years-wrap"><span class="year-tag year-multi">A038_STR24 II</span><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">Ordinaria-2022 II</span><span class="year-tag year-multi">Suppletiva-2024 II</span></div></div>
+        <div class="topic-item"><div class="topic-name">Container (Docker)</div><div class="topic-desc">Isolamento a livello OS, immagine + layer, confronto con VM (più leggeri, stesso kernel).</div><div class="years-wrap"><span class="year-tag year-single">materiali didattici recenti</span></div></div>
+        <div class="topic-item"><div class="topic-name">Cluster e alta disponibilità</div><div class="topic-desc">Load balancing, failover automatico, RAID (0/1/5/10), hot standby. RTO/RPO nei piani di disaster recovery.</div><div class="years-wrap"><span class="year-tag year-multi">ITIA_ORD18 III</span><span class="year-tag year-multi">Suplettiva-2018</span></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION 11 -->
+    <div class="section" id="s11">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">11</div>
+        <div class="section-title">IoT (Internet of Things)</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item"><div class="topic-name">Architettura IoT</div><div class="topic-desc">Sensori/attuatori → gateway locale → cloud. Microcontrollori: Arduino (Uno/Nano), ESP32, Raspberry Pi. Edge computing.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2018</span><span class="year-tag year-multi">Sim-1-2019</span><span class="year-tag year-multi">Sim-ITI-Galilei-2020</span><span class="year-tag year-multi">Suppletiva-2024 I</span></div></div>
+        <div class="topic-item"><div class="topic-name">Protocolli IoT: MQTT, CoAP, HTTP/REST</div><div class="topic-desc">MQTT: publish/subscribe, broker, topic, QoS 0/1/2. Leggero, ideale per dispositivi con banda limitata. CoAP: simile a HTTP ma per reti constrained (UDP).</div><div class="years-wrap"><span class="year-tag year-multi">Sim-1-2019</span><span class="year-tag year-multi">Ordinaria-2018</span></div></div>
+        <div class="topic-item"><div class="topic-name">Sensori e trasduttori</div><div class="topic-desc">Temperatura (NTC, PT100, DHT22), umidità, gas/idrocarburi, rilevamento incendi. Scelta del sensore adeguato al contesto.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2018</span><span class="year-tag year-multi">Sim-1-2019</span><span class="year-tag year-multi">Sim-ITI-Galilei-2020</span></div></div>
+        <div class="topic-item"><div class="topic-name">Alimentazione autonoma</div><div class="topic-desc">Batterie, pannelli solari, energy harvesting. Calcolo del consumo e dimensionamento della batteria in base alla frequenza di campionamento.</div><div class="years-wrap"><span class="year-tag year-multi">Sim-1-2019</span><span class="year-tag year-multi">Sim-ITI-Galilei-2020</span></div></div>
+        <div class="topic-item"><div class="topic-name">Separazione rete IoT dalla rete dati</div><div class="topic-desc">VLAN dedicata per i dispositivi IoT, firewall tra rete IoT e rete aziendale. Motivazione: limitare la superficie d'attacco.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2018</span><span class="year-tag year-multi">Sim-ITI-Galilei-2020</span></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION 12 -->
+    <div class="section" id="s12">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">12</div>
+        <div class="section-title">Socket e programmazione di rete</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item"><div class="topic-name">Concetto di socket</div><div class="topic-desc">Astrazione per la comunicazione di rete: indirizzo IP + porta. Socket TCP (connesso, affidabile) e UDP (non connesso, veloce).</div><div class="years-wrap"><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">Suppletiva-2024 I</span><span class="year-tag year-multi">Ordinaria-2024</span></div></div>
+        <div class="topic-item"><div class="topic-name">Client-server con socket TCP</div><div class="topic-desc">Sequenza server: <code>socket()</code> → <code>bind()</code> → <code>listen()</code> → <code>accept()</code> → <code>recv/send()</code>. Sequenza client: <code>socket()</code> → <code>connect()</code> → <code>send/recv()</code>.</div><div class="years-wrap"><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">Suppletiva-2024</span></div></div>
+        <div class="topic-item"><div class="topic-name">Formato dei dati trasmessi</div><div class="topic-desc">Definizione di protocollo applicativo personalizzato: struttura JSON, CSV o binario, separatori, lunghezza campo, checksum.</div><div class="years-wrap"><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">Suppletiva-2024</span><span class="year-tag year-multi">Ordinaria-2024</span></div></div>
+        <div class="topic-item"><div class="topic-name">Crittografia nei socket (TLS)</div><div class="topic-desc">Integrazione TLS in un socket Python (libreria <code>ssl</code>): wrapping del socket, certificati, verifica del peer.</div><div class="years-wrap"><span class="year-tag year-multi">Suplettiva-2019 III</span></div></div>
+        <div class="topic-item"><div class="topic-name">Concorrenza (thread, mutex)</div><div class="topic-desc">Server multi-client con thread. Condivisione di risorse condivise: mutex, semafori, race condition.</div><div class="years-wrap"><span class="year-tag year-multi">Suppletiva-2024 IV</span></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION 13 -->
+    <div class="section" id="s13">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">13</div>
+        <div class="section-title">Telecomunicazioni: fibra ottica e ponti radio</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <p class="section-intro">Sezione prevalentemente rilevante per l'indirizzo ITTL – Telecomunicazioni.</p>
+        <div class="topic-item"><div class="topic-name">Fibra ottica: monomodale e multimodale</div><div class="topic-desc">MMF: core largo, dispersione modale, distanze brevi (campus). SMF: core stretto, solo modo fondamentale, distanze lunghe. Standard G.652 (SMF), OM1–OM4 (MMF).</div><div class="years-wrap"><span class="year-tag year-multi">Hoepli-sim</span><span class="year-tag year-multi">Suplettiva-2019</span></div></div>
+        <div class="topic-item"><div class="topic-name">Link budget ottico</div><div class="topic-desc">Potenza TX [dBm] − attenuazione fibra [dB/km × km] − connettori − giunti ≥ sensibilità RX [dBm] + margine.</div><div class="years-wrap"><span class="year-tag year-multi">Suplettiva-2019</span></div></div>
+        <div class="topic-item"><div class="topic-name">Ponti radio punto-punto</div><div class="topic-desc">EIRP, guadagno antenne paraboliche, Free-Space Path Loss (FSPL), margine di fading. Bande di frequenza (7, 13, 23 GHz). Visibilità LOS, zona di Fresnel.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2019</span><span class="year-tag year-multi">Suplettiva-2019</span><span class="year-tag year-multi">Sim-1/2-2019</span></div></div>
+        <div class="topic-item"><div class="topic-name">Modulazioni digitali</div><div class="topic-desc">QPSK, 8PSK, 16QAM, 64QAM, 256QAM. Relazione tra ordine di modulazione, bit/simbolo, banda richiesta e sensibilità del ricevitore.</div><div class="years-wrap"><span class="year-tag year-multi">Sim-2-2019</span></div></div>
+        <div class="topic-item"><div class="topic-name">FTTH / FTTC</div><div class="topic-desc">FTTH: fibra fino all'abitazione, massima banda. FTTC: fibra fino all'armadio di strada, rame nell'ultimo miglio (VDSL2).</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2024</span><span class="year-tag year-multi">Ordinaria-2022 II</span></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION 14 -->
+    <div class="section" id="s14">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-num">14</div>
+        <div class="section-title">Privacy, normativa e sicurezza dei dati</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body">
+        <div class="topic-item"><div class="topic-name">GDPR (Regolamento UE 2016/679)</div><div class="topic-desc">Principi: liceità, minimizzazione, integrità. Diritti degli interessati (accesso, cancellazione, portabilità). Responsabile del trattamento, DPO, notifica violazioni.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2022 (tutte)</span><span class="year-tag year-multi">Sim-1/2-2024</span><span class="year-tag year-multi">A038_ORD24</span></div></div>
+        <div class="topic-item"><div class="topic-name">Dati sensibili e sanitari</div><div class="topic-desc">Trattamento di dati medici (Fascicolo Sanitario Elettronico), misure rafforzate di sicurezza, cifratura a riposo e in transito.</div><div class="years-wrap"><span class="year-tag year-multi">A038_ORD24</span><span class="year-tag year-multi">Ordinaria-2022 II</span></div></div>
+        <div class="topic-item"><div class="topic-name">Privacy by design</div><div class="topic-desc">Integrazione della protezione dei dati fin dalla fase di progettazione del sistema (non come aggiunta a posteriori).</div><div class="years-wrap"><span class="year-tag year-multi">Sim-2-2024</span><span class="year-tag year-multi">A038_ORD24</span></div></div>
+        <div class="topic-item"><div class="topic-name">Misure minime di sicurezza</div><div class="topic-desc">Password policy (lunghezza, scadenza, complessità), aggiornamenti periodici, antivirus, log degli accessi, backup.</div><div class="years-wrap"><span class="year-tag year-multi">Ordinaria-2016</span><span class="year-tag year-multi">A038_ORD24</span></div></div>
+      </div>
+    </div>
+
+    <!-- SECTION 15 — FREQUENCY -->
+    <div class="section" id="s15">
+      <div class="section-header open" onclick="toggleSection(this)">
+        <div class="section-num" style="background:linear-gradient(135deg,#f59e0b,#f97316)">📊</div>
+        <div class="section-title">Argomenti più frequenti</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body open">
+        <div class="freq-table-wrap">
+          <table class="freq-table">
+            <thead>
+              <tr><th>#</th><th>Argomento</th><th>Frequenza</th></tr>
+            </thead>
+            <tbody id="freq-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="section" id="checklist">
+      <div class="section-header open" onclick="toggleSection(this)">
+        <div class="section-num" style="background:linear-gradient(135deg,#34d399,#059669)">✅</div>
+        <div class="section-title">Checklist di studio</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body open">
+        <div class="progress-wrap">
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar" style="width:0%"></div></div>
+          <div class="progress-text"><span class="progress-pct" id="prog-pct">0%</span> — <span id="prog-count">0 / 0</span> completati</div>
+        </div>
+        <div id="checklist-container"></div>
+        <button onclick="resetChecklist()" style="margin-top:12px;padding:7px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;font-size:13px;">Azzera checklist</button>
+      </div>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="section" id="risorse">
+      <div class="section-header open" onclick="toggleSection(this)">
+        <div class="section-num" style="background:linear-gradient(135deg,#7c5cfc,#4f8ef7)">📚</div>
+        <div class="section-title">Risorse per lo studio</div>
+        <div class="section-chevron">›</div>
+      </div>
+      <div class="section-body open">
+
+        <!-- Libri -->
+        <div id="libri" class="res-section-title">📚 Libri di testo</div>
+        <div style="overflow-x:auto;margin-bottom:8px">
+          <table class="books-table">
+            <thead><tr><th>Titolo</th><th>Autori</th><th>Editore</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td><span class="book-title">Sistemi e Reti</span> (vol. 1–3)<br><span class="isbn">ISBN vol.1: 9788836012091</span></td><td>Lo Russo, Bianchi</td><td>Hoepli</td><td>Il più diffuso nelle ITIS. Vol. 3 fondamentale per l'esame (sicurezza, VPN, cloud, IoT).</td></tr>
+              <tr><td><span class="book-title">Corso di Sistemi e Reti</span> (vol. 1–3)<br><span class="isbn">ISBN vol.1: 9788808720115</span></td><td>Meini, Formichi, Sartor, Parodi</td><td>Zanichelli</td><td>Ottima alternativa con espansione online e materiali digitali.</td></tr>
+              <tr><td><span class="book-title">Internetworking – Sistemi e Reti</span></td><td>AA.VV.</td><td>Mondadori Education</td><td>Testo con video e laboratori digitali integrati.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:20px">💡 I volumi 1 e 2 coprono le basi; il <strong style="color:var(--orange)">volume 3</strong> è il più rilevante per l'esame.</p>
+
+        <!-- Siti -->
+        <div id="siti" class="res-section-title">🌐 Siti web con appunti ed esercizi</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-title">🔗 SimoneZanella.it</div><div class="res-desc">Raccolta completa di tutte le tracce d'esame (2015–2025) ordinarie e suppletive, simulazioni con soluzioni.</div><a href="https://simonezanella.it/appunti/risorse-scuola/sistemi-e-reti/" target="_blank"><span class="res-tag badge-blue badge">Apri sito ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 alfredocentinaro.it</div><div class="res-desc">Lezioni per argomento, esercizi di indirizzamento svolti, soluzioni commentate di tutti gli esami di stato.</div><a href="https://www.alfredocentinaro.it/category/lezioni/sistemi-reti/" target="_blank"><span class="res-tag badge-blue badge">Apri sito ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 ingvitel.altervista.org</div><div class="res-desc">Appunti scaricabili, esercizi IPv4 svolti, subnetting passo-passo, archivio completo esami ITIS.</div><a href="https://ingvitel.altervista.org/sistemi-e-reti.html" target="_blank"><span class="res-tag badge-blue badge">Apri sito ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 Zanichelli LaZ</div><div class="res-desc">Prove d'esame con soluzioni curate da docenti (Ollari), temi dal 2004 al 2018.</div><a href="https://online.scuola.zanichelli.it/provatecnici/sistemi-e-reti/" target="_blank"><span class="res-tag badge-blue badge">Apri sito ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 maurodeberardis.it</div><div class="res-desc">Download soluzioni dettagliate per Sistemi e Reti e Informatica, 2005–2024.</div><a href="https://www.maurodeberardis.it/index.php?option=com_jdownloads&Itemid=191&view=viewcategory&catid=18" target="_blank"><span class="res-tag badge-blue badge">Apri sito ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 informaticascuola.it</div><div class="res-desc">Spiegazioni teoriche chiare su subnetting, subnet mask, TCP/IP, con esempi pratici.</div><a href="https://www.informaticascuola.it/2021/01/10/subnetting-subnet-mask/" target="_blank"><span class="res-tag badge-blue badge">Apri sito ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 ITIS Parma — Soluzione 2024</div><div class="res-desc">Soluzione completa e commentata della seconda prova 2024 a cura dei docenti dell'ITIS di Parma.</div><a href="https://www.itis.pr.it/soluzione-seconda-prova-esame-di-stato-2024-sistemi-e-reti/" target="_blank"><span class="res-tag badge-green badge">Soluzione ufficiale ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔗 Studocu — Sistemi e Reti</div><div class="res-desc">Appunti, riassunti e guide caricati da altri studenti italiani, compresi riassunti per l'esame di stato.</div><a href="https://www.studocu.com/it/search/sistemi-e-reti" target="_blank"><span class="res-tag badge-orange badge">Studenti ↗</span></a></div>
+        </div>
+
+        <!-- Risorse per argomento -->
+        <div class="res-section-title">🎯 Risorse per argomento specifico</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-title">🧮 subnet-calculator.com</div><div class="res-desc">Calcolatore interattivo di sottoreti: inserisci IP e CIDR, ottieni rete, broadcast, range host.</div><a href="https://www.subnet-calculator.com" target="_blank"><span class="res-tag badge-blue badge">Subnetting ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🧮 Esercizi IPv4 svolti — ingvitel</div><div class="res-desc">Serie di esercizi di subnetting con soluzione passo-passo, in stile esame.</div><a href="https://ingvitel.altervista.org/esercizi-svolti-subnetting.html" target="_blank"><span class="res-tag badge-blue badge">Subnetting ↗</span></a></div>
+          <div class="res-card"><div class="res-title">🔒 cybersecurity360.it</div><div class="res-desc">Articoli in italiano su firewall, IDS, segmentazione di rete, attacchi, GDPR.</div><a href="https://www.cybersecurity360.it" target="_blank"><span class="res-tag badge-orange badge">Sicurezza ↗</span></a></div>
+          <div class="res-card"><div class="res-title">📄 rfc-editor.org</div><div class="res-desc">Testi ufficiali di tutti i protocolli: TCP (RFC 793), IP (RFC 791), DNS (RFC 1035), DHCP (RFC 2131).</div><a href="https://www.rfc-editor.org" target="_blank"><span class="res-tag badge-purple badge">Protocolli ↗</span></a></div>
+        </div>
+
+        <!-- Strumenti -->
+        <div id="tools" class="res-section-title">🛠 Strumenti pratici</div>
+        <div class="tool-card">
+          <div class="tool-name">🖥 Cisco Packet Tracer <span class="badge badge-green" style="font-size:11px">Gratuito — Consigliato</span></div>
+          <div class="tool-desc">Il simulatore di rete più usato nelle scuole italiane. Permette di costruire reti virtuali con router, switch, PC, server, access point e configurarli tramite CLI Cisco.</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong style="color:var(--text)">Cosa esercitare:</strong></p>
+          <ul>
+            <li>Progettare una rete con subnetting e piano di indirizzamento</li>
+            <li>VLAN + trunk: <code>vlan X</code>, <code>switchport mode access/trunk</code></li>
+            <li>Routing statico inter-VLAN: <code>ip route</code>, sub-interfacce</li>
+            <li>DHCP server: <code>ip dhcp pool</code>, <code>ip dhcp excluded-address</code></li>
+            <li>NAT/PAT: <code>ip nat inside/outside</code>, <code>ip nat pool</code></li>
+            <li>ACL standard ed estese: <code>access-list</code>, <code>ip access-group</code></li>
+            <li>Wi-Fi: SSID, WPA2-PSK, canali, associazione AP</li>
+          </ul>
+          <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px">
+            <a href="https://www.netacad.com/courses/packet-tracer" target="_blank"><span class="badge badge-blue">Download ↗</span></a>
+            <a href="https://www.alfredocentinaro.it/category/laboratori/cisco-packet-tracer/" target="_blank"><span class="badge badge-green">Guide in italiano ↗</span></a>
+            <a href="https://danielepostacchini.it/wp-content/uploads/2018/09/Esercizi-con-CISCO.pdf" target="_blank"><span class="badge badge-orange">Esercizi PDF ↗</span></a>
+          </div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">⚙️ GNS3 <span class="badge badge-purple" style="font-size:11px">Avanzato — Opzionale</span></div>
+          <div class="tool-desc">Simulatore più potente di Packet Tracer, supporta immagini IOS reali. Utile per OSPF, BGP e scenari complessi. Richiede più risorse hardware.</div>
+          <a href="https://www.gns3.com/" target="_blank"><span class="badge badge-purple">gns3.com ↗</span></a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">🌐 Cisco NetAcad — Corsi online gratuiti</div>
+          <div class="tool-desc">Piattaforma ufficiale Cisco con corsi gratuiti e laboratori interattivi. Registrazione gratuita su netacad.com.</div>
+          <div style="overflow-x:auto;margin-top:10px">
+            <table class="netacad-table">
+              <thead><tr><th>Corso</th><th>Livello</th><th>Contenuto</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Networking Essentials</strong></td><td><span class="level-base">Base</span></td><td>Fondamenti di reti, TCP/IP, subnetting</td></tr>
+                <tr><td><strong>IT Essentials</strong></td><td><span class="level-base">Base</span></td><td>Hardware, OS, reti di base</td></tr>
+                <tr><td><strong>Cybersecurity Essentials</strong></td><td><span class="level-mid">Intermedio</span></td><td>Sicurezza, firewall, crittografia, attacchi</td></tr>
+                <tr><td><strong>CCNA: Intro to Networks</strong></td><td><span class="level-mid">Intermedio</span></td><td>Routing, switching, VLAN, protocolli</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <a href="https://www.netacad.com/" target="_blank" style="display:inline-block;margin-top:10px"><span class="badge badge-blue">Registrati gratis ↗</span></a>
+        </div>
+
+        <!-- Video -->
+        <div id="video" class="res-section-title">🎬 Video e canali consigliati</div>
+        <div class="video-grid">
+          <a href="https://www.youtube.com/@professormesser" target="_blank" style="text-decoration:none">
+            <div class="video-card"><div class="vc-name">Professor Messer ↗</div><div class="vc-lang"><span class="badge badge-orange" style="font-size:10px">EN</span></div><div class="vc-desc">CompTIA Network+: subnetting, routing, sicurezza, protocolli. Spiegazioni chiare e visive.</div></div>
+          </a>
+          <a href="https://www.youtube.com/@NetworkChuck" target="_blank" style="text-decoration:none">
+            <div class="video-card"><div class="vc-name">NetworkChuck ↗</div><div class="vc-lang"><span class="badge badge-orange" style="font-size:10px">EN</span></div><div class="vc-desc">Reti, VLAN, routing, firewall, cybersecurity. Molto pratico e coinvolgente.</div></div>
+          </a>
+          <a href="https://www.youtube.com/@morrolinux" target="_blank" style="text-decoration:none">
+            <div class="video-card"><div class="vc-name">morrolinux ↗</div><div class="vc-lang"><span class="badge badge-green" style="font-size:10px">IT</span></div><div class="vc-desc">Moreno Razzoli — video didattici su reti e networking in italiano dal 2008. Corso reti completo disponibile su corsoreti.it.</div></div>
+          </a>
+          <a href="https://www.informaticascuola.it" target="_blank" style="text-decoration:none">
+            <div class="video-card"><div class="vc-name">InformaticaScuola.it ↗</div><div class="vc-lang"><span class="badge badge-green" style="font-size:10px">IT</span></div><div class="vc-desc">Articoli e spiegazioni teoriche su subnetting, TCP/IP, sicurezza per ITIS.</div></div>
+          </a>
+          <a href="https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo" target="_blank" style="text-decoration:none">
+            <div class="video-card"><div class="vc-name">CrashCourse CS ↗</div><div class="vc-lang"><span class="badge badge-orange" style="font-size:10px">EN (sub IT)</span></div><div class="vc-desc">Playlist completa (40 episodi) — episodi su reti e internet ottimi per capire i concetti fondamentali.</div></div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Torna in cima">↑</button>
+
+<script>
+// ── DATA ──
+const freqData = [
+  { rank:1, topic:"Piano di indirizzamento IPv4 / subnetting", freq:15, label:"tutti gli esami (15+)" },
+  { rank:2, topic:"Progettazione architettura di rete con schema grafico", freq:15, label:"tutti gli esami (15+)" },
+  { rank:3, topic:"Firewall: configurazione, tipologie, posizionamento", freq:12, label:"~12 esami" },
+  { rank:4, topic:"VLAN: separazione logica del traffico", freq:10, label:"~10 esami" },
+  { rank:5, topic:"DHCP: funzionamento e configurazione", freq:9, label:"~9 esami" },
+  { rank:6, topic:"Cablaggio strutturato (orizzontale + verticale)", freq:8, label:"~8 esami" },
+  { rank:7, topic:"VPN site-to-site e client-to-site", freq:8, label:"~8 esami" },
+  { rank:8, topic:"Wi-Fi: sicurezza (WEP/WPA/WPA2/WPA3)", freq:8, label:"~8 esami" },
+  { rank:9, topic:"Routing statico e tabelle di routing", freq:8, label:"~8 esami" },
+  { rank:10, topic:"DMZ e posizionamento server pubblici", freq:7, label:"~7 esami" },
+  { rank:11, topic:"Virtualizzazione (hypervisor tipo 1 e tipo 2)", freq:6, label:"~6 esami" },
+  { rank:12, topic:"Cloud computing (IaaS/PaaS/SaaS, cloud vs. on-premise)", freq:6, label:"~6 esami" },
+  { rank:13, topic:"DNS: funzionamento, configurazione, sicurezza", freq:6, label:"~6 esami" },
+  { rank:14, topic:"Crittografia simmetrica/asimmetrica e firma digitale", freq:6, label:"~6 esami" },
+  { rank:15, topic:"IoT: architettura, sensori, protocolli", freq:5, label:"~5 esami" },
+  { rank:16, topic:"Socket TCP/UDP: programmazione client-server", freq:5, label:"~5 esami" },
+  { rank:17, topic:"Routing dinamico (RIP, OSPF) e confronto", freq:5, label:"~5 esami" },
+  { rank:18, topic:"Proxy server", freq:5, label:"~5 esami" },
+  { rank:19, topic:"Business continuity / fault tolerance / backup", freq:5, label:"~5 esami" },
+  { rank:20, topic:"GDPR e normativa sulla privacy", freq:5, label:"~5 esami" },
+  { rank:21, topic:"HTTPS / SSL/TLS", freq:4, label:"~4 esami" },
+  { rank:22, topic:"VoIP", freq:3, label:"~3 esami" },
+  { rank:23, topic:"Autenticazione a più fattori (MFA)", freq:3, label:"~3 esami" },
+  { rank:24, topic:"NAT / PAT / port forwarding", freq:3, label:"~3 esami" },
+  { rank:25, topic:"Link budget (fibra ottica e radio)", freq:4, label:"~4 esami (ITTL)" },
+];
+
+const checklistData = [
+  { group:"Fondamentali (presenti in ogni esame)", items:[
+    "So disegnare una rete con switch, router, firewall, server e access point",
+    "So progettare un piano di indirizzamento IPv4 con subnetting CIDR",
+    "So calcolare: rete, maschera, broadcast, primo/ultimo host, numero di host",
+    "So applicare il VLSM per ottimizzare l'uso degli indirizzi",
+    "So compilare una tabella di routing statica con destinazione e next-hop",
+    "Conosco le differenze tra switch, router e firewall e so dove posizionarli",
+    "So spiegare cos'è una VLAN e come si configura su switch amministrabile",
+    "So spiegare il funzionamento di DHCP con la sequenza DORA",
+  ]},
+  { group:"Sicurezza (presente in quasi ogni esame)", items:[
+    "So descrivere i tipi di firewall (packet filter, stateful, NGFW)",
+    "So cosa è una DMZ e perché si usa",
+    "So la differenza tra crittografia simmetrica e asimmetrica",
+    "Conosco WEP, WPA, WPA2, WPA3 e le vulnerabilità di ognuno",
+    "So spiegare VPN site-to-site e VPN di accesso remoto",
+    "Conosco i protocolli VPN principali (IPsec, SSL/TLS, OpenVPN)",
+    "So cosa è HTTPS e perché è preferito a HTTP",
+    "Conosco le basi del GDPR e le misure minime di sicurezza",
+  ]},
+  { group:"Servizi di rete", items:[
+    "So configurare un server DHCP (scope, opzioni, relay)",
+    "Conosco il funzionamento di DNS (record A, MX, CNAME, PTR)",
+    "So descrivere l'architettura di un mail server (SMTP, IMAP, POP3)",
+    "So cosa è un proxy e come si inserisce in una LAN",
+    "Conosco il cablaggio strutturato: orizzontale, verticale, patch panel",
+  ]},
+  { group:"Cloud e virtualizzazione", items:[
+    "So distinguere IaaS, PaaS e SaaS con esempi pratici",
+    "Conosco hypervisor tipo 1 e tipo 2 con esempi di prodotti",
+    "So valutare pro e contro della migrazione su cloud",
+  ]},
+  { group:"IoT e socket", items:[
+    "Conosco l'architettura IoT (sensori → gateway → cloud) e MQTT",
+    "So descrivere un socket TCP client-server (bind, listen, accept, connect)",
+    "So progettare il formato di un pacchetto dati per sensori",
+  ]},
+  { group:"Telecomunicazioni (ITTL)", items:[
+    "So calcolare il link budget per un collegamento radio o in fibra ottica",
+    "Conosco le caratteristiche di fibra monomodale e multimodale",
+    "So leggere le specifiche di un access point (potenza TX, sensibilità RX)",
+  ]},
+];
+
+// ── INIT FREQ TABLE ──
+(function buildFreqTable() {
+  const max = freqData[0].freq;
+  const tbody = document.getElementById('freq-tbody');
+  freqData.forEach(d => {
+    const tr = document.createElement('tr');
+    const pct = Math.round((d.freq / max) * 100);
+    tr.innerHTML = `
+      <td><span class="rank-num ${d.rank<=3?'top3':''}">${d.rank}</span></td>
+      <td style="font-weight:${d.rank<=3?700:400}">${d.topic}</td>
+      <td><div class="freq-bar-wrap"><div class="freq-bar" style="width:${pct}px"></div><span class="freq-label">${d.label}</span></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+})();
+
+// ── INIT CHECKLIST ──
+const STORAGE_KEY = 'ser_checklist';
+let checkState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+function buildChecklist() {
+  const container = document.getElementById('checklist-container');
+  container.innerHTML = '';
+  let total = 0, done = 0;
+  checklistData.forEach((group, gi) => {
+    const sec = document.createElement('div');
+    sec.className = 'checklist-section';
+    sec.innerHTML = `<h3>${group.group}</h3>`;
+    group.items.forEach((item, ii) => {
+      const id = `chk_${gi}_${ii}`;
+      const checked = !!checkState[id];
+      if (checked) done++;
+      total++;
+      const div = document.createElement('div');
+      div.className = 'check-item' + (checked ? ' checked' : '');
+      div.innerHTML = `<input type="checkbox" id="${id}" ${checked?'checked':''}><label for="${id}">${item}</label>`;
+      div.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'INPUT') {
+          const cb = div.querySelector('input');
+          cb.checked = !cb.checked;
+          cb.dispatchEvent(new Event('change'));
+        }
+      });
+      div.querySelector('input').addEventListener('change', function() {
+        checkState[id] = this.checked;
+        div.classList.toggle('checked', this.checked);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(checkState));
+        updateProgress();
+      });
+      sec.appendChild(div);
+    });
+    container.appendChild(sec);
+  });
+  updateProgress(total, done);
+}
+
+function updateProgress(t, d) {
+  const items = document.querySelectorAll('.check-item input');
+  let total = t !== undefined ? t : items.length;
+  let done = d !== undefined ? d : [...items].filter(i => i.checked).length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-count').textContent = `${done} / ${total}`;
+}
+
+function resetChecklist() {
+  if (!confirm('Vuoi azzerare tutti i progressi della checklist?')) return;
+  checkState = {};
+  localStorage.removeItem(STORAGE_KEY);
+  buildChecklist();
+}
+
+buildChecklist();
+
+// ── ACCORDION ──
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ── MOBILE SIDEBAR ──
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+document.getElementById('menu-btn').addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+});
+
+// ── ACTIVE NAV LINK (scroll spy) ──
+const sections = document.querySelectorAll('[id]');
+const navLinks = document.querySelectorAll('#nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 300);
+}, {passive:true});
+
+// ── SEARCH ──
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (!q) {
+    document.querySelectorAll('.topic-item').forEach(el => el.style.display = '');
+    document.querySelectorAll('.section-body').forEach(el => {
+      el.innerHTML = el.innerHTML.replace(/<mark class="highlight">(.*?)<\/mark>/g, '$1');
+    });
+    return;
+  }
+  document.querySelectorAll('.section').forEach(sec => {
+    const items = sec.querySelectorAll('.topic-item');
+    let anyVisible = false;
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      if (text.includes(q)) {
+        item.style.display = '';
+        anyVisible = true;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    // auto-open sections with results
+    if (anyVisible) {
+      const header = sec.querySelector('.section-header');
+      const body = sec.querySelector('.section-body');
+      if (header && body) {
+        header.classList.add('open');
+        body.classList.add('open');
+      }
+    }
+  });
+}, {passive:true});
+</script>
+</body>
+</html>
