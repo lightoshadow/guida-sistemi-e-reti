@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet — Sistemi e Reti</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d2e;
+    --bg3: #242740;
+    --border: #2e3250;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --green: #34d399;
+    --orange: #f59e0b;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --radius: 10px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  /* ── TOPBAR ── */
+  #topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #topbar .back-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    opacity: .85;
+    transition: opacity .15s;
+  }
+  #topbar .back-link:hover { opacity: 1; }
+
+  #topbar .topbar-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+    text-align: center;
+  }
+
+  #topbar .print-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity .15s;
+  }
+  #topbar .print-btn:hover { opacity: .88; }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 24px 48px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-num {
+    min-width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .card-body { padding: 0; }
+
+  /* ── TABLES ── */
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .cs-table th {
+    background: rgba(46,50,80,.6);
+    color: var(--text3);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 7px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .cs-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgba(46,50,80,.5);
+    color: var(--text);
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+
+  .cs-table tr:last-child td { border-bottom: none; }
+  .cs-table tr:hover td { background: rgba(36,39,64,.6); }
+
+  /* highlight common CIDR rows */
+  .cs-table tr.common td { background: rgba(79,142,247,.07); }
+  .cs-table tr.common td:first-child { color: var(--accent); font-weight: 700; }
+
+  /* status colors */
+  .ok    { color: var(--green);  font-weight: 600; }
+  .warn  { color: var(--orange); font-weight: 600; }
+  .bad   { color: var(--red);    font-weight: 600; }
+  .dim   { color: var(--text3); }
+  .mono  { font-family: var(--mono); font-size: 11px; }
+
+  /* port type badges */
+  .proto-tcp  { background: rgba(79,142,247,.18);  color: var(--accent);  border-radius: 4px; padding: 1px 5px; font-size: 10px; font-weight: 700; }
+  .proto-udp  { background: rgba(245,158,11,.18);  color: var(--orange);  border-radius: 4px; padding: 1px 5px; font-size: 10px; font-weight: 700; }
+  .proto-both { background: rgba(52,211,153,.15);  color: var(--green);   border-radius: 4px; padding: 1px 5px; font-size: 10px; font-weight: 700; }
+
+  /* OSI layer colors */
+  .layer-7 { color: #e879f9; }
+  .layer-6 { color: #a78bfa; }
+  .layer-5 { color: var(--accent2); }
+  .layer-4 { color: var(--accent); }
+  .layer-3 { color: var(--green); }
+  .layer-2 { color: var(--orange); }
+  .layer-1 { color: var(--red); }
+
+  /* ── FORMULA BOX ── */
+  .formula-box {
+    padding: 10px 14px;
+  }
+
+  .formula {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .formula:last-child { margin-bottom: 0; }
+  .formula .label {
+    font-family: var(--font);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .formula .expr { color: var(--accent); }
+  .formula .comment { color: var(--text3); font-size: 10.5px; }
+
+  /* ── DORA FLOW ── */
+  .dora-flow {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 4px;
+    padding: 14px 12px;
+    flex-wrap: wrap;
+  }
+
+  .dora-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dora-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  .dora-letter { font-size: 11px; font-weight: 700; color: var(--text); }
+  .dora-name   { font-size: 10px; color: var(--text2); white-space: nowrap; }
+  .dora-desc   { font-size: 9.5px; color: var(--text3); white-space: nowrap; }
+
+  .dora-arrow {
+    font-size: 18px;
+    color: var(--text3);
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  .dora-d { background: rgba(79,142,247,.2);  color: var(--accent);  }
+  .dora-o { background: rgba(52,211,153,.2);  color: var(--green);   }
+  .dora-r { background: rgba(245,158,11,.2);  color: var(--orange);  }
+  .dora-a { background: rgba(124,92,252,.2);  color: var(--accent2); }
+
+  .dora-detail {
+    border-top: 1px solid var(--border);
+    padding: 6px 12px 10px;
+  }
+  .dora-detail table { width: 100%; font-size: 11px; border-collapse: collapse; }
+  .dora-detail td { padding: 3px 6px; color: var(--text2); vertical-align: top; }
+  .dora-detail td:first-child { color: var(--text3); font-size: 10px; width: 70px; }
+
+  /* ── RFC1918 ── */
+  .rfc-card {}
+
+  /* ── span whole row ── */
+  .span-full { grid-column: 1 / -1; }
+
+  /* ── scrollable table wrapper ── */
+  .table-wrap { overflow-x: auto; max-height: 340px; overflow-y: auto; }
+  .table-wrap-tall { overflow-x: auto; }
+
+  /* subnet table specific sizing */
+  #subnet-wrap { max-height: 310px; overflow-y: auto; overflow-x: auto; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .span-full { grid-column: 1; }
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    :root {
+      --bg: #fff;
+      --bg2: #f8f9fa;
+      --bg3: #f0f2f5;
+      --border: #ccd0d9;
+      --text: #111;
+      --text2: #444;
+      --text3: #888;
+      --accent: #1a56db;
+      --accent2: #5521b5;
+      --green: #057a55;
+      --orange: #b45309;
+      --red: #c81e1e;
+    }
+
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    body { font-size: 10px; background: #fff; color: #111; line-height: 1.4; }
+
+    #topbar { display: none !important; }
+
+    .page { padding: 8px; max-width: 100%; }
+
+    .grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .card-header {
+      background: #f0f2f5;
+      border-bottom: 1px solid #ccc;
+      padding: 5px 8px;
+    }
+
+    .card-num {
+      background: linear-gradient(135deg, #1a56db, #5521b5);
+    }
+
+    .card-title { font-size: 11px; }
+
+    .cs-table { font-size: 9px; }
+    .cs-table th { padding: 4px 6px; font-size: 8px; background: #f0f2f5; color: #555; }
+    .cs-table td { padding: 3px 6px; border-bottom: 1px solid #ddd; }
+    .cs-table tr:hover td { background: transparent; }
+    .cs-table tr.common td { background: #eef3ff; }
+    .cs-table tr.common td:first-child { color: #1a56db; }
+
+    .formula-box { padding: 6px 8px; }
+    .formula { padding: 5px 8px; margin-bottom: 5px; font-size: 9.5px; background: #f8f9fa; border: 1px solid #ccc; }
+    .formula .expr { color: #1a56db; }
+    .formula .comment { color: #888; }
+    .formula .label { color: #888; }
+
+    .dora-flow { padding: 8px 6px; gap: 2px; }
+    .dora-icon { width: 32px; height: 32px; font-size: 14px; }
+    .dora-letter { font-size: 9px; }
+    .dora-name { font-size: 8.5px; }
+    .dora-desc { font-size: 8px; }
+    .dora-arrow { font-size: 14px; margin-bottom: 14px; }
+
+    #subnet-wrap { max-height: none; overflow: visible; }
+    .table-wrap { max-height: none; overflow: visible; }
+
+    .proto-tcp, .proto-udp, .proto-both {
+      font-size: 8px;
+      padding: 0 3px;
+    }
+
+    .ok    { color: #057a55; }
+    .warn  { color: #b45309; }
+    .bad   { color: #c81e1e; }
+
+    .dora-detail td { font-size: 9px; padding: 2px 4px; }
+
+    @page {
+      size: A4;
+      margin: 12mm 10mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR (screen only) -->
+<div id="topbar">
+  <a class="back-link" href="index.html">&#8592; Guida</a>
+  <span class="topbar-title">Cheat Sheet — Sistemi e Reti</span>
+  <button class="print-btn" onclick="window.print()">&#128424; Stampa</button>
+</div>
+
+<div class="page">
+  <div class="grid">
+
+    <!-- 1. SUBNET MASK COMPLETA -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">1</div>
+        <span class="card-title">Tabella subnet mask completa</span>
+      </div>
+      <div class="card-body">
+        <div id="subnet-wrap">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>CIDR</th>
+                <th>Subnet mask</th>
+                <th>Host utili</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody id="subnet-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. PORTE E PROTOCOLLI -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">2</div>
+        <span class="card-title">Porte e protocolli fondamentali</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Porta</th>
+                <th>Protocollo</th>
+                <th>Descrizione</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="mono">20</td><td>FTP-data</td><td>Trasferimento dati</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">21</td><td>FTP-ctrl</td><td>Controllo FTP</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">22</td><td>SSH</td><td>Shell sicura / SFTP / tunnel</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">23</td><td>Telnet</td><td class="warn">Shell remota non cifrata</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">25</td><td>SMTP</td><td>Invio email (server↔server)</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">53</td><td>DNS</td><td>Risoluzione nomi</td><td><span class="proto-both">TCP/UDP</span></td></tr>
+              <tr><td class="mono">67</td><td>DHCP server</td><td>Assegna parametri IP</td><td><span class="proto-udp">UDP</span></td></tr>
+              <tr><td class="mono">68</td><td>DHCP client</td><td>Riceve parametri IP</td><td><span class="proto-udp">UDP</span></td></tr>
+              <tr><td class="mono">80</td><td>HTTP</td><td>Web non cifrato</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">110</td><td>POP3</td><td>Ricezione email (scarica)</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">143</td><td>IMAP</td><td>Ricezione email (sync)</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">161</td><td>SNMP</td><td>Monitoraggio rete</td><td><span class="proto-udp">UDP</span></td></tr>
+              <tr><td class="mono">443</td><td>HTTPS</td><td>Web cifrato TLS</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">587</td><td>SMTP-auth</td><td>Invio autenticato (client)</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">993</td><td>IMAPS</td><td>IMAP over TLS</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">995</td><td>POP3S</td><td>POP3 over TLS</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">1194</td><td>OpenVPN</td><td>VPN open-source</td><td><span class="proto-both">TCP/UDP</span></td></tr>
+              <tr><td class="mono">1433</td><td>SQL Server</td><td>MS SQL Server</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">3306</td><td>MySQL</td><td>Database MySQL/MariaDB</td><td><span class="proto-tcp">TCP</span></td></tr>
+              <tr><td class="mono">3389</td><td>RDP</td><td>Desktop remoto Windows</td><td><span class="proto-both">TCP/UDP</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MODELLO OSI -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">3</div>
+        <span class="card-title">Modello OSI — 7 livelli</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Protocolli / esempi</th>
+                <th>PDU</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="layer-7">7</strong></td>
+                <td class="layer-7"><strong>Applicazione</strong></td>
+                <td class="dim">HTTP, HTTPS, DNS, FTP, SSH, SMTP, SNMP</td>
+                <td class="mono">Dati</td>
+              </tr>
+              <tr>
+                <td><strong class="layer-6">6</strong></td>
+                <td class="layer-6"><strong>Presentazione</strong></td>
+                <td class="dim">TLS/SSL, JPEG, MPEG, ASCII, XML</td>
+                <td class="mono">Dati</td>
+              </tr>
+              <tr>
+                <td><strong class="layer-5">5</strong></td>
+                <td class="layer-5"><strong>Sessione</strong></td>
+                <td class="dim">NetBIOS, RPC, SMB, SIP</td>
+                <td class="mono">Dati</td>
+              </tr>
+              <tr>
+                <td><strong class="layer-4">4</strong></td>
+                <td class="layer-4"><strong>Trasporto</strong></td>
+                <td class="dim">TCP, UDP, SCTP</td>
+                <td class="mono">Segmento</td>
+              </tr>
+              <tr>
+                <td><strong class="layer-3">3</strong></td>
+                <td class="layer-3"><strong>Rete</strong></td>
+                <td class="dim">IP, ICMP, ARP, OSPF, BGP, RIP</td>
+                <td class="mono">Pacchetto</td>
+              </tr>
+              <tr>
+                <td><strong class="layer-2">2</strong></td>
+                <td class="layer-2"><strong>Collegamento dati</strong></td>
+                <td class="dim">Ethernet, Wi-Fi 802.11, PPP, VLAN 802.1Q</td>
+                <td class="mono">Frame</td>
+              </tr>
+              <tr>
+                <td><strong class="layer-1">1</strong></td>
+                <td class="layer-1"><strong>Fisico</strong></td>
+                <td class="dim">Cavi UTP/STP, fibra, onde radio, USB</td>
+                <td class="mono">Bit</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. WI-FI IEEE 802.11 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">4</div>
+        <span class="card-title">Standard Wi-Fi IEEE 802.11</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Standard</th>
+                <th>Anno</th>
+                <th>Banda</th>
+                <th>Vel. max</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="warn">802.11b</span></td>
+                <td class="dim">1999</td>
+                <td>2.4 GHz</td>
+                <td>11 Mbps</td>
+                <td class="dim">Solo DSSS, obsoleto</td>
+              </tr>
+              <tr>
+                <td><span class="warn">802.11g</span></td>
+                <td class="dim">2003</td>
+                <td>2.4 GHz</td>
+                <td>54 Mbps</td>
+                <td class="dim">OFDM, compat. con b</td>
+              </tr>
+              <tr>
+                <td><span class="ok">802.11n</span></td>
+                <td class="dim">2009</td>
+                <td>2.4 / 5 GHz</td>
+                <td>600 Mbps</td>
+                <td class="dim">MIMO, Wi-Fi 4</td>
+              </tr>
+              <tr>
+                <td><span class="ok">802.11ac</span></td>
+                <td class="dim">2013</td>
+                <td>5 GHz</td>
+                <td>6.9 Gbps</td>
+                <td class="dim">MU-MIMO, Wi-Fi 5</td>
+              </tr>
+              <tr>
+                <td><span class="ok">802.11ax</span></td>
+                <td class="dim">2019</td>
+                <td>2.4 / 5 / 6 GHz</td>
+                <td>9.6 Gbps</td>
+                <td class="dim">OFDMA, Wi-Fi 6/6E</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. SICUREZZA WI-FI -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">5</div>
+        <span class="card-title">Sicurezza Wi-Fi</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Protocollo</th>
+                <th>Cifratura</th>
+                <th>Stato</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>WEP</strong></td>
+                <td class="mono">RC4 / 40–128 bit</td>
+                <td><span class="bad">Rotto</span></td>
+                <td class="dim">IV a 24 bit, attacchi in minuti</td>
+              </tr>
+              <tr>
+                <td><strong>WPA</strong></td>
+                <td class="mono">TKIP + RC4</td>
+                <td><span class="bad">Deprecato</span></td>
+                <td class="dim">TKIP vulnerabile, 2003</td>
+              </tr>
+              <tr>
+                <td><strong>WPA2-Personal</strong></td>
+                <td class="mono">AES-CCMP 128 bit</td>
+                <td><span class="warn">Accettabile</span></td>
+                <td class="dim">PSK, vulnerabile a dict. attack</td>
+              </tr>
+              <tr>
+                <td><strong>WPA2-Enterprise</strong></td>
+                <td class="mono">AES-CCMP + 802.1X</td>
+                <td><span class="ok">Sicuro</span></td>
+                <td class="dim">RADIUS, EAP, ambienti aziendali</td>
+              </tr>
+              <tr>
+                <td><strong>WPA3</strong></td>
+                <td class="mono">AES-GCMP-256 / SAE</td>
+                <td><span class="ok">Raccomandato</span></td>
+                <td class="dim">SAE protegge da dict. attack, 2018</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. FORMULE LINK BUDGET E FIBRA -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">6</div>
+        <span class="card-title">Formule — Link Budget e Fibra</span>
+      </div>
+      <div class="card-body">
+        <div class="formula-box">
+          <div class="formula">
+            <span class="label">Free-Space Path Loss (FSPL)</span>
+            <span class="expr">FSPL (dB) = 20·log₁₀(d) + 20·log₁₀(f) + 32.4</span>
+            <br><span class="comment">  d in km, f in MHz</span>
+          </div>
+          <div class="formula">
+            <span class="label">Potenza ricevuta</span>
+            <span class="expr">P_RX = P_TX + G_TX + G_RX − FSPL − altre perdite</span>
+            <br><span class="comment">  tutti i valori in dBm / dBi / dB</span>
+          </div>
+          <div class="formula">
+            <span class="label">Margine di collegamento</span>
+            <span class="expr">Margine = P_RX − Sensibilità_RX</span>
+            <br><span class="comment">  deve essere &gt; 0 dB (tipicamente ≥ 10 dB)</span>
+          </div>
+          <div class="formula">
+            <span class="label">Attenuazione fibra SMF (monomodale)</span>
+            <span class="expr ok">~0.2 dB/km  @ 1550 nm</span>
+            <br><span class="comment">  usata per lunghe distanze (&gt; km)</span>
+          </div>
+          <div class="formula">
+            <span class="label">Attenuazione fibra MMF (multimodale)</span>
+            <span class="expr warn">~3.5 dB/km  @ 850 nm</span>
+            <br><span class="comment">  usata per LAN / edificio (centinaia di m)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. SEQUENZA DORA (DHCP) -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">7</div>
+        <span class="card-title">Sequenza DORA (DHCP)</span>
+      </div>
+      <div class="card-body">
+        <div class="dora-flow">
+          <div class="dora-step">
+            <div class="dora-icon dora-d">D</div>
+            <span class="dora-letter">Discover</span>
+            <span class="dora-name">Client → broadcast</span>
+            <span class="dora-desc">Chi è il server DHCP?</span>
+          </div>
+          <div class="dora-arrow">→</div>
+          <div class="dora-step">
+            <div class="dora-icon dora-o">O</div>
+            <span class="dora-letter">Offer</span>
+            <span class="dora-name">Server → broadcast</span>
+            <span class="dora-desc">Proposta IP disponibile</span>
+          </div>
+          <div class="dora-arrow">→</div>
+          <div class="dora-step">
+            <div class="dora-icon dora-r">R</div>
+            <span class="dora-letter">Request</span>
+            <span class="dora-name">Client → broadcast</span>
+            <span class="dora-desc">Accetta l'offerta</span>
+          </div>
+          <div class="dora-arrow">→</div>
+          <div class="dora-step">
+            <div class="dora-icon dora-a">A</div>
+            <span class="dora-letter">Acknowledge</span>
+            <span class="dora-name">Server → broadcast</span>
+            <span class="dora-desc">Conferma lease IP</span>
+          </div>
+        </div>
+        <div class="dora-detail">
+          <table>
+            <tr><td>Protocollo</td><td>UDP — porta 67 (server) / 68 (client)</td></tr>
+            <tr><td>Lease</td><td>Durata assegnazione IP; il client rinnova a metà lease</td></tr>
+            <tr><td>Parametri</td><td>IP, subnet mask, default gateway, DNS, durata lease</td></tr>
+            <tr><td>APIPA</td><td>169.254.x.x — assegnato se nessun server risponde</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. TIPI DI FIREWALL -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">8</div>
+        <span class="card-title">Tipi di firewall</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Livello OSI</th>
+                <th>Caratteristiche</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Packet Filter</strong></td>
+                <td><span class="layer-3">L3</span> / <span class="layer-4">L4</span></td>
+                <td class="dim">Regole su IP src/dst, porta, protocollo. Stateless. Veloce ma limitato.</td>
+              </tr>
+              <tr>
+                <td><strong>Stateful Inspection</strong></td>
+                <td><span class="layer-4">L4</span></td>
+                <td class="dim">Tiene traccia delle connessioni (tabella di stato). Blocca pacchetti fuori sessione.</td>
+              </tr>
+              <tr>
+                <td><strong>Application-layer (NGFW)</strong></td>
+                <td><span class="layer-7">L7</span></td>
+                <td class="dim">Deep packet inspection, IDS/IPS integrato, controllo utente, SSL inspection.</td>
+              </tr>
+              <tr>
+                <td><strong>Proxy firewall</strong></td>
+                <td><span class="layer-7">L7</span></td>
+                <td class="dim">Intermediario per ogni connessione. Nasconde topologia interna. Circuit/application proxy.</td>
+              </tr>
+              <tr>
+                <td><strong>WAF</strong></td>
+                <td><span class="layer-7">L7</span></td>
+                <td class="dim">Specializzato per HTTP/S. Protegge da SQLi, XSS, CSRF. Davanti a web server.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. CRITTOGRAFIA -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">9</div>
+        <span class="card-title">Crittografia — riepilogo</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Algoritmi</th>
+                <th>Chiavi</th>
+                <th>Uso principale</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="ok">Simmetrica</strong></td>
+                <td class="mono">AES-128/256, 3DES, ChaCha20</td>
+                <td>Unica (stessa per cifrare e decifrare)</td>
+                <td class="dim">Cifratura dati in transito/a riposo, VPN payload</td>
+              </tr>
+              <tr>
+                <td><strong class="accent2">Asimmetrica</strong></td>
+                <td class="mono">RSA-2048/4096, ECC (P-256), DH</td>
+                <td>Coppia pubblica / privata</td>
+                <td class="dim">Scambio chiavi, firma digitale, certificati TLS</td>
+              </tr>
+              <tr>
+                <td><strong>Hash</strong></td>
+                <td class="mono"><span class="ok">SHA-256</span>, SHA-3, <span class="warn">SHA-1†</span>, <span class="bad">MD5†</span></td>
+                <td>Nessuna (funzione a senso unico)</td>
+                <td class="dim">Integrità, password, firma digitale, HMAC</td>
+              </tr>
+              <tr>
+                <td><strong>Ibrida</strong></td>
+                <td class="mono">TLS 1.3, PGP, SSH</td>
+                <td>Asimmetrica per scambio + simmetrica per dati</td>
+                <td class="dim">HTTPS, email cifrata, tunnel SSH — approccio standard</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:8px 10px; font-size:10.5px; color:var(--text3); border-top:1px solid var(--border);">
+          † SHA-1 e MD5 sono crittograficamente rotti — non usare per sicurezza.
+          &nbsp;|&nbsp; AES-256 è standard NIST post-quantum safe.
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. RFC 1918 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">10</div>
+        <span class="card-title">Indirizzi privati RFC 1918</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Classe</th>
+                <th>Range</th>
+                <th>CIDR</th>
+                <th>Host max</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="ok">A</strong></td>
+                <td class="mono">10.0.0.0 – 10.255.255.255</td>
+                <td class="mono">/8</td>
+                <td>16 777 214</td>
+              </tr>
+              <tr>
+                <td><strong class="warn">B</strong></td>
+                <td class="mono">172.16.0.0 – 172.31.255.255</td>
+                <td class="mono">/12</td>
+                <td>1 048 574</td>
+              </tr>
+              <tr>
+                <td><strong>C</strong></td>
+                <td class="mono">192.168.0.0 – 192.168.255.255</td>
+                <td class="mono">/16</td>
+                <td>65 534</td>
+              </tr>
+              <tr>
+                <td class="dim">Loopback</td>
+                <td class="mono">127.0.0.0 – 127.255.255.255</td>
+                <td class="mono">/8</td>
+                <td class="dim">— (loopback)</td>
+              </tr>
+              <tr>
+                <td class="dim">Link-local</td>
+                <td class="mono">169.254.0.0 – 169.254.255.255</td>
+                <td class="mono">/16</td>
+                <td class="dim">— (APIPA)</td>
+              </tr>
+              <tr>
+                <td class="dim">Multicast</td>
+                <td class="mono">224.0.0.0 – 239.255.255.255</td>
+                <td class="mono">/4</td>
+                <td class="dim">— (multicast)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+</div><!-- /page -->
+
+<script>
+// ── Genera tabella subnet /1–/32 ──
+(function() {
+  const common = new Set([8,16,24,25,26,27,28,29,30]);
+  const notes = {
+    8:  'Classe A privata (10.x.x.x)',
+    16: 'Classe B privata (172.x.x.x) / RFC1918',
+    24: 'LAN tipica (192.168.x.x)',
+    25: '2 subnet da /24',
+    26: '4 subnet da /24',
+    27: '8 subnet da /24',
+    28: '16 subnet da /24',
+    29: 'Piccola LAN (6 host)',
+    30: 'Link punto-punto (2 host)',
+    31: 'P2P RFC 3021 (no broadcast)',
+    32: 'Host route (singolo IP)',
+    1:  'Supernet massima',
+  };
+
+  function cidrToMask(prefix) {
+    if (prefix === 0) return '0.0.0.0';
+    const n = (0xffffffff << (32 - prefix)) >>> 0;
+    return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.');
+  }
+
+  const tbody = document.getElementById('subnet-tbody');
+  let html = '';
+  for (let p = 1; p <= 32; p++) {
+    const mask = cidrToMask(p);
+    let hosts;
+    if (p === 31) hosts = '2 (RFC 3021)';
+    else if (p === 32) hosts = '1';
+    else hosts = (Math.pow(2, 32 - p) - 2).toLocaleString('it-IT');
+    const note = notes[p] || '';
+    const cls = common.has(p) ? ' class="common"' : '';
+    html += `<tr${cls}><td>/${p}</td><td class="mono">${mask}</td><td>${hosts}</td><td class="dim" style="font-size:10.5px">${note}</td></tr>`;
+  }
+  tbody.innerHTML = html;
+})();
+</script>
+
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

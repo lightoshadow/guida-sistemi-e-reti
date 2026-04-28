@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subnetting Trainer — Sistemi e Reti</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d2e;
+    --bg3: #242740;
+    --border: #2e3250;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --green: #34d399;
+    --orange: #f59e0b;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --radius: 10px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-wrap: wrap;
+  }
+
+  .topbar a {
+    color: var(--text3);
+    text-decoration: none;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color .15s;
+    white-space: nowrap;
+  }
+  .topbar a:hover { color: var(--accent); }
+
+  .topbar-title {
+    font-size: 15px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+  }
+
+  .topbar-sep { color: var(--border); font-size: 18px; }
+
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .kbd-hint { font-size: 11px; color: var(--text3); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .kbd { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 11px; font-family: var(--mono); color: var(--text2); }
+
+  /* ── SCORE PILL ── */
+  .score-pill {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: rgba(79,142,247,.15);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,.3);
+  }
+
+  /* ── CONTROLS BAR ── */
+  .controls {
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .diff-btn {
+    font-family: var(--font);
+    font-size: 13px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text2);
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, color .15s;
+    font-weight: 600;
+  }
+  .diff-btn:hover { border-color: var(--accent); color: var(--text); }
+  .diff-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .diff-label {
+    font-size: 12px;
+    color: var(--text3);
+    margin-right: 4px;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ── EXERCISE CARD ── */
+  .exercise-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .exercise-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .exercise-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .network-display {
+    font-family: var(--mono);
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .network-meta {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .network-meta span { display: flex; align-items: center; gap: 5px; }
+
+  .meta-label { color: var(--text3); }
+
+  .meta-val { font-family: var(--mono); color: var(--text); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .badge-base { background: rgba(245,158,11,.12); color: var(--orange); border: 1px solid rgba(245,158,11,.3); }
+  .badge-vlsm { background: rgba(124,92,252,.12); color: var(--accent2); border: 1px solid rgba(124,92,252,.3); }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 0 -4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 680px;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: var(--bg3);
+    color: var(--text3);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { border-radius: var(--radius) 0 0 0; }
+  thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    padding: 8px 12px;
+    vertical-align: middle;
+  }
+
+  .subnet-label {
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .req-hosts {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+    white-space: nowrap;
+  }
+
+  /* ── INPUT CELLS ── */
+  .field-input {
+    width: 100%;
+    min-width: 120px;
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 6px 10px;
+    outline: none;
+    transition: border-color .15s, background .15s;
+  }
+  .field-input:focus { border-color: var(--accent); background: #1e2240; }
+  .field-input::placeholder { color: var(--text3); font-size: 12px; }
+
+  .field-input.correct {
+    border-color: var(--green);
+    background: rgba(52,211,153,.08);
+    color: var(--green);
+  }
+  .field-input.wrong {
+    border-color: var(--red);
+    background: rgba(248,113,113,.08);
+    color: var(--red);
+  }
+  .field-input.readonly {
+    opacity: .7;
+    cursor: default;
+  }
+
+  /* ── ACTION ROW ── */
+  .action-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .btn {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, transform .1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { border-color: var(--accent); background: var(--bg3); }
+  .btn:active { transform: scale(.97); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent;
+    color: #fff;
+  }
+  .btn-primary:hover { opacity: .9; border-color: transparent; }
+
+  .btn-green {
+    background: rgba(52,211,153,.1);
+    border-color: rgba(52,211,153,.4);
+    color: var(--green);
+  }
+  .btn-green:hover { background: rgba(52,211,153,.2); border-color: var(--green); }
+
+  .btn-orange {
+    background: rgba(245,158,11,.1);
+    border-color: rgba(245,158,11,.3);
+    color: var(--orange);
+  }
+  .btn-orange:hover { background: rgba(245,158,11,.2); border-color: var(--orange); }
+
+  /* ── RESULT BADGE ── */
+  .result-badge {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .result-badge.good { background: rgba(52,211,153,.15); color: var(--green); border: 1px solid rgba(52,211,153,.3); }
+  .result-badge.bad { background: rgba(248,113,113,.15); color: var(--red); border: 1px solid rgba(248,113,113,.3); }
+  .result-badge.partial { background: rgba(245,158,11,.15); color: var(--orange); border: 1px solid rgba(245,158,11,.3); }
+
+  /* ── SOLUTION PANEL ── */
+  .solution-panel {
+    display: none;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-top: 20px;
+  }
+  .solution-panel.visible { display: block; }
+
+  .solution-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--green);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sol-subnet {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sol-subnet:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .sol-name {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .sol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 6px 20px;
+    margin-bottom: 8px;
+  }
+
+  .sol-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sol-field-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--text3);
+    margin-bottom: 1px;
+  }
+
+  .sol-field-val {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .sol-explain {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+    background: var(--bg2);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+  }
+
+  .sol-explain code {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg3);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--orange);
+  }
+
+  /* ── EMPTY / LOADING ── */
+  .loading-msg {
+    text-align: center;
+    color: var(--text3);
+    padding: 60px 20px;
+    font-size: 15px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .topbar { padding: 12px 16px; gap: 10px; }
+    .controls { padding: 12px 16px; }
+    .main { padding: 20px 12px 60px; }
+    .exercise-card { padding: 16px; }
+    .action-row { gap: 8px; }
+    .btn { padding: 9px 14px; font-size: 13px; }
+    .result-badge { margin-left: 0; width: 100%; text-align: center; }
+    .kbd-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <a href="index.html">&#8592; Guida</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Subnetting Trainer</span>
+  <div class="topbar-right">
+    <div class="kbd-hint">
+      <span class="kbd">Invio</span> controlla &nbsp;&#183;&nbsp;
+      <span class="kbd">N</span> nuovo esercizio
+    </div>
+    <div class="score-pill" id="scorePill">0 esercizi · 0 al primo colpo</div>
+  </div>
+</header>
+
+<!-- ── DIFFICULTY CONTROLS ── -->
+<div class="controls">
+  <span class="diff-label">Difficolt&#224;:</span>
+  <button class="diff-btn active" id="btnBase" onclick="setDifficulty('base')">Base</button>
+  <button class="diff-btn" id="btnVlsm" onclick="setDifficulty('vlsm')">VLSM</button>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="main" id="mainArea">
+  <div class="loading-msg" id="loadingMsg">Generazione esercizio&#8230;</div>
+</main>
+
+<script>
+// ─────────────────────────────────────────────
+//  UTILITY — IP arithmetic
+// ─────────────────────────────────────────────
+
+function ipToNum(ip) {
+  return ip.split('.').reduce((acc, o) => (acc << 8) + parseInt(o, 10), 0) >>> 0;
+}
+
+function numToIp(n) {
+  return [
+    (n >>> 24) & 255,
+    (n >>> 16) & 255,
+    (n >>> 8) & 255,
+    n & 255
+  ].join('.');
+}
+
+function cidrToMask(prefix) {
+  return prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0;
+}
+
+function maskToDotted(mask) {
+  return numToIp(mask);
+}
+
+function hostsPerSubnet(prefix) {
+  // usable hosts
+  return Math.pow(2, 32 - prefix) - 2;
+}
+
+function prefixForHosts(n) {
+  // minimum prefix that fits at least n usable hosts
+  let bits = Math.ceil(Math.log2(n + 2));
+  if (bits > 30) bits = 30; // /30 = 2 hosts minimum
+  return 32 - bits;
+}
+
+// ─────────────────────────────────────────────
+//  GENERATION
+// ─────────────────────────────────────────────
+
+const BASE_NETS = [
+  { net: '192.168.1.0',   prefix: 24 },
+  { net: '192.168.10.0',  prefix: 24 },
+  { net: '192.168.100.0', prefix: 24 },
+  { net: '10.10.0.0',     prefix: 24 },
+  { net: '10.20.0.0',     prefix: 24 },
+  { net: '172.16.0.0',    prefix: 24 },
+  { net: '172.16.1.0',    prefix: 24 },
+];
+
+const VLSM_NETS = [
+  { net: '192.168.0.0',   prefix: 22 },
+  { net: '192.168.8.0',   prefix: 22 },
+  { net: '192.168.4.0',   prefix: 22 },
+  { net: '10.0.0.0',      prefix: 22 },
+  { net: '10.1.0.0',      prefix: 22 },
+  { net: '172.16.0.0',    prefix: 22 },
+  { net: '172.16.4.0',    prefix: 22 },
+  { net: '10.0.0.0',      prefix: 23 },
+  { net: '10.1.0.0',      prefix: 23 },
+  { net: '192.168.2.0',   prefix: 23 },
+  { net: '192.168.4.0',   prefix: 23 },
+  { net: '172.16.0.0',    prefix: 23 },
+];
+
+// Friendly host counts (powers-of-2 minus 2)
+const FRIENDLY_HOSTS = [2, 6, 14, 30, 62, 126, 254];
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function randInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function generateExercise(difficulty) {
+  if (difficulty === 'base') {
+    return generateBase();
+  } else {
+    return generateVLSM();
+  }
+}
+
+function generateBase() {
+  const netDef = pick(BASE_NETS);
+  const baseIp = ipToNum(netDef.net);
+  const basePrefix = netDef.prefix;
+
+  // 2–4 equal subnets; pick a count and find required prefix
+  const count = randInt(2, 4);
+  // We need count subnets fitting inside /basePrefix
+  // required bits = ceil(log2(count)), new prefix = basePrefix + bits
+  const extraBits = Math.ceil(Math.log2(count));
+  const subPrefix = basePrefix + extraBits;
+  if (subPrefix > 30) {
+    // Fallback — shouldn't normally happen with /24 bases but be safe
+    return generateBase();
+  }
+
+  const subnetSize = Math.pow(2, 32 - subPrefix);
+  const usable = hostsPerSubnet(subPrefix);
+
+  const subnets = [];
+  for (let i = 0; i < count; i++) {
+    const netNum = (baseIp + i * subnetSize) >>> 0;
+    const bcast = (netNum + subnetSize - 1) >>> 0;
+    const first = (netNum + 1) >>> 0;
+    const last  = (bcast - 1) >>> 0;
+    const mask  = cidrToMask(subPrefix);
+
+    // Give each subnet a realistic name
+    const names = ['Uffici', 'Server', 'DMZ', 'Laboratorio', 'Direzione', 'Produzione'];
+    subnets.push({
+      name:       names[i] || `Subnet ${i + 1}`,
+      reqHosts:   usable,
+      network:    numToIp(netNum),
+      cidr:       subPrefix,
+      mask:       maskToDotted(mask),
+      broadcast:  numToIp(bcast),
+      firstHost:  numToIp(first),
+      lastHost:   numToIp(last),
+      usable:     usable,
+      explain:    buildExplain(subPrefix, netNum, bcast, usable),
+    });
+  }
+
+  return {
+    difficulty: 'base',
+    startNet:   netDef.net,
+    startPrefix: basePrefix,
+    totalHosts: Math.pow(2, 32 - basePrefix) - 2,
+    subnets,
+  };
+}
+
+function generateVLSM() {
+  const netDef = pick(VLSM_NETS);
+  const baseIp = ipToNum(netDef.net);
+  const basePrefix = netDef.prefix;
+  const totalAddresses = Math.pow(2, 32 - basePrefix);
+
+  const count = randInt(4, 6);
+
+  // Generate random host requirements, ensuring they fit in the space
+  // available total addresses minus one per subnet for network/broadcast overhead
+  // Strategy: pick random friendly host counts, check they sum to < totalAddresses
+  let reqList;
+  let attempts = 0;
+  do {
+    reqList = [];
+    for (let i = 0; i < count; i++) {
+      reqList.push(pick(FRIENDLY_HOSTS));
+    }
+    // Total space needed: sum of 2^(32-prefix) for each
+    const totalNeeded = reqList.reduce((acc, h) => {
+      const p = prefixForHosts(h);
+      return acc + Math.pow(2, 32 - p);
+    }, 0);
+    if (totalNeeded <= totalAddresses) break;
+    attempts++;
+  } while (attempts < 100);
+
+  if (attempts >= 100) {
+    // Fallback: pick small requirements guaranteed to fit
+    reqList = [126, 62, 30, 14].slice(0, count);
+  }
+
+  // Sort largest first (greedy VLSM)
+  reqList.sort((a, b) => b - a);
+
+  const subnetNames = ['LAN-A', 'LAN-B', 'LAN-C', 'LAN-D', 'LAN-E', 'LAN-F'];
+  let cursor = baseIp;
+  const subnets = [];
+
+  for (let i = 0; i < count; i++) {
+    const h = reqList[i];
+    const subPrefix = prefixForHosts(h);
+    const subnetSize = Math.pow(2, 32 - subPrefix);
+    const mask = cidrToMask(subPrefix);
+
+    // Align cursor to block boundary
+    const aligned = Math.ceil(cursor / subnetSize) * subnetSize >>> 0;
+    const netNum = aligned >>> 0;
+    const bcast  = (netNum + subnetSize - 1) >>> 0;
+    const first  = (netNum + 1) >>> 0;
+    const last   = (bcast - 1) >>> 0;
+    const usable = hostsPerSubnet(subPrefix);
+
+    subnets.push({
+      name:      subnetNames[i],
+      reqHosts:  h,
+      network:   numToIp(netNum),
+      cidr:      subPrefix,
+      mask:      maskToDotted(mask),
+      broadcast: numToIp(bcast),
+      firstHost: numToIp(first),
+      lastHost:  numToIp(last),
+      usable:    usable,
+      explain:   buildExplain(subPrefix, netNum, bcast, usable),
+    });
+
+    cursor = (bcast + 1) >>> 0;
+  }
+
+  return {
+    difficulty: 'vlsm',
+    startNet:   netDef.net,
+    startPrefix: basePrefix,
+    totalHosts:  totalAddresses - 2,
+    subnets,
+  };
+}
+
+function buildExplain(prefix, netNum, bcast, usable) {
+  const hostBits = 32 - prefix;
+  const total = Math.pow(2, hostBits);
+  return `<code>/${prefix}</code> → ${hostBits} bit host → 2<sup>${hostBits}</sup> = ${total} indirizzi totali → `
+       + `<code>${usable}</code> host utilizzabili (−2 per rete e broadcast). `
+       + `Blocco: <code>${numToIp(netNum)}</code> – <code>${numToIp(bcast)}</code>.`;
+}
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+
+let difficulty = 'base';
+let exercise = null;
+let totalCompleted = 0;
+let firstTryCorrect = 0;
+let checkedOnce = false;
+
+// ─────────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────────
+
+function renderExercise() {
+  exercise = generateExercise(difficulty);
+  checkedOnce = false;
+
+  const main = document.getElementById('mainArea');
+
+  const diffBadge = exercise.difficulty === 'base'
+    ? '<span class="badge badge-base">Base</span>'
+    : '<span class="badge badge-vlsm">VLSM</span>';
+
+  const maskDotted = maskToDotted(cidrToMask(exercise.startPrefix));
+
+  let rows = '';
+  exercise.subnets.forEach((s, idx) => {
+    rows += `
+    <tr>
+      <td class="subnet-label">${s.name}</td>
+      <td><span class="req-hosts">${s.reqHosts}</span></td>
+      <td><input class="field-input" type="text" id="f_net_${idx}" placeholder="es. 192.168.1.0" autocomplete="off" spellcheck="false"></td>
+      <td><input class="field-input" type="text" id="f_cidr_${idx}" placeholder="es. /26" autocomplete="off" spellcheck="false"></td>
+      <td><input class="field-input" type="text" id="f_mask_${idx}" placeholder="es. 255.255.255.192" autocomplete="off" spellcheck="false"></td>
+      <td><input class="field-input" type="text" id="f_bcast_${idx}" placeholder="es. 192.168.1.63" autocomplete="off" spellcheck="false"></td>
+      <td><input class="field-input" type="text" id="f_first_${idx}" placeholder="es. 192.168.1.1" autocomplete="off" spellcheck="false"></td>
+      <td><input class="field-input" type="text" id="f_last_${idx}" placeholder="es. 192.168.1.62" autocomplete="off" spellcheck="false"></td>
+      <td><input class="field-input" type="text" id="f_usable_${idx}" placeholder="es. 62" autocomplete="off" spellcheck="false" style="min-width:70px"></td>
+    </tr>`;
+  });
+
+  main.innerHTML = `
+  <div class="exercise-card">
+    <div class="exercise-header">
+      <div>
+        <div class="exercise-title">Rete di partenza</div>
+        <div class="network-display">${exercise.startNet}/${exercise.startPrefix}</div>
+        <div class="network-meta">
+          <span><span class="meta-label">Maschera:</span> <span class="meta-val">${maskDotted}</span></span>
+          <span><span class="meta-label">Host totali disponibili:</span> <span class="meta-val">${exercise.totalHosts}</span></span>
+        </div>
+      </div>
+      <div style="margin-left:auto">${diffBadge}</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Subnet</th>
+            <th>Host richiesti</th>
+            <th>Ind. di rete</th>
+            <th>CIDR</th>
+            <th>Maschera decimale</th>
+            <th>Broadcast</th>
+            <th>Primo host</th>
+            <th>Ultimo host</th>
+            <th>Host utilizzabili</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" id="btnCheck" onclick="checkAnswers()">&#10003; Controlla</button>
+      <button class="btn btn-orange" id="btnSolution" onclick="toggleSolution()">Mostra soluzione</button>
+      <button class="btn" id="btnNew" onclick="newExercise()">&#8635; Nuovo esercizio</button>
+      <span id="resultBadge" style="display:none" class="result-badge"></span>
+    </div>
+
+    <div class="solution-panel" id="solutionPanel"></div>
+  </div>`;
+
+  // Focus first input
+  const firstInput = document.getElementById('f_net_0');
+  if (firstInput) firstInput.focus();
+}
+
+// ─────────────────────────────────────────────
+//  VALIDATION
+// ─────────────────────────────────────────────
+
+function normaliseInput(val) {
+  return val.trim().replace(/\s+/g, '');
+}
+
+function normaliseCidr(val) {
+  const v = val.trim();
+  if (v.startsWith('/')) return v;
+  return '/' + v;
+}
+
+function checkAnswers() {
+  let correct = 0;
+  let total = 0;
+
+  exercise.subnets.forEach((s, idx) => {
+    const fields = [
+      { id: `f_net_${idx}`,    correct: s.network,   norm: normaliseInput },
+      { id: `f_cidr_${idx}`,   correct: `/${s.cidr}`, norm: normaliseCidr },
+      { id: `f_mask_${idx}`,   correct: s.mask,       norm: normaliseInput },
+      { id: `f_bcast_${idx}`,  correct: s.broadcast,  norm: normaliseInput },
+      { id: `f_first_${idx}`,  correct: s.firstHost,  norm: normaliseInput },
+      { id: `f_last_${idx}`,   correct: s.lastHost,   norm: normaliseInput },
+      { id: `f_usable_${idx}`, correct: String(s.usable), norm: normaliseInput },
+    ];
+
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (!el) return;
+      total++;
+      const userVal = f.norm(el.value);
+      const ok = userVal.toLowerCase() === f.correct.toLowerCase();
+      el.classList.remove('correct', 'wrong');
+      if (userVal === '') {
+        // Empty: do nothing yet — keep neutral
+      } else if (ok) {
+        el.classList.add('correct');
+        correct++;
+      } else {
+        el.classList.add('wrong');
+      }
+    });
+  });
+
+  // Also mark empty fields as wrong after first check
+  exercise.subnets.forEach((s, idx) => {
+    const fields = [
+      { id: `f_net_${idx}`,    correct: s.network,       norm: normaliseInput },
+      { id: `f_cidr_${idx}`,   correct: `/${s.cidr}`,     norm: normaliseCidr },
+      { id: `f_mask_${idx}`,   correct: s.mask,           norm: normaliseInput },
+      { id: `f_bcast_${idx}`,  correct: s.broadcast,      norm: normaliseInput },
+      { id: `f_first_${idx}`,  correct: s.firstHost,      norm: normaliseInput },
+      { id: `f_last_${idx}`,   correct: s.lastHost,       norm: normaliseInput },
+      { id: `f_usable_${idx}`, correct: String(s.usable), norm: normaliseInput },
+    ];
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (!el) return;
+      const userVal = f.norm(el.value);
+      if (userVal === '' && !el.classList.contains('correct')) {
+        el.classList.add('wrong');
+      }
+    });
+  });
+
+  // Score display
+  const badge = document.getElementById('resultBadge');
+  badge.style.display = '';
+  badge.textContent = `${correct} / ${total} campi corretti`;
+  badge.className = 'result-badge';
+  if (correct === total) {
+    badge.classList.add('good');
+    if (!checkedOnce) {
+      totalCompleted++;
+      firstTryCorrect++;
+      updateScorePill();
+    }
+  } else if (correct >= total * 0.7) {
+    badge.classList.add('partial');
+    if (!checkedOnce) {
+      totalCompleted++;
+      updateScorePill();
+    }
+  } else {
+    badge.classList.add('bad');
+    if (!checkedOnce) {
+      totalCompleted++;
+      updateScorePill();
+    }
+  }
+  checkedOnce = true;
+}
+
+// ─────────────────────────────────────────────
+//  SOLUTION
+// ─────────────────────────────────────────────
+
+function toggleSolution() {
+  const panel = document.getElementById('solutionPanel');
+  const btn   = document.getElementById('btnSolution');
+
+  if (panel.classList.contains('visible')) {
+    panel.classList.remove('visible');
+    btn.textContent = 'Mostra soluzione';
+    return;
+  }
+
+  // Build solution HTML
+  let html = '<div class="solution-title">&#10003; Soluzione completa</div>';
+  exercise.subnets.forEach((s) => {
+    html += `
+    <div class="sol-subnet">
+      <div class="sol-name">${s.name} — richiesti ${s.reqHosts} host</div>
+      <div class="sol-grid">
+        <div class="sol-field"><span class="sol-field-label">Indirizzo di rete</span><span class="sol-field-val">${s.network}</span></div>
+        <div class="sol-field"><span class="sol-field-label">CIDR</span><span class="sol-field-val">/${s.cidr}</span></div>
+        <div class="sol-field"><span class="sol-field-label">Maschera decimale</span><span class="sol-field-val">${s.mask}</span></div>
+        <div class="sol-field"><span class="sol-field-label">Broadcast</span><span class="sol-field-val">${s.broadcast}</span></div>
+        <div class="sol-field"><span class="sol-field-label">Primo host</span><span class="sol-field-val">${s.firstHost}</span></div>
+        <div class="sol-field"><span class="sol-field-label">Ultimo host</span><span class="sol-field-val">${s.lastHost}</span></div>
+        <div class="sol-field"><span class="sol-field-label">Host utilizzabili</span><span class="sol-field-val">${s.usable}</span></div>
+      </div>
+      <div class="sol-explain">${s.explain}</div>
+    </div>`;
+  });
+
+  panel.innerHTML = html;
+  panel.classList.add('visible');
+  btn.textContent = 'Nascondi soluzione';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ─────────────────────────────────────────────
+//  CONTROLS
+// ─────────────────────────────────────────────
+
+function setDifficulty(d) {
+  difficulty = d;
+  document.getElementById('btnBase').classList.toggle('active', d === 'base');
+  document.getElementById('btnVlsm').classList.toggle('active', d === 'vlsm');
+  newExercise();
+}
+
+function newExercise() {
+  renderExercise();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateScorePill() {
+  document.getElementById('scorePill').textContent =
+    `${totalCompleted} esercizi · ${firstTryCorrect} al primo colpo`;
+}
+
+// ─────────────────────────────────────────────
+//  KEYBOARD SHORTCUTS
+// ─────────────────────────────────────────────
+
+document.addEventListener('keydown', (e) => {
+  // Ignore shortcuts when typing inside inputs
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      checkAnswers();
+    }
+    return;
+  }
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    checkAnswers();
+  }
+  if (e.key === 'n' || e.key === 'N') {
+    e.preventDefault();
+    newExercise();
+  }
+});
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+
+renderExercise();
+</script>
+
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
