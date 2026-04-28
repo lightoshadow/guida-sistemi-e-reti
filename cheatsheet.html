@@ -884,6 +884,425 @@
       </div>
     </div>
 
+    <!-- 11. VLAN 802.1Q -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">11</div>
+        <span class="card-title">VLAN 802.1Q — trunk e access</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Concetto</th>
+                <th>Dettaglio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Porta access</strong></td>
+                <td class="dim">Un'unica VLAN; il frame esce <em>senza</em> tag 802.1Q. Usata per PC, stampanti, IP phone.</td>
+              </tr>
+              <tr>
+                <td><strong>Porta trunk</strong></td>
+                <td class="dim">Più VLAN; i frame trasportano il <strong>tag 802.1Q</strong> (4 byte, campo VID 12 bit → max 4094 VLAN). Usata tra switch e verso router.</td>
+              </tr>
+              <tr>
+                <td><strong>VLAN nativa</strong></td>
+                <td class="dim">VLAN il cui traffico viaggia sul trunk <em>senza</em> tag (default VLAN 1). Cambiare per sicurezza.</td>
+              </tr>
+              <tr>
+                <td><strong>Inter-VLAN routing</strong></td>
+                <td class="dim">Router-on-a-stick: sub-interfacce sul router (<code>int Fa0/0.10</code>, <code>encapsulation dot1Q 10</code>). Oppure L3 switch con SVI.</td>
+              </tr>
+              <tr>
+                <td><strong>Vantaggi VLAN</strong></td>
+                <td class="dim">Segmentazione broadcast, sicurezza, flessibilità topologica, QoS separata (es. VLAN VoIP, VLAN IoT, VLAN guest).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="padding-top:4px">
+          <div class="formula">
+            <span class="label">Tag 802.1Q (4 byte inseriti nel frame Ethernet)</span>
+            <span class="expr">TPID (0x8100) | PCP (3 bit) | DEI (1 bit) | VID (12 bit)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. ROUTING STATICO + RIP/OSPF -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">12</div>
+        <span class="card-title">Routing statico e dinamico (RIP / OSPF)</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Caratteristiche chiave</th>
+                <th>Uso</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="ok">Statico</strong></td>
+                <td class="dim">Configurazione manuale (<code>ip route rete mask next-hop</code>). Default route: <code>0.0.0.0/0</code>. Nessun overhead, pieno controllo.</td>
+                <td class="dim">Reti piccole, default GW</td>
+              </tr>
+              <tr>
+                <td><strong class="warn">RIP v2</strong></td>
+                <td class="dim">Distance-vector. Metrica: hop count (max 15). Aggiornamento broadcast ogni 30 s. Convergenza lenta.</td>
+                <td class="dim">Reti semplici / laboratorio</td>
+              </tr>
+              <tr>
+                <td><strong class="accent2">OSPF</strong></td>
+                <td class="dim">Link-state. Algoritmo Dijkstra (SPF). Metrica: costo (100 Mbps / banda). Aree (Area 0 = backbone). Convergenza rapida.</td>
+                <td class="dim">Reti medie-grandi aziendali</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="padding-top:4px">
+          <div class="formula">
+            <span class="label">Cisco — route statica</span>
+            <span class="expr">ip route 192.168.2.0 255.255.255.0 10.0.0.1</span>
+            <br><span class="comment">  rete destinazione  mask  next-hop (o interfaccia uscita)</span>
+          </div>
+          <div class="formula">
+            <span class="label">Default route (gateway of last resort)</span>
+            <span class="expr">ip route 0.0.0.0 0.0.0.0 &lt;next-hop&gt;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13. DMZ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">13</div>
+        <span class="card-title">DMZ — De-Militarized Zone</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Zona</th>
+                <th>Accesso tipico</th>
+                <th>Contiene</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="bad">Internet</strong></td>
+                <td><span class="bad">Untrusted</span></td>
+                <td class="dim">Utenti esterni, indirizzi pubblici</td>
+              </tr>
+              <tr>
+                <td><strong class="warn">DMZ</strong></td>
+                <td><span class="warn">Semi-trusted</span></td>
+                <td class="dim">Web server, mail server, DNS pubblico, reverse proxy</td>
+              </tr>
+              <tr>
+                <td><strong class="ok">LAN interna</strong></td>
+                <td><span class="ok">Trusted</span></td>
+                <td class="dim">Workstation, server interni, AD, database</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="padding-top:4px">
+          <div class="formula">
+            <span class="label">Regola firewall tipica (dual-firewall o singolo a 3 interfacce)</span>
+            <span class="expr">Internet → DMZ: <span class="ok">PERMIT</span> tcp dst 80,443  <span class="comment">(web pubblico)</span></span>
+            <br><span class="expr">Internet → LAN: <span class="bad">DENY</span> any          <span class="comment">(nessun accesso diretto)</span></span>
+            <br><span class="expr">DMZ → LAN: <span class="bad">DENY</span> any             <span class="comment">(server DMZ non vedono LAN)</span></span>
+            <br><span class="expr">LAN → DMZ: <span class="ok">PERMIT</span> (amministrazione)</span>
+            <br><span class="expr">LAN → Internet: <span class="ok">PERMIT</span> (navigazione)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14. VPN SITE-TO-SITE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">14</div>
+        <span class="card-title">VPN site-to-site — IPsec</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Parametro</th>
+                <th>Tunnel mode</th>
+                <th>Transport mode</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Cosa cifra</strong></td>
+                <td class="dim">Intero pacchetto IP originale (+ nuovo header IP)</td>
+                <td class="dim">Solo il payload (header IP originale visibile)</td>
+              </tr>
+              <tr>
+                <td><strong>Uso tipico</strong></td>
+                <td class="ok">VPN gateway-to-gateway (site-to-site)</td>
+                <td class="dim">Host-to-host (es. IPsec nativo tra server)</td>
+              </tr>
+              <tr>
+                <td><strong>AH</strong></td>
+                <td colspan="2" class="dim">Integrità + autenticazione; <span class="bad">NON cifra</span>. Incompatibile con NAT.</td>
+              </tr>
+              <tr>
+                <td><strong>ESP</strong></td>
+                <td colspan="2" class="dim">Cifratura (AES) + integrità + autenticazione. <span class="ok">Usato in pratica</span>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="padding-top:4px">
+          <div class="formula">
+            <span class="label">Fasi IKE (negoziazione)</span>
+            <span class="expr">Fase 1: autenticazione peer + SA ISAKMP (canale sicuro)</span>
+            <br><span class="expr">Fase 2: negoziazione SA IPsec (parametri ESP/AH, chiavi di sessione)</span>
+          </div>
+          <div class="formula">
+            <span class="label">Tipi di VPN a confronto</span>
+            <span class="expr">Site-to-site: <span class="ok">gateway ↔ gateway</span>, permanente, trasparente</span>
+            <br><span class="expr">Client-to-site: <span style="color:var(--accent)">laptop/smartphone ↔ gateway</span>, su richiesta</span>
+            <br><span class="expr">SSL/TLS VPN: porta 443, attraversa NAT/firewall facilmente</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15. CABLAGGIO STRUTTURATO -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">15</div>
+        <span class="card-title">Cablaggio strutturato (EIA/TIA-568 — ISO 11801)</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Sottosistema</th>
+                <th>Tratto</th>
+                <th>Limite</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Backbone campus</strong></td>
+                <td class="dim">Tra edifici — fibra SMF/MMF</td>
+                <td class="mono">&le; 3000 m (SMF)</td>
+              </tr>
+              <tr>
+                <td><strong>Backbone edificio</strong></td>
+                <td class="dim">MDF → IDF (piano), fibra MMF o UTP</td>
+                <td class="mono">&le; 500 m (MMF)</td>
+              </tr>
+              <tr>
+                <td><strong>Distribuzione orizzontale</strong></td>
+                <td class="dim">IDF → presa a muro (workstation)</td>
+                <td class="mono">&le; 90 m (UTP)</td>
+              </tr>
+              <tr>
+                <td><strong>Cavo patch</strong></td>
+                <td class="dim">Presa → PC / patch panel → switch</td>
+                <td class="mono">&le; 10 m</td>
+              </tr>
+              <tr>
+                <td><strong>Canale totale</strong></td>
+                <td class="dim">Switch → NIC (incl. patch)</td>
+                <td class="mono">&le; 100 m</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap-tall" style="border-top:1px solid var(--border)">
+          <table class="cs-table">
+            <thead>
+              <tr><th>Categoria UTP</th><th>Banda</th><th>Velocità max</th><th>Uso</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="dim">Cat 5e</span></td><td>100 MHz</td><td>1 Gbps</td><td class="dim">LAN ancora diffusa</td></tr>
+              <tr><td><span class="ok">Cat 6</span></td><td>250 MHz</td><td>1 Gbps (10G a 55 m)</td><td class="dim">Standard corrente</td></tr>
+              <tr><td><span class="ok">Cat 6A</span></td><td>500 MHz</td><td>10 Gbps / 100 m</td><td class="dim">Data center, dorsale</td></tr>
+              <tr><td><span class="warn">Cat 7</span></td><td>600 MHz</td><td>10 Gbps</td><td class="dim">Schermato S/FTP</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16. DNS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">16</div>
+        <span class="card-title">DNS — record e risoluzione</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Record</th>
+                <th>Significato</th>
+                <th>Esempio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong class="ok">A</strong></td><td class="dim">Nome → IPv4</td><td class="mono dim">www → 1.2.3.4</td></tr>
+              <tr><td><strong class="ok">AAAA</strong></td><td class="dim">Nome → IPv6</td><td class="mono dim">www → 2001:db8::1</td></tr>
+              <tr><td><strong style="color:var(--accent)">CNAME</strong></td><td class="dim">Alias → nome canonico</td><td class="mono dim">ftp → www.example.com</td></tr>
+              <tr><td><strong class="warn">MX</strong></td><td class="dim">Mail exchanger (con priorità)</td><td class="mono dim">10 mail.example.com</td></tr>
+              <tr><td><strong>NS</strong></td><td class="dim">Name server autoritativo</td><td class="mono dim">ns1.example.com</td></tr>
+              <tr><td><strong>PTR</strong></td><td class="dim">Reverse lookup: IPv4 → nome</td><td class="mono dim">4.3.2.1.in-addr.arpa</td></tr>
+              <tr><td><strong>SOA</strong></td><td class="dim">Start of Authority: serial, refresh</td><td class="dim">Parametri zona</td></tr>
+              <tr><td><strong class="dim">TXT</strong></td><td class="dim">Testo libero (SPF, DKIM, verifica)</td><td class="dim">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="padding-top:4px">
+          <div class="formula">
+            <span class="label">Gerarchia risoluzione (iterativa)</span>
+            <span class="expr">Client → resolver locale → root (.) → TLD (.com) → autoritativo</span>
+            <br><span class="comment">  Cache a ogni passo (TTL). Porta 53 UDP/TCP.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17. CLOUD E VIRTUALIZZAZIONE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">17</div>
+        <span class="card-title">Cloud computing e Virtualizzazione</span>
+      </div>
+      <div class="card-body">
+        <div class="table-wrap-tall">
+          <table class="cs-table">
+            <thead>
+              <tr>
+                <th>Modello</th>
+                <th>Gestito dal cliente</th>
+                <th>Gestito dal provider</th>
+                <th>Esempi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="ok">IaaS</strong></td>
+                <td class="dim">OS, app, dati</td>
+                <td class="dim">HW, rete, storage fisico</td>
+                <td class="dim">AWS EC2, Azure VM</td>
+              </tr>
+              <tr>
+                <td><strong class="warn">PaaS</strong></td>
+                <td class="dim">App, dati</td>
+                <td class="dim">OS, runtime, middleware</td>
+                <td class="dim">Heroku, Azure App Service</td>
+              </tr>
+              <tr>
+                <td><strong class="accent2">SaaS</strong></td>
+                <td class="dim">Solo dati/config</td>
+                <td class="dim">Tutto lo stack</td>
+                <td class="dim">Gmail, Office 365</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap-tall" style="border-top:1px solid var(--border)">
+          <table class="cs-table">
+            <thead>
+              <tr><th>Hypervisor</th><th>Tipo</th><th>Caratteristica</th><th>Esempi</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong class="ok">Tipo 1</strong></td>
+                <td class="dim">Bare metal</td>
+                <td class="dim">Direttamente sull'HW, più efficiente, production</td>
+                <td class="dim">VMware ESXi, Hyper-V, KVM</td>
+              </tr>
+              <tr>
+                <td><strong class="warn">Tipo 2</strong></td>
+                <td class="dim">Hosted</td>
+                <td class="dim">Sopra un OS host, più semplice, uso desktop</td>
+                <td class="dim">VirtualBox, VMware Workstation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-box" style="padding-top:4px">
+          <div class="formula">
+            <span class="label">VM vs Container</span>
+            <span class="expr">VM: kernel dedicato, OS completo → isolamento forte, overhead alto</span>
+            <br><span class="expr">Container: kernel condiviso (Docker) → avvio rapido, overhead basso</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18. PROXY, BUSINESS CONTINUITY, GDPR -->
+    <div class="card span-full">
+      <div class="card-header">
+        <div class="card-num">18</div>
+        <span class="card-title">Proxy server · Business Continuity · GDPR</span>
+      </div>
+      <div class="card-body">
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; border-top:none">
+          <!-- Proxy -->
+          <div style="border-right:1px solid var(--border)">
+            <div style="padding:6px 10px; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--text3); background:rgba(46,50,80,.4); border-bottom:1px solid var(--border)">Proxy server</div>
+            <table class="cs-table">
+              <tbody>
+                <tr><td style="width:120px"><strong>Forward proxy</strong></td><td class="dim">Client → Proxy → Internet. Filtra contenuti, fa caching, nasconde IP client. Usato in azienda per controllo navigazione.</td></tr>
+                <tr><td><strong>Reverse proxy</strong></td><td class="dim">Internet → Proxy → Server interni. Bilancia il carico, termina TLS, protegge backend. Es. Nginx, HAProxy.</td></tr>
+                <tr><td><strong>NAT vs Proxy</strong></td><td class="dim">NAT opera a L3 (IP), Proxy a L7 (applicazione). Il proxy può ispezionare il contenuto HTTP.</td></tr>
+                <tr><td><strong>Transparent proxy</strong></td><td class="dim">Il client non sa di passare dal proxy (configurazione sul router/firewall).</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Business Continuity -->
+          <div style="border-right:1px solid var(--border)">
+            <div style="padding:6px 10px; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--text3); background:rgba(46,50,80,.4); border-bottom:1px solid var(--border)">Business Continuity</div>
+            <table class="cs-table">
+              <tbody>
+                <tr><td style="width:80px"><strong class="warn">RTO</strong></td><td class="dim">Recovery Time Objective — tempo massimo tollerabile di inattività dopo il guasto.</td></tr>
+                <tr><td><strong class="warn">RPO</strong></td><td class="dim">Recovery Point Objective — quantità massima di dati persi (misurata nel tempo).</td></tr>
+                <tr><td><strong>Backup</strong></td><td class="dim"><strong>Full</strong>: copia totale (lento, completo). <strong>Incrementale</strong>: solo modifiche dall'ultimo backup. <strong>Differenziale</strong>: modifiche dall'ultimo full.</td></tr>
+                <tr><td><strong>RAID</strong></td><td class="dim">RAID 1: mirror (ridondanza). RAID 5: parità distribuita (min 3 dischi). RAID 10: mirror+stripe.</td></tr>
+                <tr><td><strong>Cluster HA</strong></td><td class="dim">Failover automatico, load balancing, hot standby per eliminare SPOF.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- GDPR -->
+          <div>
+            <div style="padding:6px 10px; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--text3); background:rgba(46,50,80,.4); border-bottom:1px solid var(--border)">GDPR (Reg. UE 2016/679)</div>
+            <table class="cs-table">
+              <tbody>
+                <tr><td style="width:110px"><strong>Titolare</strong></td><td class="dim">Decide finalità e mezzi del trattamento. Responsabile delle misure di sicurezza.</td></tr>
+                <tr><td><strong>Responsabile</strong></td><td class="dim">Tratta i dati per conto del titolare (es. fornitore cloud). Contratto DPA obbligatorio.</td></tr>
+                <tr><td><strong>DPO</strong></td><td class="dim">Data Protection Officer — obbligatorio per PA, grandi aziende, trattamenti su larga scala.</td></tr>
+                <tr><td><strong>Diritti</strong></td><td class="dim">Accesso, rettifica, cancellazione ("diritto all'oblio"), portabilità, opposizione, limitazione.</td></tr>
+                <tr><td><strong>Notifica breach</strong></td><td class="dim">All'autorità (Garante) entro <strong>72 ore</strong>. All'interessato se rischio elevato.</td></tr>
+                <tr><td><strong>Sanzioni</strong></td><td class="dim">Fino a <strong>20 M€</strong> o 4% fatturato globale annuo (il maggiore).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /grid -->
 </div><!-- /page -->
 
