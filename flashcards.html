@@ -347,12 +347,46 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
-    .controls { padding: 12px 16px; }
-    .main { padding: 24px 12px 40px; }
-    .card-face { padding: 22px 20px; }
     .topbar { padding: 12px 16px; }
     .kbd-hint { display: none; }
+    .topbar-title { font-size: 13px; }
+
+    .controls {
+      padding: 12px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .controls select,
+    .controls button {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      text-align: left;
+    }
+    .controls-sep { display: none; }
+    .stat-pill { text-align: center; font-size: 13px; padding: 8px 12px; }
+
     .prog-wrap { padding: 6px 16px; }
+
+    .main { padding: 20px 12px 48px; }
+
+    .card-wrap { margin-bottom: 20px; }
+    .card { min-height: 260px; }
+    .card-face { padding: 20px 18px; min-height: 260px; }
+    .card-q { font-size: 18px; }
+    .card-a { font-size: 14px; }
+    .card-hint { font-size: 11px; }
+
+    .nav-row { gap: 8px; width: 100%; max-width: 480px; }
+    .nav-btn {
+      flex: 1;
+      padding: 12px 10px;
+      font-size: 14px;
+      justify-content: center;
+    }
+    .btn-know { flex: unset; width: 100%; max-width: 480px; padding: 14px; font-size: 15px; }
+    .card-counter { min-width: 50px; font-size: 13px; }
   }
 </style>
 </head>
