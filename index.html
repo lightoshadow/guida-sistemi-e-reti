@@ -723,6 +723,27 @@
 
   #back-top.visible { opacity: 1; pointer-events: all; }
 
+  /* ── FOOTER ── */
+  footer {
+    margin-left: var(--sidebar-w);
+    text-align: center;
+    padding: 1rem 1rem 2rem;
+    font-size: 0.9rem;
+    color: var(--text3);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem 0;
+  }
+  footer a {
+    color: var(--text3);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  footer .sep { margin: 0 0.6rem; opacity: 0.4; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     #sidebar { transform: translateX(-100%); }
@@ -1656,12 +1677,12 @@
   </div><!-- /content -->
 </main>
 
-<footer style="margin-left:var(--sidebar-w);text-align:center;padding:1rem 1rem 2rem;font-size:1rem;color:var(--text3);">
-  <a href="https://github.com/lightoshadow" target="_blank" rel="noopener" style="color:var(--text3);text-decoration:none;border-bottom:1px solid var(--border);">Fatto da Marco</a>
-  <span style="margin:0 0.75rem;opacity:0.4;">·</span>
-  <a href="https://github.com/lightoshadow/guida-sistemi-e-reti/issues/new" target="_blank" rel="noopener" style="color:var(--text3);text-decoration:none;border-bottom:1px solid var(--border);">Segnala un errore</a>
-  <span style="margin:0 0.75rem;opacity:0.4;">·</span>
-  <a href="mailto:marco.disarra@gmail.com" style="color:var(--text3);text-decoration:none;border-bottom:1px solid var(--border);">Contattami</a>
+<footer>
+  <a href="https://github.com/lightoshadow" target="_blank" rel="noopener">Fatto da Marco</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href="https://github.com/lightoshadow/guida-sistemi-e-reti/issues/new" target="_blank" rel="noopener">Segnala un errore</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <a href="mailto:marco.disarra@gmail.com">Contattami</a>
 </footer>
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Torna in cima">↑</button>
