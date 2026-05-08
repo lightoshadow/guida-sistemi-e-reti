@@ -39,6 +39,28 @@ All CSS, JS, and HTML are inlined in a single file. Key sections:
 
 PDFs in `prove-esame/` are official MIM/MIUR exam papers for *Sistemi e Reti* (sessions 2015–2024). When adding new exams, also add the corresponding row in the PDF download section of `index.html`.
 
+## Responsiveness
+
+All pages (index.html and every file in topics/) **must be usable on any screen size**, including phones. Requirements:
+
+- `<meta name="viewport" content="width=device-width, initial-scale=1.0">` on every page
+- Every topic page's `<style>` block must include this responsive CSS before `</style>`:
+  ```css
+  pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  @media(max-width:600px){
+    .page{padding:20px 12px 60px}
+    .block{padding:16px 14px}
+    .topbar-section{display:none}
+    table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  }
+  ```
+- SVGs: always use `width="100%"` and `viewBox`; set `max-width` to the natural diagram width
+- Tables: the media query above makes them horizontally scrollable on narrow screens
+- `pre`/`code` blocks: `overflow-x:auto` prevents horizontal overflow
+- Do **not** add fixed pixel widths to block-level elements
+
+When adding new topic pages, copy the CSS from an existing page — the responsive rules are already included.
+
 ## Deployment
 
 Deployed on Vercel from the `main` branch of `github.com/lightoshadow/guida-sistemi-e-reti`. Push to `main` triggers an automatic redeploy. No `vercel.json` is needed — Vercel serves the root as a static site.
