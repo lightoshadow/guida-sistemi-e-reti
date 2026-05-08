@@ -49,9 +49,10 @@ All pages (index.html and every file in topics/) **must be usable on any screen 
   pre{overflow-x:auto;-webkit-overflow-scrolling:touch}
   @media(max-width:600px){
     .page{padding:20px 12px 60px}
-    .block{padding:16px 14px}
+    .block{padding:16px 14px;overflow-x:auto}
     .topbar-section{display:none}
     table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+    .block svg{min-width:520px}
   }
   ```
 - SVGs: always use `width="100%"` and `viewBox`; set `max-width` to the natural diagram width
