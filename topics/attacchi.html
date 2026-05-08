@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attacchi e minacce alla rete — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}.badge-red{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout.red{border-left-color:var(--red);background:rgba(248,113,113,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Attacchi e minacce alla rete</span>
+  <span class="topbar-section">Sezione 6</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 6 — Sicurezza delle reti</div>
+    <h1>Attacchi e minacce alla rete</h1>
+    <p class="hero-desc">Gli attacchi informatici compaiono come quesiti autonomi o come parte del progetto ("quali minacce affronta questo sistema?"). Devi sapere cosa sono, come funzionano e come difendersi.</p>
+    <div class="badges">
+      <span class="badge badge-red">MitM</span>
+      <span class="badge badge-red">Ransomware</span>
+      <span class="badge badge-red">DoS / DDoS</span>
+      <span class="badge badge-orange">Phishing</span>
+      <span class="badge badge-blue">Contromisure</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Quadro generale degli attacchi</h2>
+    <table>
+      <thead><tr><th>Attacco</th><th>Obiettivo CIA</th><th>Meccanismo</th><th>Contromisure principali</th></tr></thead>
+      <tbody>
+        <tr><td><strong>MitM</strong></td><td>Confidenzialità, Integrità</td><td>Intercettazione e/o modifica del traffico</td><td>TLS/HTTPS, VPN, HSTS</td></tr>
+        <tr><td><strong>Phishing</strong></td><td>Confidenzialità</td><td>Email/sito falso che ruba credenziali</td><td>MFA, filtri email, formazione utenti</td></tr>
+        <tr><td><strong>Ransomware</strong></td><td>Disponibilità</td><td>Cifratura dei dati, richiesta riscatto</td><td>Backup offline, aggiornamenti, antivirus</td></tr>
+        <tr><td><strong>DoS / DDoS</strong></td><td>Disponibilità</td><td>Saturazione di banda o risorse server</td><td>Firewall, rate limiting, CDN, anti-DDoS</td></tr>
+        <tr><td><strong>SQL Injection</strong></td><td>Confidenzialità, Integrità</td><td>Iniezione di comandi SQL in input non validato</td><td>Prepared statements, WAF, validazione input</td></tr>
+        <tr><td><strong>XSS</strong></td><td>Integrità, Confidenzialità</td><td>Iniezione di script in pagine web</td><td>Sanitizzazione output, CSP</td></tr>
+        <tr><td><strong>Malware/Virus</strong></td><td>Tutti</td><td>Codice malevolo eseguito sul sistema</td><td>Antivirus, aggiornamenti, policy esecuzione</td></tr>
+        <tr><td><strong>Spam</strong></td><td>Disponibilità (parziale)</td><td>Email indesiderate, spesso vettore di phishing</td><td>Filtri antispam, SPF/DKIM/DMARC</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p><strong>CIA Triad:</strong> i tre obiettivi della sicurezza informatica — <strong>C</strong>onfidenzialità (solo chi è autorizzato vede i dati), <strong>I</strong>ntegrità (i dati non sono stati alterati), <strong>D</strong>isponibilità (i servizi sono accessibili quando servono).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Man-in-the-Middle (MitM)</h2>
+    <p>L'attaccante si posiziona tra mittente e destinatario, intercettando e/o modificando le comunicazioni. Le vittime credono di comunicare direttamente tra loro.</p>
+    <h3>Varianti principali</h3>
+    <ul>
+      <li><strong>ARP Poisoning:</strong> l'attaccante invia risposte ARP false → la tabella ARP degli host viene avvelenata → il traffico passa per lui</li>
+      <li><strong>DNS Spoofing:</strong> risponde alle query DNS con IP falsi → reindirizza a siti malevoli</li>
+      <li><strong>SSL Stripping:</strong> degrada HTTPS a HTTP abbassando la cifratura</li>
+      <li><strong>Evil Twin:</strong> access point Wi-Fi con lo stesso SSID della rete legittima</li>
+    </ul>
+    <h3>Contromisure</h3>
+    <ul>
+      <li>HTTPS con HSTS (forza HTTPS, previene SSL stripping)</li>
+      <li>VPN su reti non fidate</li>
+      <li>Dynamic ARP Inspection (DAI) sugli switch</li>
+      <li>DNSSEC per le query DNS</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Ransomware</h2>
+    <p>Il ransomware cifra i file della vittima e richiede un riscatto (spesso in criptovaluta) per la chiave di decifratura.</p>
+    <h3>Fasi di un attacco ransomware</h3>
+    <ol>
+      <li><strong>Distribuzione:</strong> email di phishing, link malevoli, vulnerabilità non patchate, RDP esposto</li>
+      <li><strong>Esecuzione:</strong> il malware viene eseguito (spesso richiede azione dell'utente)</li>
+      <li><strong>Propagazione:</strong> si diffonde nella rete (lateral movement)</li>
+      <li><strong>Cifratura:</strong> cifra file locali e su share di rete con chiave asimmetrica</li>
+      <li><strong>Estorsione:</strong> mostra istruzioni per il pagamento</li>
+    </ol>
+    <h3>Contromisure</h3>
+    <ul>
+      <li><strong>Backup 3-2-1:</strong> 3 copie, 2 supporti diversi, 1 off-site (o offline) — il backup offline non viene cifrato dal ransomware</li>
+      <li>Aggiornamenti OS e applicazioni (patch vulnerabilità)</li>
+      <li>Segmentazione della rete (limita la propagazione)</li>
+      <li>Principio del minimo privilegio (gli utenti non hanno accesso admin)</li>
+      <li>EDR (Endpoint Detection and Response)</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>DoS e DDoS</h2>
+    <p>Un attacco <strong>DoS (Denial of Service)</strong> mira a rendere un servizio irraggiungibile saturando le sue risorse (banda, CPU, connessioni). Il <strong>DDoS</strong> usa migliaia di dispositivi compromessi (botnet).</p>
+    <h3>Tipologie</h3>
+    <ul>
+      <li><strong>Volumetrico:</strong> satura la banda — UDP flood, ICMP flood, DNS amplification</li>
+      <li><strong>Protocol attack:</strong> sfrutta vulnerabilità nei protocolli — SYN flood, Ping of Death</li>
+      <li><strong>Application layer (L7):</strong> richieste HTTP legittime ma in grande quantità — HTTP flood, Slowloris</li>
+    </ul>
+    <h3>SYN Flood</h3>
+    <p>L'attaccante invia molti SYN con IP sorgente falsificato. Il server risponde con SYN-ACK ma non riceve mai l'ACK finale — le half-open connections occupano memoria finché il server va in crash.</p>
+    <h3>Contromisure</h3>
+    <ul>
+      <li>Firewall con rate limiting per IP</li>
+      <li>SYN Cookies (il server non alloca stato prima dell'ACK finale)</li>
+      <li>CDN e scrubbing centers (filtrano il traffico malevolo prima che arrivi al server)</li>
+      <li>Anycast routing (distribuisce il traffico su più datacenter)</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Phishing e ingegneria sociale</h2>
+    <p>Il phishing sfrutta la <strong>debolezza umana</strong> piuttosto che le vulnerabilità tecniche. Varianti:</p>
+    <ul>
+      <li><strong>Phishing email:</strong> email che imita un'istituzione (banca, corriere) con link a siti falsi</li>
+      <li><strong>Spear phishing:</strong> phishing mirato a una persona specifica con informazioni personalizzate</li>
+      <li><strong>Vishing:</strong> phishing via telefono</li>
+      <li><strong>Smishing:</strong> phishing via SMS</li>
+    </ul>
+    <h3>Contromisure tecniche</h3>
+    <ul>
+      <li><strong>SPF (Sender Policy Framework):</strong> record DNS TXT che specifica quali server possono inviare email per il dominio</li>
+      <li><strong>DKIM (DomainKeys Identified Mail):</strong> firma digitale delle email</li>
+      <li><strong>DMARC:</strong> policy che definisce cosa fare con email che falliscono SPF/DKIM</li>
+      <li>MFA — anche se le credenziali vengono rubate, non bastano per accedere</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="firewall.html">Firewall e IDS/IPS →</a>
+      <a href="crittografia.html">Crittografia come difesa →</a>
+      <a href="backup-dr.html">Backup contro ransomware →</a>
+      <a href="gdpr.html">Notifica violazioni GDPR →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

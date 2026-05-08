@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routing statico e dinamico — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Routing statico e dinamico</span>
+  <span class="topbar-section">Sezione 5</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 5 — Routing e Switching</div>
+    <h1>Routing statico e dinamico</h1>
+    <p class="hero-desc">Il routing statico è presente in <strong>tutti gli esami</strong>: devi saper leggere e compilare tabelle di routing. RIP e OSPF sono richiesti come confronto teorico o configurazione base.</p>
+    <div class="badges">
+      <span class="badge badge-green">★ Tutti gli esami</span>
+      <span class="badge badge-blue">Routing statico</span>
+      <span class="badge badge-blue">RIP</span>
+      <span class="badge badge-blue">OSPF</span>
+      <span class="badge badge-orange">Router-on-a-stick</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Come funziona il routing</h2>
+    <p>Il router opera a <strong>livello 3 (rete)</strong>. Quando riceve un pacchetto, consulta la sua <strong>tabella di routing</strong> per decidere dove inviarlo. Confronta l'indirizzo IP di destinazione con le rotte disponibili e sceglie quella con il prefisso più lungo (longest prefix match).</p>
+    <h3>Struttura di una tabella di routing</h3>
+    <table>
+      <thead><tr><th>Destinazione</th><th>Maschera</th><th>Next-hop</th><th>Interfaccia</th><th>Metrica</th></tr></thead>
+      <tbody>
+        <tr><td>192.168.1.0</td><td>/24</td><td>directly connected</td><td>eth0</td><td>0</td></tr>
+        <tr><td>192.168.2.0</td><td>/24</td><td>10.0.0.2</td><td>eth1</td><td>1</td></tr>
+        <tr><td>10.0.0.0</td><td>/30</td><td>directly connected</td><td>eth1</td><td>0</td></tr>
+        <tr><td>0.0.0.0</td><td>/0</td><td>203.0.113.1</td><td>eth2</td><td>1</td></tr>
+      </tbody>
+    </table>
+    <p>La riga <code>0.0.0.0/0</code> è il <strong>default gateway</strong> (rotta di default): usata per tutti i pacchetti che non corrispondono a nessuna rotta più specifica.</p>
+    <div class="callout"><p><strong>Longest prefix match:</strong> tra più rotte che corrispondono, vince quella con la maschera più lunga (più specifica). Es.: se esistono /24 e /16, la /24 batte sempre la /16.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Routing statico</h2>
+    <p>Le rotte sono configurate <strong>manualmente</strong> dall'amministratore. Non si aggiornano automaticamente in caso di guasti.</p>
+    <pre><code># Cisco IOS — aggiungere una rotta statica
+ip route 192.168.2.0 255.255.255.0 10.0.0.2
+#         ^destinazione  ^maschera  ^next-hop
+
+# Rotta di default
+ip route 0.0.0.0 0.0.0.0 203.0.113.1</code></pre>
+    <ul>
+      <li><strong>Pro:</strong> semplice, predicibile, nessun overhead di protocollo, sicuro (nessun routing protocol da attaccare)</li>
+      <li><strong>Contro:</strong> non scala (in reti grandi serve configurare ogni rotta manualmente), nessun failover automatico</li>
+      <li><strong>Quando usarlo:</strong> reti piccole (&lt;5 router), link WAN verso ISP, stub network (rete con un solo percorso)</li>
+    </ul>
+
+    <h3>Compilare una tabella di routing all'esame</h3>
+    <div class="diagram">
+Topologia:
+Router A: eth0=192.168.1.1/24, eth1=10.0.0.1/30
+Router B: eth0=10.0.0.2/30, eth1=192.168.2.1/24
+
+Tabella Router A:
+  192.168.1.0/24 → directly connected (eth0)
+  10.0.0.0/30    → directly connected (eth1)
+  192.168.2.0/24 → next-hop 10.0.0.2 (eth1)   ← rotta statica
+
+Tabella Router B:
+  10.0.0.0/30    → directly connected (eth0)
+  192.168.2.0/24 → directly connected (eth1)
+  192.168.1.0/24 → next-hop 10.0.0.1 (eth0)   ← rotta statica
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Routing dinamico — RIP</h2>
+    <p>Il <strong>RIP (Routing Information Protocol)</strong> è un protocollo distance-vector. Ogni router comunica la propria tabella di routing ai vicini diretti ogni 30 secondi.</p>
+    <ul>
+      <li><strong>Metrica:</strong> hop count (numero di router attraversati)</li>
+      <li><strong>Limite:</strong> max 15 hop (16 = rete irraggiungibile)</li>
+      <li><strong>Convergenza:</strong> lenta (può richiedere minuti dopo un guasto)</li>
+      <li><strong>Versioni:</strong> RIPv1 (classful, broadcast) → RIPv2 (classless, multicast 224.0.0.9, supporta VLSM)</li>
+    </ul>
+    <div class="callout orange"><p><strong>Limitazione critica:</strong> il limite di 15 hop rende RIP inadatto a reti grandi. Oggi è usato solo in ambienti molto piccoli o per scopi didattici.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Routing dinamico — OSPF</h2>
+    <p>Il <strong>OSPF (Open Shortest Path First)</strong> è un protocollo link-state. Ogni router mappa l'intera topologia della rete e calcola il percorso ottimale con l'algoritmo di Dijkstra (SPF — Shortest Path First).</p>
+    <ul>
+      <li><strong>Metrica:</strong> costo (basato sulla banda: costo = 10⁸/bandwidth)</li>
+      <li><strong>Nessun limite di hop</strong></li>
+      <li><strong>Convergenza rapida</strong> (pochi secondi dopo un guasto)</li>
+      <li><strong>Gerarchico:</strong> suddivide la rete in aree (Area 0 = backbone)</li>
+      <li><strong>Multicast:</strong> 224.0.0.5 (tutti i router OSPF), 224.0.0.6 (DR/BDR)</li>
+    </ul>
+
+    <h3>Confronto RIP vs OSPF</h3>
+    <table>
+      <thead><tr><th></th><th>RIP</th><th>OSPF</th></tr></thead>
+      <tbody>
+        <tr><td>Tipo</td><td>Distance-vector</td><td>Link-state</td></tr>
+        <tr><td>Metrica</td><td>Hop count</td><td>Costo (banda)</td></tr>
+        <tr><td>Limite</td><td>15 hop</td><td>Nessuno</td></tr>
+        <tr><td>Convergenza</td><td>Lenta (minuti)</td><td>Rapida (secondi)</td></tr>
+        <tr><td>Scalabilità</td><td>Solo reti piccole</td><td>Reti grandi</td></tr>
+        <tr><td>Aggiornamenti</td><td>Periodici (30s)</td><td>Solo su cambiamenti</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Inter-VLAN routing (router-on-a-stick)</h2>
+    <p>Per instradare il traffico tra VLAN diverse serve un router (o un L3 switch). Con <strong>router-on-a-stick</strong>:</p>
+    <ol>
+      <li>Il link router↔switch è configurato come <strong>trunk</strong></li>
+      <li>Il router ha una <strong>sub-interfaccia</strong> per ogni VLAN, ognuna con il proprio IP gateway</li>
+      <li>Il traffico inter-VLAN sale sul trunk, viene instradato, scende verso la VLAN di destinazione</li>
+    </ol>
+    <pre><code># Configurazione switch (lato trunk)
+interface GigabitEthernet0/24
+  switchport mode trunk
+  switchport trunk allowed vlan 10,20,30
+
+# Configurazione router (sub-interfacce)
+interface GigabitEthernet0/0.10
+  encapsulation dot1Q 10
+  ip address 192.168.10.1 255.255.255.0
+
+interface GigabitEthernet0/0.20
+  encapsulation dot1Q 20
+  ip address 192.168.20.1 255.255.255.0</code></pre>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="subnetting-ip.html">Subnetting e tabelle di indirizzamento →</a>
+      <a href="vlan.html">VLAN e inter-VLAN routing →</a>
+      <a href="vpn.html">VPN e routing tra sedi →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

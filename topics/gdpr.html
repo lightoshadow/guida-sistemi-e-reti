@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDPR e Privacy — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">GDPR e Privacy</span>
+  <span class="topbar-section">Sezione 14</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 14 — Privacy e normativa</div>
+    <h1>GDPR e Privacy by Design</h1>
+    <p class="hero-desc">Il GDPR compare in quasi tutte le prove dal 2022 in poi, spesso nel contesto di sistemi che trattano dati personali (sanitari, scolastici, aziendali). Devi conoscere i principi fondamentali e i ruoli.</p>
+    <div class="badges">
+      <span class="badge badge-blue">Reg. UE 2016/679</span>
+      <span class="badge badge-orange">Privacy by design</span>
+      <span class="badge badge-green">Alta frequenza (2022+)</span>
+      <span class="badge badge-blue">DPO</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Principi del GDPR (art. 5)</h2>
+    <p>Il GDPR (General Data Protection Regulation — Regolamento UE 2016/679, in vigore dal 25 maggio 2018) stabilisce i principi per il trattamento dei dati personali:</p>
+    <table>
+      <thead><tr><th>Principio</th><th>Significato pratico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Liceità, correttezza, trasparenza</strong></td><td>Il trattamento deve avere una base giuridica (consenso, contratto, obbligo legale…) e deve essere comunicato all'interessato</td></tr>
+        <tr><td><strong>Limitazione della finalità</strong></td><td>I dati raccolti per uno scopo non possono essere usati per scopi incompatibili</td></tr>
+        <tr><td><strong>Minimizzazione</strong></td><td>Raccogliere solo i dati strettamente necessari alla finalità ("data minimization")</td></tr>
+        <tr><td><strong>Esattezza</strong></td><td>I dati devono essere aggiornati e corretti</td></tr>
+        <tr><td><strong>Limitazione della conservazione</strong></td><td>Conservare i dati solo per il tempo necessario</td></tr>
+        <tr><td><strong>Integrità e riservatezza</strong></td><td>Proteggere i dati con misure tecniche e organizzative adeguate (cifratura, controllo accessi…)</td></tr>
+        <tr><td><strong>Responsabilizzazione (Accountability)</strong></td><td>Il titolare deve dimostrare di rispettare il GDPR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Diritti degli interessati</h2>
+    <p>Il GDPR riconosce agli interessati (le persone fisiche i cui dati vengono trattati) una serie di diritti:</p>
+    <ul>
+      <li><strong>Diritto di accesso (art. 15):</strong> ottenere conferma del trattamento e copia dei dati</li>
+      <li><strong>Diritto di rettifica (art. 16):</strong> correggere dati inesatti</li>
+      <li><strong>Diritto alla cancellazione / "diritto all'oblio" (art. 17):</strong> chiedere la cancellazione dei dati</li>
+      <li><strong>Diritto di limitazione (art. 18):</strong> limitare il trattamento in attesa di verifica</li>
+      <li><strong>Diritto alla portabilità (art. 20):</strong> ricevere i propri dati in formato strutturato e trasferirli ad altro titolare</li>
+      <li><strong>Diritto di opposizione (art. 21):</strong> opporsi al trattamento per marketing diretto</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Ruoli nel GDPR</h2>
+    <table>
+      <thead><tr><th>Ruolo</th><th>Chi è</th><th>Responsabilità</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Titolare del trattamento</strong><br>(Data Controller)</td><td>Organizzazione che determina finalità e mezzi del trattamento (es. azienda, scuola)</td><td>Responsabilità principale, deve dimostrare compliance</td></tr>
+        <tr><td><strong>Responsabile del trattamento</strong><br>(Data Processor)</td><td>Tratta dati per conto del titolare (es. fornitore cloud)</td><td>Deve seguire le istruzioni del titolare, garantisce sicurezza</td></tr>
+        <tr><td><strong>DPO (Data Protection Officer)</strong></td><td>Figura obbligatoria per PA, grandi organizzazioni, chi tratta dati sensibili su larga scala</td><td>Supervisiona la conformità GDPR, punto di contatto con l'Autorità Garante</td></tr>
+        <tr><td><strong>Interessato</strong><br>(Data Subject)</td><td>La persona fisica i cui dati vengono trattati</td><td>Esercita i diritti sopra descritti</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Notifica delle violazioni (Data Breach)</h2>
+    <p>In caso di violazione dei dati personali (data breach), il GDPR impone:</p>
+    <ul>
+      <li><strong>Entro 72 ore:</strong> notifica all'Autorità Garante (Garante Privacy in Italia) se la violazione comporta rischi per gli interessati</li>
+      <li><strong>Senza ritardo:</strong> notifica agli interessati se il rischio è elevato</li>
+    </ul>
+    <p>Il titolare deve documentare tutte le violazioni, anche quelle non notificate, nel <strong>registro delle violazioni</strong>.</p>
+    <div class="callout orange"><p><strong>All'esame:</strong> spesso si chiede di progettare un sistema che rispetti il GDPR. Risposta tipo: cifratura dei dati a riposo e in transito, controllo degli accessi, log degli accessi, backup, minimizzazione dei dati raccolti.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Privacy by Design</h2>
+    <p>Il principio di <strong>Privacy by Design</strong> (art. 25 GDPR) richiede che la protezione dei dati sia integrata nel progetto del sistema <em>fin dall'inizio</em>, non aggiunta a posteriori.</p>
+    <h3>7 principi fondamentali (Ann Cavoukian)</h3>
+    <ol>
+      <li>Proattivo, non reattivo — prevenire, non rimediare</li>
+      <li>Privacy come impostazione predefinita (privacy by default)</li>
+      <li>Privacy incorporata nel design</li>
+      <li>Funzionalità completa — non zero-sum (sicurezza e funzionalità)</li>
+      <li>Sicurezza end-to-end — protezione per tutto il ciclo di vita del dato</li>
+      <li>Visibilità e trasparenza</li>
+      <li>Rispetto per la privacy dell'utente</li>
+    </ol>
+    <h3>Applicazione pratica in un progetto</h3>
+    <ul>
+      <li>Cifrare i dati personali nel database (a riposo)</li>
+      <li>Usare HTTPS per tutti i form che raccolgono dati (in transito)</li>
+      <li>Pseudonimizzare o anonimizzare dove possibile</li>
+      <li>Implementare controllo degli accessi granulare (minimo privilegio)</li>
+      <li>Prevedere log degli accessi ai dati personali</li>
+      <li>Raccogliere solo i dati necessari (no campo "data di nascita" se basta l'anno)</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="crittografia.html">Cifratura dei dati →</a>
+      <a href="attacchi.html">Violazioni e data breach →</a>
+      <a href="backup-dr.html">Backup e conservazione dati →</a>
+      <a href="ssl-tls.html">HTTPS e protezione dei dati in transito →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

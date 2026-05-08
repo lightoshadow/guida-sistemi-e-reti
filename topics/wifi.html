@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reti Wireless e sicurezza Wi-Fi — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}.badge-red{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout.red{border-left-color:var(--red);background:rgba(248,113,113,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Reti Wireless e sicurezza Wi-Fi</span>
+  <span class="topbar-section">Sezione 4</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 4 — Reti Wireless</div>
+    <h1>Reti Wireless — IEEE 802.11 e sicurezza</h1>
+    <p class="hero-desc">Le reti Wi-Fi compaiono in quasi tutti i progetti d'esame. Devi saper confrontare gli standard, scegliere il protocollo di sicurezza corretto e gestire BYOD e captive portal.</p>
+    <div class="badges">
+      <span class="badge badge-blue">IEEE 802.11</span>
+      <span class="badge badge-red">WEP → WPA3</span>
+      <span class="badge badge-orange">BYOD</span>
+      <span class="badge badge-green">802.1X / RADIUS</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Standard IEEE 802.11 — confronto</h2>
+    <table>
+      <thead><tr><th>Standard</th><th>Nome</th><th>Banda</th><th>Velocità max</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>802.11b</td><td>Wi-Fi 1</td><td>2.4 GHz</td><td>11 Mbps</td><td>Obsoleto</td></tr>
+        <tr><td>802.11a</td><td>Wi-Fi 2</td><td>5 GHz</td><td>54 Mbps</td><td>Obsoleto</td></tr>
+        <tr><td>802.11g</td><td>Wi-Fi 3</td><td>2.4 GHz</td><td>54 Mbps</td><td>Obsoleto</td></tr>
+        <tr><td>802.11n</td><td>Wi-Fi 4</td><td>2.4 e 5 GHz</td><td>600 Mbps</td><td>MIMO, ancora diffuso</td></tr>
+        <tr><td>802.11ac</td><td>Wi-Fi 5</td><td>5 GHz</td><td>3.5 Gbps</td><td>MU-MIMO, beamforming</td></tr>
+        <tr><td>802.11ax</td><td>Wi-Fi 6</td><td>2.4, 5, 6 GHz</td><td>9.6 Gbps</td><td>OFDMA, alta densità</td></tr>
+        <tr><td>802.11be</td><td>Wi-Fi 7</td><td>2.4, 5, 6 GHz</td><td>46 Gbps</td><td>Standard recente (2024)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Bande 2.4 GHz vs 5 GHz</h3>
+    <table>
+      <thead><tr><th></th><th>2.4 GHz</th><th>5 GHz</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Copertura</strong></td><td>Maggiore (penetra meglio i muri)</td><td>Minore</td></tr>
+        <tr><td><strong>Velocità</strong></td><td>Minore</td><td>Maggiore</td></tr>
+        <tr><td><strong>Interferenze</strong></td><td>Molte (microonde, Bluetooth, vicini)</td><td>Poche</td></tr>
+        <tr><td><strong>Canali non sovrapposti</strong></td><td>3 (1, 6, 11)</td><td>~20+</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p><strong>Canali 2.4 GHz:</strong> in Europa ci sono 13 canali, ma solo 3 non si sovrappongono: 1, 6 e 11. Configurare AP adiacenti su canali diversi evita le interferenze.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Sicurezza Wi-Fi: WEP → WPA3</h2>
+    <table>
+      <thead><tr><th>Protocollo</th><th>Anno</th><th>Cifratura</th><th>Autenticazione</th><th>Stato</th></tr></thead>
+      <tbody>
+        <tr><td><strong>WEP</strong></td><td>1997</td><td>RC4 (chiave statica)</td><td>PSK debole</td><td>Obsoleto — bucato in minuti</td></tr>
+        <tr><td><strong>WPA</strong></td><td>2003</td><td>TKIP (RC4 migliorato)</td><td>PSK o 802.1X</td><td>Deprecato</td></tr>
+        <tr><td><strong>WPA2 Personal</strong></td><td>2004</td><td>AES-CCMP</td><td>PSK (password condivisa)</td><td>Sicuro se PSK forte</td></tr>
+        <tr><td><strong>WPA2 Enterprise</strong></td><td>2004</td><td>AES-CCMP</td><td>802.1X / RADIUS</td><td>Standard aziendale</td></tr>
+        <tr><td><strong>WPA3 Personal</strong></td><td>2018</td><td>AES-GCMP-256</td><td>SAE (Dragonfly)</td><td>Standard attuale</td></tr>
+        <tr><td><strong>WPA3 Enterprise</strong></td><td>2018</td><td>AES-GCMP-256</td><td>802.1X con PMF</td><td>Standard attuale</td></tr>
+      </tbody>
+    </table>
+
+    <h3>WPA3 — miglioramenti chiave</h3>
+    <ul>
+      <li><strong>SAE (Simultaneous Authentication of Equals):</strong> rimpiazza il PSK handshake di WPA2 — resistente agli attacchi dictionary offline</li>
+      <li><strong>Forward Secrecy:</strong> ogni sessione ha chiavi diverse — compromettere la password non svela le sessioni passate</li>
+      <li><strong>PMF (Protected Management Frames):</strong> protegge i frame di management (deauth, disassoc) da spoofing</li>
+      <li><strong>192-bit security suite</strong> in WPA3 Enterprise per ambienti ad alta sicurezza</li>
+    </ul>
+
+    <h3>WPA2 Enterprise e 802.1X</h3>
+    <p>In ambito aziendale, ogni utente si autentica con le proprie credenziali (non una password condivisa). Architettura:</p>
+    <ul>
+      <li><strong>Supplicant:</strong> il dispositivo che vuole connettersi</li>
+      <li><strong>Authenticator:</strong> l'Access Point</li>
+      <li><strong>Authentication Server:</strong> server RADIUS (Remote Authentication Dial-In User Service)</li>
+    </ul>
+    <div class="callout green"><p><strong>All'esame:</strong> in un contesto aziendale o scolastico con molti utenti → WPA2/WPA3 Enterprise con RADIUS. Per reti domestiche o piccole → WPA2/WPA3 Personal con PSK forte.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>BYOD e reti ospiti</h2>
+    <p><strong>BYOD (Bring Your Own Device)</strong> = i dipendenti/studenti usano i propri dispositivi personali sulla rete aziendale/scolastica. Problema: dispositivi non controllati → potenziale vettore di malware.</p>
+
+    <h3>Strategie di gestione BYOD</h3>
+    <ul>
+      <li><strong>VLAN dedicata per ospiti/BYOD</strong> — segmentazione dalla rete interna</li>
+      <li><strong>Captive portal</strong> — pagina di login obbligatoria via browser</li>
+      <li><strong>NAC (Network Access Control)</strong> — verifica la conformità del dispositivo (antivirus aggiornato, OS aggiornato) prima di concedere accesso</li>
+      <li><strong>Policy di accesso limitate</strong> — la VLAN ospiti ha solo accesso a Internet, non alle risorse interne</li>
+    </ul>
+
+    <h3>Captive Portal</h3>
+    <p>Il captive portal reindirizza ogni tentativo HTTP verso una pagina di autenticazione:</p>
+    <ol>
+      <li>Il dispositivo si associa all'AP e ottiene un IP via DHCP</li>
+      <li>Tenta di navigare su qualsiasi sito HTTP</li>
+      <li>Il gateway intercetta e reindirizza a <code>portal.rete.it/login</code></li>
+      <li>L'utente inserisce credenziali o accetta le condizioni</li>
+      <li>Il gateway sblocca l'accesso per quell'IP/MAC per una sessione</li>
+    </ol>
+    <div class="callout orange"><p><strong>Limitazione:</strong> il captive portal non funziona trasparentemente con HTTPS. I browser moderni potrebbero mostrare un errore SSL. Soluzione: usare protocollo CAPPORT (RFC 8910) o garantire che la prima richiesta sia HTTP.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Link budget wireless (cenni)</h2>
+    <p>Il link budget verifica se il segnale radio è sufficiente a collegare due punti:</p>
+    <p style="font-family:var(--mono);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;color:var(--green);font-size:13px;margin:12px 0">
+      Margine = P_TX [dBm] + G_TX [dBi] + G_RX [dBi] − FSPL [dB] − P_RX_min [dBm]
+    </p>
+    <p>Se il margine è positivo (es. ≥ 10 dB), il collegamento funziona.</p>
+    <ul>
+      <li><strong>FSPL (Free-Space Path Loss):</strong> attenuazione nello spazio libero, cresce con distanza e frequenza</li>
+      <li><strong>Formula FSPL [dB]:</strong> 20·log(d[km]) + 20·log(f[MHz]) + 32.45</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="vlan.html">VLAN ospiti e BYOD →</a>
+      <a href="crittografia.html">AES e WPA3 →</a>
+      <a href="firewall.html">Captive portal e controllo accessi →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

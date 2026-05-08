@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backup e Disaster Recovery — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Backup e Disaster Recovery</span>
+  <span class="topbar-section">Sezione 9</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 9 — Server e infrastruttura</div>
+    <h1>Backup e Disaster Recovery</h1>
+    <p class="hero-desc">La business continuity è richiesta in molti esami, specialmente quando la traccia coinvolge data center, ospedali o aziende con dati critici. RTO e RPO sono i due parametri chiave.</p>
+    <div class="badges">
+      <span class="badge badge-blue">RTO / RPO</span>
+      <span class="badge badge-orange">Backup 3-2-1</span>
+      <span class="badge badge-blue">Full / Incrementale</span>
+      <span class="badge badge-green">Alta disponibilità</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>RTO e RPO — parametri fondamentali</h2>
+    <table>
+      <thead><tr><th>Parametro</th><th>Definizione</th><th>Esempio</th></tr></thead>
+      <tbody>
+        <tr><td><strong>RTO</strong><br>(Recovery Time Objective)</td><td>Tempo massimo accettabile di inattività dopo un disastro — "quanto possiamo stare offline?"</td><td>RTO = 4 ore: entro 4 ore dal guasto i sistemi devono essere tornati operativi</td></tr>
+        <tr><td><strong>RPO</strong><br>(Recovery Point Objective)</td><td>Massima perdita di dati accettabile — "fino a quando possiamo perdere i dati?"</td><td>RPO = 1 ora: possiamo perdere al massimo 1 ora di transazioni</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p>RTO e RPO più bassi richiedono investimenti maggiori in infrastruttura (replication, hot standby). Un ospedale può avere RTO = 0 (zero downtime) e RPO = 0 (nessuna perdita dati).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Tipologie di backup</h2>
+    <table>
+      <thead><tr><th>Tipo</th><th>Cosa copia</th><th>Velocità backup</th><th>Velocità ripristino</th><th>Spazio</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Full</strong></td><td>Tutti i dati ogni volta</td><td>Lento</td><td>Veloce (un solo set)</td><td>Molto grande</td></tr>
+        <tr><td><strong>Incrementale</strong></td><td>Solo le modifiche dall'ultimo backup (full o incrementale)</td><td>Molto veloce</td><td>Lento (serve full + tutti gli incrementali)</td><td>Minimo</td></tr>
+        <tr><td><strong>Differenziale</strong></td><td>Solo le modifiche dall'ultimo full</td><td>Veloce</td><td>Medio (serve full + ultimo differenziale)</td><td>Medio</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Strategia tipica: full settimanale + incrementale giornaliero</h3>
+    <ul>
+      <li>Domenica: backup full (es. 500 GB)</li>
+      <li>Lunedì–Sabato: backup incrementale (es. 5–20 GB)</li>
+      <li>Per ripristinare a giovedì: full domenica + lunedì + martedì + mercoledì + giovedì</li>
+    </ul>
+    <div class="callout orange"><p><strong>Regola 3-2-1:</strong> <strong>3</strong> copie dei dati, su <strong>2</strong> supporti diversi, di cui <strong>1</strong> off-site (fuori sede o cloud). Protegge da guasti hardware, incendi, furto e ransomware.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Ridondanza hardware e alta disponibilità</h2>
+    <h3>RAID — Redundant Array of Independent Disks</h3>
+    <table>
+      <thead><tr><th>RAID</th><th>Dischi min</th><th>Protezione</th><th>Performance</th><th>Spazio utile</th></tr></thead>
+      <tbody>
+        <tr><td><strong>RAID 0</strong> (striping)</td><td>2</td><td>Nessuna — un disco guasto = perdita totale</td><td>Massima lettura/scrittura</td><td>100%</td></tr>
+        <tr><td><strong>RAID 1</strong> (mirroring)</td><td>2</td><td>Tolera 1 guasto (copia esatta)</td><td>Lettura veloce, scrittura normale</td><td>50%</td></tr>
+        <tr><td><strong>RAID 5</strong> (parità)</td><td>3</td><td>Tolera 1 guasto (parità distribuita)</td><td>Buona lettura, scrittura penalizzata</td><td>(n−1)/n</td></tr>
+        <tr><td><strong>RAID 6</strong></td><td>4</td><td>Tolera 2 guasti simultanei</td><td>Come RAID 5 ma scrittura più lenta</td><td>(n−2)/n</td></tr>
+        <tr><td><strong>RAID 10</strong> (1+0)</td><td>4</td><td>Tolera fino a n/2 guasti (uno per specchio)</td><td>Massima performance + protezione</td><td>50%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout green"><p><strong>Importante:</strong> RAID non è un backup! RAID protegge da guasto hardware, non da cancellazione accidentale, virus, ransomware o incendio. Serve sempre un backup separato.</p></div>
+
+    <h3>Cluster e failover</h3>
+    <ul>
+      <li><strong>Active-Active:</strong> entrambi i server gestiscono il traffico — se uno cade, l'altro continua (load balancing + HA)</li>
+      <li><strong>Active-Passive (Hot Standby):</strong> il server secondario è in attesa, prende il controllo automaticamente se il primario cade (failover)</li>
+      <li><strong>Heartbeat:</strong> i nodi del cluster si inviano segnali periodici — se manca la risposta si attiva il failover</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Piano di Disaster Recovery (DR)</h2>
+    <p>Il Piano di DR definisce le procedure da seguire in caso di evento catastrofico (incendio, alluvione, attacco ransomware, guasto datacenter).</p>
+    <ul>
+      <li><strong>Sito di DR (secondary site):</strong> datacenter alternativo dove i sistemi vengono ripristinati</li>
+      <li><strong>Hot site:</strong> infrastruttura identica già accesa e sincronizzata (failover in minuti) — costo elevato</li>
+      <li><strong>Warm site:</strong> infrastruttura pronta ma non attiva, da configurare (failover in ore)</li>
+      <li><strong>Cold site:</strong> solo spazio fisico e alimentazione, hardware da installare (failover in giorni)</li>
+      <li><strong>Cloud DR:</strong> repliche nel cloud, paghi solo quando attivi il failover</li>
+    </ul>
+    <div class="callout orange"><p><strong>All'esame:</strong> quando si parla di "business continuity" per un ospedale o azienda critica, menzionare: backup 3-2-1, RAID 5/10, cluster active-passive, RTO e RPO definiti, sito di DR.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="attacchi.html">Ransomware e backup →</a>
+      <a href="cloud-virtualizzazione.html">Cloud DR e snapshot →</a>
+      <a href="gdpr.html">Conservazione dati e GDPR →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

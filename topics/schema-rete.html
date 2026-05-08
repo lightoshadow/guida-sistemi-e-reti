@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progettazione della rete — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Progettazione della rete</span>
+  <span class="topbar-section">Sezione 1</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 1 — Architettura di rete</div>
+    <h1>Progettazione della rete e schema logico/fisico</h1>
+    <p class="hero-desc">La progettazione dell'infrastruttura è il cuore della prima parte dell'esame. Devi saper descrivere, disegnare e motivare l'architettura scelta, includendo tutti i dispositivi e le loro interconnessioni.</p>
+    <div class="badges">
+      <span class="badge badge-green">★ Tutti gli esami</span>
+      <span class="badge badge-blue">Schema logico</span>
+      <span class="badge badge-blue">Schema fisico</span>
+      <span class="badge badge-orange">Scelte progettuali</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Schema logico vs schema fisico</h2>
+    <table>
+      <thead><tr><th></th><th>Schema logico</th><th>Schema fisico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mostra</strong></td><td>Subnet, VLAN, indirizzi IP, flussi di traffico, zone di sicurezza</td><td>Dispositivi fisici, cavi, armadi rack, posizione negli edifici</td></tr>
+        <tr><td><strong>Include</strong></td><td>Router, switch (logici), firewall, server, AP — con IP e subnet</td><td>Patch panel, percorsi cavi, centri stella, prese RJ45</td></tr>
+        <tr><td><strong>Scala</strong></td><td>Non in scala — mostra la topologia</td><td>Può rispettare la planimetria dell'edificio</td></tr>
+        <tr><td><strong>All'esame</strong></td><td>Quasi sempre richiesto — disegna le subnet con IP</td><td>Spesso richiesto insieme allo logico</td></tr>
+      </tbody>
+    </table>
+    <div class="callout green"><p><strong>Consiglio:</strong> inizia sempre dallo schema logico. Prima decidi le VLAN e le subnet, poi il fisico ne è la conseguenza.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Componenti da inserire nello schema</h2>
+    <h3>Dispositivi obbligatori in quasi ogni progetto</h3>
+    <ul>
+      <li><strong>Router/firewall di bordo:</strong> interfaccia verso l'ISP/Internet — con IP pubblico e privato (gateway)</li>
+      <li><strong>Switch core (L3):</strong> centro stella, connette tutti i distribution switch e server</li>
+      <li><strong>Distribution switch:</strong> uno per edificio/piano, connesso al core via fibra</li>
+      <li><strong>Access switch:</strong> uno per sala/reparto, connesso al distribution</li>
+      <li><strong>Access point:</strong> per la copertura wireless, connesso all'access switch</li>
+      <li><strong>Server:</strong> web server (in DMZ), file server, DHCP/DNS, mail server</li>
+    </ul>
+
+    <h3>Dispositivi condizionali</h3>
+    <ul>
+      <li><strong>Firewall separato:</strong> se si chiede DMZ</li>
+      <li><strong>VPN concentrator:</strong> se ci sono connessioni remote</li>
+      <li><strong>IDS/IPS:</strong> se richiesto dalla traccia</li>
+      <li><strong>Load balancer:</strong> per server ad alta disponibilità</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Esempio schema logico tipo</h2>
+    <div class="diagram">
+Internet
+    │ IP pubblico: 203.0.113.1/30
+[Firewall / Router]
+    │ IP interno: 192.168.0.1
+    ├── eth1 → DMZ (10.0.0.0/24)
+    │           ├── Web Server:  10.0.0.10
+    │           └── Mail Server: 10.0.0.11
+    │
+    └── eth0 → [Switch Core L3]
+                ├── VLAN 10: Amministrazione (192.168.10.0/24) → [Sw Uffici]
+                ├── VLAN 20: Laboratori     (192.168.20.0/24) → [Sw Lab]
+                ├── VLAN 30: Ospiti Wi-Fi   (192.168.30.0/24) → [AP]
+                ├── VLAN 40: VoIP           (192.168.40.0/24) → [Phone]
+                └── VLAN 50: Server interni (192.168.50.0/24) → [DB, File, DHCP]
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Come motivare le scelte progettuali</h2>
+    <p>All'esame non basta disegnare — devi <strong>motivare ogni scelta</strong>. Struttura della risposta:</p>
+    <ol>
+      <li><strong>Identificare i requisiti</strong> dalla traccia (quanti utenti, quali servizi, sicurezza richiesta)</li>
+      <li><strong>Segmentare la rete</strong> in VLAN coerenti con i reparti/funzioni</li>
+      <li><strong>Scegliere le subnet</strong> dimensionate ai requisiti (VLSM)</li>
+      <li><strong>Posizionare i dispositivi di sicurezza</strong> (firewall, DMZ, IDS)</li>
+      <li><strong>Pianificare la ridondanza</strong> se richiesta (doppi link, STP, clustering)</li>
+    </ol>
+
+    <h3>Frasi utili per motivare</h3>
+    <ul>
+      <li>"La rete è segmentata in VLAN per limitare il broadcast domain e aumentare la sicurezza"</li>
+      <li>"I server pubblici sono collocati in DMZ per separarli dalla rete interna"</li>
+      <li>"Il firewall stateful inspection filtra il traffico tra Internet, DMZ e rete interna"</li>
+      <li>"La VLAN ospiti è isolata dalla rete aziendale per prevenire accessi non autorizzati alle risorse interne"</li>
+      <li>"Il cablaggio strutturato su fibra ottica garantisce le prestazioni necessarie tra i piani"</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Topologie di rete</h2>
+    <table>
+      <thead><tr><th>Topologia</th><th>Schema</th><th>Vantaggi</th><th>Svantaggi</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Stella</strong></td><td>Tutti i nodi connessi a un hub/switch centrale</td><td>Facile gestione, guasto di un nodo non blocca gli altri</td><td>Il dispositivo centrale è un single point of failure</td></tr>
+        <tr><td><strong>Bus</strong></td><td>Tutti i nodi su un unico cavo condiviso</td><td>Semplice, economico</td><td>Un guasto blocca tutta la rete, obsoleto</td></tr>
+        <tr><td><strong>Anello</strong></td><td>Nodi collegati in cerchio</td><td>Nessuna collisione, determinismo</td><td>Un guasto può bloccare l'anello (senza ridondanza)</td></tr>
+        <tr><td><strong>Albero (gerarchica)</strong></td><td>Stella di stelle</td><td>Scalabile, standard nelle reti aziendali</td><td>Il core è critico</td></tr>
+        <tr><td><strong>Maglia (mesh)</strong></td><td>Ogni nodo connesso a più nodi</td><td>Alta ridondanza</td><td>Costoso, complesso</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p><strong>Nelle reti aziendali moderne</strong> si usa la topologia <strong>gerarchica a tre livelli</strong>: Core (backbone) → Distribution (aggregazione) → Access (endpoint). È la topologia che compare in quasi tutti i progetti d'esame.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="subnetting-ip.html">Piano di indirizzamento →</a>
+      <a href="vlan.html">VLAN e segmentazione →</a>
+      <a href="firewall.html">DMZ e sicurezza perimetrale →</a>
+      <a href="cablaggio.html">Cablaggio strutturato →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -336,6 +336,24 @@
   .year-multi { background: rgba(79,142,247,.15); color: var(--accent); }
   .year-single { background: rgba(100,116,139,.12); color: var(--text3); }
 
+  /* ── STUDY LINK ── */
+  .study-link { margin-top: 9px; }
+  .study-link a {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 3px 10px;
+    border: 1px solid rgba(79,142,247,.3);
+    border-radius: 4px;
+    background: rgba(79,142,247,.08);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all .15s;
+  }
+  .study-link a:hover { background: rgba(79,142,247,.2); border-color: var(--accent); }
+
   /* ── FREQUENCY TABLE ── */
   .freq-table-wrap { overflow-x: auto; }
 
@@ -1979,6 +1997,103 @@ function scaricaTutti() {
     }, i * 400);
   });
 }
+
+/* ── STUDY LINKS — mappa nome argomento → pagina di studio ── */
+(function() {
+  const links = {
+    "Schema logico/fisico della rete": "topics/schema-rete.html",
+    "Suddivisione in sottoreti con scopi diversi": "topics/subnetting-ip.html",
+    "Architettura multi-sede / campus": "topics/schema-rete.html",
+    "Data Center": "topics/backup-dr.html",
+    "DMZ (Demilitarized Zone)": "topics/firewall.html",
+    "Topologie di rete": "topics/schema-rete.html",
+    "Cablaggio strutturato (EIA/TIA-568)": "topics/cablaggio.html",
+    "Connettività ISP": "topics/schema-rete.html",
+    "Classi di indirizzi IP e indirizzi privati": "topics/subnetting-ip.html",
+    "Notazione CIDR e subnet mask": "topics/subnetting-ip.html",
+    "Subnetting": "topics/subnetting-ip.html",
+    "VLSM (Variable Length Subnet Masking)": "topics/subnetting-ip.html",
+    "IPv4 statico vs. DHCP dinamico": "topics/dhcp.html",
+    "NAT / PAT e port forwarding": "topics/nat-pat.html",
+    "Tabelle di routing": "topics/routing.html",
+    "Piano di indirizzamento completo": "topics/subnetting-ip.html",
+    "LAN Ethernet (802.3)": "topics/vlan.html",
+    "VLAN (Virtual LAN) — 802.1Q": "topics/vlan.html",
+    "Switch amministrabile vs. non amministrabile": "topics/vlan.html",
+    "VoIP": "topics/vlan.html",
+    "Ridondanza LAN (STP, link aggregation)": "topics/routing.html",
+    "Standard IEEE 802.11": "topics/wifi.html",
+    "Sicurezza Wi-Fi: WEP → WPA3": "topics/wifi.html",
+    "BYOD (Bring Your Own Device)": "topics/wifi.html",
+    "Captive Portal": "topics/wifi.html",
+    "Link budget wireless": "topics/wifi.html",
+    "Routing statico": "topics/routing.html",
+    "Routing dinamico: RIP": "topics/routing.html",
+    "Routing dinamico: OSPF": "topics/routing.html",
+    "Inter-VLAN routing (router-on-a-stick)": "topics/routing.html",
+    "Firewall": "topics/firewall.html",
+    "Crittografia simmetrica e asimmetrica": "topics/crittografia.html",
+    "Firma digitale e PKI": "topics/crittografia.html",
+    "SSL/TLS e HTTPS": "topics/ssl-tls.html",
+    "Autenticazione (password, MFA, RADIUS)": "topics/wifi.html",
+    "Attacchi e minacce": "topics/attacchi.html",
+    "Business continuity e fault tolerance": "topics/backup-dr.html",
+    "IDS / IPS": "topics/firewall.html",
+    "DHCP — Sequenza DORA": "topics/dhcp.html",
+    "DNS": "topics/dns.html",
+    "HTTP / HTTPS": "topics/ssl-tls.html",
+    "Posta elettronica: SMTP, IMAP, POP3": "topics/dns.html",
+    "SSH": "topics/ssl-tls.html",
+    "TCP vs UDP": "topics/tcp-udp.html",
+    "ICMP (ping, traceroute)": "topics/tcp-udp.html",
+    "VPN site-to-site": "topics/vpn.html",
+    "VPN client-to-site (remote access)": "topics/vpn.html",
+    "IPsec (ESP, AH)": "topics/vpn.html",
+    "SSL/TLS VPN e OpenVPN": "topics/vpn.html",
+    "Web Server": "topics/schema-rete.html",
+    "Mail Server": "topics/dns.html",
+    "File Server e Active Directory": "topics/schema-rete.html",
+    "Proxy Server": "topics/firewall.html",
+    "Backup e disaster recovery": "topics/backup-dr.html",
+    "Videosorveglianza IP": "topics/vlan.html",
+    "Modelli di servizio: IaaS, PaaS, SaaS": "topics/cloud-virtualizzazione.html",
+    "Cloud pubblico, privato, ibrido": "topics/cloud-virtualizzazione.html",
+    "Virtualizzazione: hypervisor tipo 1 e tipo 2": "topics/cloud-virtualizzazione.html",
+    "Container (Docker)": "topics/cloud-virtualizzazione.html",
+    "Cluster e alta disponibilità": "topics/backup-dr.html",
+    "Architettura IoT": "topics/iot.html",
+    "Protocolli IoT: MQTT, CoAP, HTTP/REST": "topics/iot.html",
+    "Sensori e trasduttori": "topics/iot.html",
+    "Alimentazione autonoma": "topics/iot.html",
+    "Separazione rete IoT dalla rete dati": "topics/iot.html",
+    "Concetto di socket": "topics/socket.html",
+    "Client-server con socket TCP": "topics/socket.html",
+    "Formato dei dati trasmessi": "topics/socket.html",
+    "Crittografia nei socket (TLS)": "topics/ssl-tls.html",
+    "Concorrenza (thread, mutex)": "topics/socket.html",
+    "Fibra ottica: monomodale e multimodale": "topics/cablaggio.html",
+    "Link budget ottico": "topics/cablaggio.html",
+    "Ponti radio punto-punto": "topics/wifi.html",
+    "Modulazioni digitali": "topics/wifi.html",
+    "FTTH / FTTC": "topics/cablaggio.html",
+    "GDPR (Regolamento UE 2016/679)": "topics/gdpr.html",
+    "Dati sensibili e sanitari": "topics/gdpr.html",
+    "Privacy by design": "topics/gdpr.html",
+    "Misure minime di sicurezza": "topics/attacchi.html"
+  };
+
+  document.querySelectorAll('.topic-item').forEach(function(item) {
+    const nameEl = item.querySelector('.topic-name');
+    if (!nameEl) return;
+    const name = nameEl.textContent.trim();
+    if (links[name]) {
+      const div = document.createElement('div');
+      div.className = 'study-link';
+      div.innerHTML = '<a href="' + links[name] + '">Studia →</a>';
+      item.appendChild(div);
+    }
+  });
+})();
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>

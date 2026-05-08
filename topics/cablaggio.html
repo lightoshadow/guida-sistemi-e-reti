@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cablaggio strutturato — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Cablaggio strutturato</span>
+  <span class="topbar-section">Sezione 1</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 1 — Architettura di rete</div>
+    <h1>Cablaggio strutturato (EIA/TIA-568)</h1>
+    <p class="hero-desc">Il cablaggio strutturato definisce come organizzare fisicamente la rete di un edificio. Compare soprattutto nelle tracce che richiedono il progetto fisico completo.</p>
+    <div class="badges">
+      <span class="badge badge-blue">EIA/TIA-568</span>
+      <span class="badge badge-blue">CAT5e / CAT6 / CAT6A</span>
+      <span class="badge badge-orange">Fibra ottica</span>
+      <span class="badge badge-green">Armadi rack</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Gerarchia del cablaggio strutturato</h2>
+    <p>Lo standard EIA/TIA-568 (americano, equivalente ISO/IEC 11801 internazionale) definisce tre sottosistemi:</p>
+    <div class="diagram">
+[Centro stella di edificio (MDF)] ← Main Distribution Frame
+  Dorsale di campus (fibra SMF)
+         │
+[Centro stella di piano (IDF)] ← Intermediate Distribution Frame
+  Distribuzione verticale (fibra MMF o UTP CAT6A)
+         │
+[Prese utente (TO)] ← Telecommunications Outlet
+  Distribuzione orizzontale (UTP CAT5e/CAT6, max 90m)
+    </div>
+
+    <h3>I tre sottosistemi</h3>
+    <ul>
+      <li><strong>Distribuzione orizzontale:</strong> dal centro stella di piano alle prese utente. Distanza max 90 m (+ 10 m cavi patch = 100 m totali). Cavo: UTP CAT5e, CAT6 o CAT6A.</li>
+      <li><strong>Distribuzione verticale (backbone):</strong> tra centri stella di piani diversi o edifici. Cavo: fibra ottica (MMF per intra-edificio, SMF per inter-edificio).</li>
+      <li><strong>Campus backbone:</strong> tra edifici separati. Fibra SMF o MMF in tubazioni interrate.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Categorie di cavo UTP</h2>
+    <table>
+      <thead><tr><th>Categoria</th><th>Banda</th><th>Velocità max</th><th>Uso tipico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CAT5e</strong></td><td>100 MHz</td><td>1 Gbps</td><td>Distribuzione orizzontale uffici (ancora molto diffuso)</td></tr>
+        <tr><td><strong>CAT6</strong></td><td>250 MHz</td><td>1 Gbps (10 Gbps fino a 55 m)</td><td>Nuove installazioni, ambienti con requisiti elevati</td></tr>
+        <tr><td><strong>CAT6A</strong></td><td>500 MHz</td><td>10 Gbps fino a 100 m</td><td>Datacenter, backbone orizzontale ad alte prestazioni</td></tr>
+        <tr><td><strong>CAT7</strong></td><td>600 MHz</td><td>10 Gbps</td><td>Schermato (S/FTP), ambienti con interferenze</td></tr>
+        <tr><td><strong>CAT8</strong></td><td>2000 MHz</td><td>40 Gbps</td><td>Solo datacenter, distanza max 30 m</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p><strong>All'esame:</strong> per la distribuzione orizzontale di un nuovo edificio scegliere almeno <strong>CAT6</strong>; se si prevede 10 Gbps agli access switch usare <strong>CAT6A</strong>. Il limite dei 100 m include cavi patch.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Fibra ottica</h2>
+    <table>
+      <thead><tr><th></th><th>Multimodale (MMF)</th><th>Monomodale (SMF)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Core</strong></td><td>50 μm o 62.5 μm</td><td>9 μm</td></tr>
+        <tr><td><strong>Distanza tipica</strong></td><td>300–2000 m (dipende dalla classe)</td><td>Km (decine di km)</td></tr>
+        <tr><td><strong>Uso</strong></td><td>Backbone intra-edificio, datacenter</td><td>Backbone inter-edificio, WAN, FTTH</td></tr>
+        <tr><td><strong>Costo</strong></td><td>Minore (LED/VCSEL)</td><td>Maggiore (laser)</td></tr>
+        <tr><td><strong>Classificazione</strong></td><td>OM1, OM2, OM3, OM4, OM5</td><td>OS1, OS2 (G.652)</td></tr>
+      </tbody>
+    </table>
+    <p>OM3 e OM4 sono le più diffuse oggi per backbone di datacenter (10G e 40G). SMF G.652 è lo standard per le reti metropolitane e WAN.</p>
+  </div>
+
+  <div class="block">
+    <h2>Componenti passivi del cablaggio</h2>
+    <ul>
+      <li><strong>Patch panel:</strong> pannello con porte RJ45 sul fronte e cavi permanenti sul retro. Permette di riconfigurare le connessioni con semplici cavi patch senza toccare l'impianto fisso.</li>
+      <li><strong>Armadio rack (19"):</strong> contenitore standard per switch, patch panel, server, UPS. Altezza in unità U (1U = 44.45 mm).</li>
+      <li><strong>Presa TO (Telecommunications Outlet):</strong> presa a muro RJ45, punto finale della distribuzione orizzontale.</li>
+      <li><strong>Cavi patch:</strong> brevi cavi flessibili che collegano patch panel ↔ switch, o presa TO ↔ PC.</li>
+    </ul>
+    <div class="callout orange"><p><strong>Regola 90+10:</strong> il cavo permanente dalla presa all'armadio deve essere al massimo <strong>90 m</strong>. I 10 m restanti sono per i cavi patch (lato utente + lato armadio).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="schema-rete.html">Schema fisico della rete →</a>
+      <a href="vlan.html">Armadi e distribuzione VLAN →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

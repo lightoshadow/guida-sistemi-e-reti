@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indirizzamento IP e Subnetting — Sistemi e Reti</title>
+<style>
+:root {
+  --bg:#0f1117; --bg2:#1a1d2e; --bg3:#242740; --border:#2e3250;
+  --accent:#4f8ef7; --accent2:#7c5cfc; --green:#34d399; --orange:#f59e0b;
+  --red:#f87171; --text:#e2e8f0; --text2:#94a3b8; --text3:#64748b;
+  --radius:10px; --font:'Segoe UI',system-ui,-apple-system,sans-serif;
+  --mono:'Cascadia Code','Fira Code','Consolas',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}
+.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}
+.topbar a:hover{color:var(--accent)}
+.topbar-sep{color:var(--border)}
+.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}
+.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}
+.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}
+.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}
+.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}
+.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}
+.block p{color:var(--text2);font-size:14px;margin-bottom:12px}
+.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}
+.block li{margin-bottom:6px}
+.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}
+pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}
+.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}
+.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}
+.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}
+.related a:hover{border-color:var(--accent);color:var(--accent)}
+.formula{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--green)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Indirizzamento IP e Subnetting</span>
+  <span class="topbar-section">Sezione 2</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 2 — Indirizzamento IP</div>
+    <h1>Indirizzamento IP e Subnetting</h1>
+    <p class="hero-desc">Il calcolo degli indirizzi e la divisione in sottoreti è presente in <strong>ogni singola traccia d'esame</strong>. Devi saper eseguire tutto a mano, senza calcolatore.</p>
+    <div class="badges">
+      <span class="badge badge-green">★ Tutti gli esami</span>
+      <span class="badge badge-blue">CIDR</span>
+      <span class="badge badge-blue">Subnetting</span>
+      <span class="badge badge-blue">VLSM</span>
+      <span class="badge badge-orange">Piano di indirizzamento</span>
+    </div>
+  </div>
+
+  <!-- TEORIA BASE -->
+  <div class="block">
+    <h2>Indirizzi IPv4 — struttura</h2>
+    <p>Un indirizzo IPv4 è composto da <strong>32 bit</strong>, scritti come 4 ottetti decimali separati da punti (notazione dotted-decimal). Ogni ottetto vale 0–255.</p>
+    <p>L'indirizzo si divide in due parti: <strong>parte di rete</strong> (identificata dalla subnet mask) e <strong>parte host</strong>.</p>
+
+    <h3>Classi storiche e indirizzi privati (RFC 1918)</h3>
+    <table>
+      <thead><tr><th>Classe</th><th>Range</th><th>Indirizzi privati</th><th>Mask default</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>1.0.0.0 – 126.255.255.255</td><td><code>10.0.0.0/8</code></td><td>/8</td></tr>
+        <tr><td>B</td><td>128.0.0.0 – 191.255.255.255</td><td><code>172.16.0.0/12</code></td><td>/16</td></tr>
+        <tr><td>C</td><td>192.0.0.0 – 223.255.255.255</td><td><code>192.168.0.0/16</code></td><td>/24</td></tr>
+      </tbody>
+    </table>
+    <div class="callout orange"><p><strong>Attenzione:</strong> <code>127.0.0.0/8</code> è riservato al loopback (localhost). <code>169.254.0.0/16</code> è APIPA (assegnato automaticamente senza DHCP).</p></div>
+  </div>
+
+  <!-- CIDR -->
+  <div class="block">
+    <h2>Notazione CIDR e subnet mask</h2>
+    <p>La notazione CIDR (Classless Inter-Domain Routing) scrive la maschera come <code>/n</code> dove <em>n</em> è il numero di bit a 1 nella subnet mask.</p>
+
+    <h3>Formule fondamentali</h3>
+    <div class="formula">
+N° host utilizzabili = 2^(32−n) − 2
+N° sottoreti = 2^(bit presi dagli host per le subnet)
+    </div>
+    <p>Si sottraggono 2 perché l'indirizzo di rete (tutti bit host = 0) e di broadcast (tutti bit host = 1) non sono assegnabili.</p>
+
+    <h3>Tabella CIDR di riferimento rapido</h3>
+    <table>
+      <thead><tr><th>Prefisso</th><th>Subnet mask</th><th>N° host usabili</th><th>Uso tipico</th></tr></thead>
+      <tbody>
+        <tr><td><code>/24</code></td><td>255.255.255.0</td><td>254</td><td>LAN piccola/media</td></tr>
+        <tr><td><code>/25</code></td><td>255.255.255.128</td><td>126</td><td>Divisione di /24 in 2</td></tr>
+        <tr><td><code>/26</code></td><td>255.255.255.192</td><td>62</td><td>Divisione di /24 in 4</td></tr>
+        <tr><td><code>/27</code></td><td>255.255.255.224</td><td>30</td><td>Subnet WAN</td></tr>
+        <tr><td><code>/28</code></td><td>255.255.255.240</td><td>14</td><td>Subnet piccola</td></tr>
+        <tr><td><code>/29</code></td><td>255.255.255.248</td><td>6</td><td>Link point-to-point</td></tr>
+        <tr><td><code>/30</code></td><td>255.255.255.252</td><td>2</td><td>Link router-router</td></tr>
+        <tr><td><code>/16</code></td><td>255.255.0.0</td><td>65.534</td><td>LAN grande / VLSM base</td></tr>
+        <tr><td><code>/8</code></td><td>255.0.0.0</td><td>16.777.214</td><td>Classe A intera</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Come calcolare da CIDR → componenti della subnet</h3>
+    <p>Dato <strong>192.168.10.0/26</strong>:</p>
+    <ol>
+      <li>Subnet mask: /26 → 255.255.255.<strong>192</strong> (gli ultimi 6 bit sono host = 64+128=192)</li>
+      <li>Indirizzo di rete: <code>192.168.10.0</code></li>
+      <li>Indirizzo di broadcast: <code>192.168.10.63</code> (0 + 64 − 1 = 63)</li>
+      <li>Range host: <code>192.168.10.1 – 192.168.10.62</code></li>
+      <li>N° host: 2⁶ − 2 = <strong>62</strong></li>
+    </ol>
+    <div class="callout green"><p><strong>Trucco:</strong> il "salto" tra subnet consecutive = 2^(bit host). Con /26 il salto è 64. Le subnet di 192.168.10.0/24 divisa in /26 sono: .0, .64, .128, .192.</p></div>
+  </div>
+
+  <!-- SUBNETTING -->
+  <div class="block">
+    <h2>Subnetting — procedura passo-passo</h2>
+    <p>Esercizio tipico d'esame: "Dividere <code>10.0.0.0/8</code> per ospitare le seguenti sottoreti: Rete A (200 host), Rete B (100 host), Rete C (50 host), Rete D (25 host), link WAN (2 host)."</p>
+
+    <h3>Passo 1 — Scegliere la maschera minima</h3>
+    <p>Per ogni rete, trovare il prefisso più corto tale che <code>2^(32−n) − 2 ≥ host_richiesti</code>:</p>
+    <table>
+      <thead><tr><th>Rete</th><th>Host richiesti</th><th>2^x ≥ richiesti+2</th><th>Prefisso</th><th>Host usabili</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>200</td><td>2⁸=256</td><td>/24</td><td>254</td></tr>
+        <tr><td>B</td><td>100</td><td>2⁷=128</td><td>/25</td><td>126</td></tr>
+        <tr><td>C</td><td>50</td><td>2⁶=64</td><td>/26</td><td>62</td></tr>
+        <tr><td>D</td><td>25</td><td>2⁵=32</td><td>/27</td><td>30</td></tr>
+        <tr><td>WAN</td><td>2</td><td>2²=4</td><td>/30</td><td>2</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Passo 2 — Assegnare gli spazi (con VLSM, ordine decrescente)</h3>
+    <p>Con VLSM si assegnano prima le subnet più grandi per non sprecare spazio:</p>
+    <pre><code>10.0.0.0/24   → Rete A  (network: 10.0.0.0, bcast: 10.0.0.255)
+10.0.1.0/25   → Rete B  (network: 10.0.1.0, bcast: 10.0.1.127)
+10.0.1.128/26 → Rete C  (network: 10.0.1.128, bcast: 10.0.1.191)
+10.0.1.192/27 → Rete D  (network: 10.0.1.192, bcast: 10.0.1.223)
+10.0.1.224/30 → WAN     (network: 10.0.1.224, bcast: 10.0.1.227)</code></pre>
+    <div class="callout"><p><strong>VLSM</strong> (Variable Length Subnet Masking) = subnet con maschere di lunghezza variabile nello stesso spazio di indirizzi. Permette di ottimizzare l'uso degli indirizzi.</p></div>
+  </div>
+
+  <!-- PIANO DI INDIRIZZAMENTO -->
+  <div class="block">
+    <h2>Piano di indirizzamento completo</h2>
+    <p>La presentazione tabellare è obbligatoria in quasi ogni esame. Formato standard:</p>
+    <table>
+      <thead><tr><th>Subnet</th><th>Indirizzo di rete</th><th>Mask</th><th>Gateway</th><th>Range host</th><th>Broadcast</th><th>Utilizzo</th></tr></thead>
+      <tbody>
+        <tr><td>Rete A</td><td>10.0.0.0</td><td>/24</td><td>10.0.0.1</td><td>10.0.0.1 – .254</td><td>10.0.0.255</td><td>Uffici piano 1</td></tr>
+        <tr><td>Rete B</td><td>10.0.1.0</td><td>/25</td><td>10.0.1.1</td><td>10.0.1.1 – .126</td><td>10.0.1.127</td><td>Laboratori</td></tr>
+        <tr><td>Rete C</td><td>10.0.1.128</td><td>/26</td><td>10.0.1.129</td><td>10.0.1.129 – .190</td><td>10.0.1.191</td><td>Ospiti Wi-Fi</td></tr>
+      </tbody>
+    </table>
+    <div class="callout green"><p><strong>Il gateway è sempre il primo host utilizzabile</strong> della subnet (convenzione standard, anche se tecnicamente il gateway può essere qualsiasi host della rete).</p></div>
+
+    <h3>Indirizzi statici vs DHCP</h3>
+    <ul>
+      <li><strong>Statici:</strong> server, stampanti di rete, gateway, access point — dispositivi che devono sempre rispondere allo stesso IP.</li>
+      <li><strong>DHCP dinamico:</strong> PC, notebook, smartphone, qualsiasi client che può ricevere un IP temporaneo (lease).</li>
+      <li>Riserva un range per DHCP ed escudi gli statici: es. host .1–.10 statici, DHCP scope .11–.254.</li>
+    </ul>
+  </div>
+
+  <!-- ESAME -->
+  <div class="block">
+    <h2>Come compare all'esame</h2>
+    <ul>
+      <li><strong>Prima parte (progetto):</strong> ti viene dato un edificio con N reparti; devi dimensionare le subnet e compilare il piano di indirizzamento.</li>
+      <li><strong>Seconda parte (quesiti):</strong> domande su CIDR, calcolo di broadcast/host, VLSM.</li>
+      <li>Spesso richiedono di mostrare le subnet in forma tabellare con almeno 5 colonne (rete, mask, gateway, range, broadcast).</li>
+      <li>Frequente: partizionare un /16 o /24 in sottoreti di dimensioni diverse con VLSM.</li>
+    </ul>
+    <div class="callout orange"><p><strong>Errori frequenti:</strong> dimenticare di sottrarre 2 agli host, confondere l'indirizzo di rete con il gateway, non ordinare le subnet da grande a piccola con VLSM.</p></div>
+  </div>
+
+  <!-- CORRELATI -->
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="nat-pat.html">NAT / PAT e port forwarding →</a>
+      <a href="routing.html">Routing statico e tabelle di routing →</a>
+      <a href="dhcp.html">DHCP — configurazione scope →</a>
+      <a href="schema-rete.html">Progettazione della rete →</a>
+    </div>
+    <p style="margin-top:12px"><a href="../subnetting.html" style="color:var(--accent)">🧮 Apri il Subnetting Trainer interattivo →</a></p>
+  </div>
+</div>
+</body>
+</html>

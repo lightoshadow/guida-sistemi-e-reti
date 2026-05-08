@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crittografia e PKI — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Crittografia e PKI</span>
+  <span class="topbar-section">Sezione 6</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 6 — Sicurezza delle reti</div>
+    <h1>Crittografia simmetrica, asimmetrica e PKI</h1>
+    <p class="hero-desc">La crittografia è il fondamento di HTTPS, VPN, firma digitale e autenticazione. Devi saper spiegare le differenze tra i due tipi e come si usano in combinazione.</p>
+    <div class="badges">
+      <span class="badge badge-blue">Simmetrica (AES)</span>
+      <span class="badge badge-blue">Asimmetrica (RSA)</span>
+      <span class="badge badge-orange">Firma digitale</span>
+      <span class="badge badge-green">PKI / Certificati X.509</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Crittografia simmetrica</h2>
+    <p>Si usa <strong>una sola chiave</strong> sia per cifrare che per decifrare. Mittente e destinatario devono condividere la stessa chiave segreta.</p>
+    <div class="diagram">
+Testo in chiaro → [CIFRATURA con chiave K] → Testo cifrato
+Testo cifrato  → [DECIFRATURA con chiave K] → Testo in chiaro
+    </div>
+    <h3>Algoritmi principali</h3>
+    <table>
+      <thead><tr><th>Algoritmo</th><th>Dimensione chiave</th><th>Stato</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AES</strong> (Advanced Encryption Standard)</td><td>128, 192, 256 bit</td><td>Standard attuale — sicuro</td></tr>
+        <tr><td><strong>3DES</strong> (Triple DES)</td><td>112 o 168 bit effettivi</td><td>Deprecato — lento</td></tr>
+        <tr><td><strong>DES</strong> (Data Encryption Standard)</td><td>56 bit</td><td>Obsoleto — insicuro</td></tr>
+        <tr><td><strong>ChaCha20</strong></td><td>256 bit</td><td>Moderno — usato in TLS 1.3</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><strong>Pro:</strong> molto veloce, efficiente per grandi quantità di dati</li>
+      <li><strong>Contro:</strong> problema della distribuzione delle chiavi (come si scambia la chiave in modo sicuro?)</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Crittografia asimmetrica</h2>
+    <p>Si usa una <strong>coppia di chiavi</strong>: <em>chiave pubblica</em> (distribuibile a tutti) e <em>chiave privata</em> (segreta, mai condivisa). Quello che si cifra con una si decifra solo con l'altra.</p>
+    <div class="diagram">
+Cifratura verso A:   testo → [chiave pubblica di A] → cifrato
+Decifratura da A:   cifrato → [chiave privata di A] → testo
+
+Firma da A:          hash → [chiave privata di A] → firma
+Verifica firma:      firma → [chiave pubblica di A] → verifica hash
+    </div>
+    <h3>Algoritmi principali</h3>
+    <table>
+      <thead><tr><th>Algoritmo</th><th>Basato su</th><th>Uso tipico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>RSA</strong></td><td>Fattorizzazione di grandi numeri</td><td>Scambio chiavi, firma digitale</td></tr>
+        <tr><td><strong>ECC</strong> (Elliptic Curve)</td><td>Curve ellittiche</td><td>TLS moderno, dispositivi mobili — chiavi più corte, stessa sicurezza</td></tr>
+        <tr><td><strong>Diffie-Hellman</strong></td><td>Logaritmo discreto</td><td>Scambio di chiavi (non cifra dati)</td></tr>
+        <tr><td><strong>DSA / ECDSA</strong></td><td>Log. discreto / ECC</td><td>Solo firma digitale</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><strong>Pro:</strong> risolve il problema della distribuzione delle chiavi</li>
+      <li><strong>Contro:</strong> molto più lento della crittografia simmetrica (1000×)</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Crittografia ibrida — come funziona in pratica</h2>
+    <p>Nella pratica (TLS, PGP, SSH) si usano <strong>entrambi i tipi</strong>: l'asimmetrica per scambiare in modo sicuro una chiave simmetrica, poi la simmetrica per cifrare i dati.</p>
+    <div class="diagram">
+1. Alice genera una chiave simmetrica casuale (session key)
+2. Alice cifra la session key con la chiave pubblica di Bob
+3. Alice invia la session key cifrata a Bob
+4. Bob decifra con la sua chiave privata → ottiene la session key
+5. Alice e Bob usano AES con la session key per comunicare
+    </div>
+    <div class="callout green"><p><strong>Vantaggio:</strong> si ottiene la velocità della crittografia simmetrica e la sicurezza dello scambio di chiavi asimmetrico.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Firma digitale</h2>
+    <p>La firma digitale garantisce <strong>autenticità</strong> (è davvero chi dice di essere) e <strong>integrità</strong> (il documento non è stato modificato).</p>
+    <h3>Processo di firma</h3>
+    <ol>
+      <li>Si calcola l'<strong>hash</strong> (impronta) del documento (es. SHA-256)</li>
+      <li>L'hash viene cifrato con la <strong>chiave privata</strong> del mittente → questa è la firma</li>
+      <li>Il documento + la firma vengono inviati al destinatario</li>
+    </ol>
+    <h3>Processo di verifica</h3>
+    <ol>
+      <li>Il destinatario decifra la firma con la <strong>chiave pubblica</strong> del mittente → ottiene l'hash originale</li>
+      <li>Calcola l'hash del documento ricevuto</li>
+      <li>Se i due hash coincidono → documento integro e autentico</li>
+    </ol>
+    <div class="callout orange"><p><strong>Attenzione:</strong> la firma digitale <em>non cifra</em> il documento! Garantisce solo autenticità e integrità. Per la confidenzialità si usa anche la cifratura.</p></div>
+    <h3>Funzioni hash principali</h3>
+    <table>
+      <thead><tr><th>Algoritmo</th><th>Output</th><th>Stato</th></tr></thead>
+      <tbody>
+        <tr><td>MD5</td><td>128 bit</td><td>Obsoleto — collisioni note</td></tr>
+        <tr><td>SHA-1</td><td>160 bit</td><td>Deprecato — vulnerabile</td></tr>
+        <tr><td>SHA-256</td><td>256 bit</td><td>Standard attuale — sicuro</td></tr>
+        <tr><td>SHA-3</td><td>variabile</td><td>Moderno, alternativa a SHA-2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>PKI — Public Key Infrastructure</h2>
+    <p>La PKI è l'infrastruttura che gestisce la distribuzione e la fiducia nelle chiavi pubbliche tramite <strong>certificati digitali</strong>.</p>
+    <h3>Certificato X.509</h3>
+    <p>Un certificato X.509 contiene:</p>
+    <ul>
+      <li>Chiave pubblica del titolare</li>
+      <li>Identità del titolare (Common Name, organizzazione, paese)</li>
+      <li>Periodo di validità (not before / not after)</li>
+      <li>Firma digitale della <strong>CA (Certification Authority)</strong> che lo ha emesso</li>
+      <li>Numero seriale e algoritmo di firma</li>
+    </ul>
+    <h3>Catena di fiducia</h3>
+    <div class="diagram">
+Root CA (fiducia assoluta, pre-installata nel browser/OS)
+  └── Intermediate CA (firmata dalla Root CA)
+        └── Certificato sito web (firmato dall'Intermediate CA)
+    </div>
+    <p>Il browser verifica la catena: il certificato del sito è firmato da un'Intermediate CA che è firmata da una Root CA già presente nel trust store del browser.</p>
+    <div class="callout"><p><strong>CRL e OCSP:</strong> meccanismi per verificare se un certificato è stato revocato prima della scadenza (es. compromissione della chiave privata).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="ssl-tls.html">SSL/TLS — uso della crittografia →</a>
+      <a href="vpn.html">IPsec e scambio di chiavi →</a>
+      <a href="attacchi.html">Attacchi crittografici →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAT e PAT — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">NAT / PAT e port forwarding</span>
+  <span class="topbar-section">Sezione 2</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 2 — Indirizzamento IP</div>
+    <h1>NAT / PAT e Port Forwarding</h1>
+    <p class="hero-desc">NAT consente a tutti i dispositivi della rete privata di condividere un singolo IP pubblico per navigare in Internet. Port forwarding espone servizi interni all'esterno.</p>
+    <div class="badges">
+      <span class="badge badge-blue">NAT</span>
+      <span class="badge badge-blue">PAT / NAPT</span>
+      <span class="badge badge-orange">Port forwarding</span>
+      <span class="badge badge-green">RFC 1918</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Perché esiste il NAT</h2>
+    <p>Gli indirizzi IPv4 pubblici sono scarsi (~4 miliardi totali, meno di 1 per persona). Il NAT permette di usare indirizzi <strong>privati</strong> (RFC 1918) nella rete interna e un singolo IP pubblico verso Internet.</p>
+    <div class="diagram">
+Rete privata                         Internet
+192.168.1.10 ─┐
+192.168.1.11 ─┼─→ [Router NAT] ──→  203.0.113.1  ──→ Server
+192.168.1.12 ─┘    IP pubblico
+    </div>
+    <p>Tutti i dispositivi privati navigano "come se" avessero lo stesso IP pubblico. Il router tiene traccia delle connessioni per girare le risposte al dispositivo corretto.</p>
+  </div>
+
+  <div class="block">
+    <h2>Tipi di NAT</h2>
+    <h3>Static NAT (NAT statico)</h3>
+    <p>Mappa un IP privato fisso → un IP pubblico fisso. Usato per server che devono essere raggiungibili dall'esterno con IP noto.</p>
+    <pre><code>192.168.1.10 ↔ 203.0.113.10  (associazione permanente)</code></pre>
+
+    <h3>Dynamic NAT</h3>
+    <p>Mappa IP privati → IP pubblici da un pool. Non permette connessioni dall'esterno verso l'interno. Raramente usato oggi.</p>
+
+    <h3>PAT — Port Address Translation (NAT overload)</h3>
+    <p>La forma più comune. Mappa <em>molti</em> IP privati → un solo IP pubblico, differenziandoli tramite la <strong>porta sorgente</strong>.</p>
+    <table>
+      <thead><tr><th>IP privato : porta</th><th>IP pubblico : porta</th><th>Server di destinazione</th></tr></thead>
+      <tbody>
+        <tr><td>192.168.1.10:50100</td><td>203.0.113.1:50100</td><td>8.8.8.8:443</td></tr>
+        <tr><td>192.168.1.11:50101</td><td>203.0.113.1:50101</td><td>8.8.8.8:443</td></tr>
+        <tr><td>192.168.1.12:50102</td><td>203.0.113.1:50102</td><td>1.1.1.1:80</td></tr>
+      </tbody>
+    </table>
+    <p>Il router mantiene una <strong>NAT translation table</strong>. Quando arriva la risposta da Internet, cerca la porta e la rimappa all'IP privato corrispondente.</p>
+    <div class="callout"><p><strong>PAT = NAPT = NAT overload.</strong> Termini equivalenti. Quasi tutti i router domestici e aziendali usano PAT.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Port Forwarding</h2>
+    <p>Di default, con NAT i dispositivi interni <em>non</em> sono raggiungibili dall'esterno (connessioni entranti vengono bloccate — nessuna entry nella NAT table). Il port forwarding crea una regola statica per redirigere le connessioni entranti verso un host interno.</p>
+    <h3>Configurazione tipica</h3>
+    <pre><code># Esempio: esporre un web server interno
+Regola port forwarding:
+  IP esterno (qualsiasi) : porta 443  →  192.168.1.10 : 443
+  IP esterno (qualsiasi) : porta 80   →  192.168.1.10 : 80
+
+# Esempio: esporre SSH per gestione remota
+  IP esterno (qualsiasi) : porta 2222 →  192.168.1.20 : 22
+  (porta esterna diversa per sicurezza)</code></pre>
+
+    <h3>Porte standard per port forwarding</h3>
+    <table>
+      <thead><tr><th>Servizio</th><th>Porta esterna</th><th>Porta interna</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td>Web server HTTP</td><td>80</td><td>80</td><td>—</td></tr>
+        <tr><td>Web server HTTPS</td><td>443</td><td>443</td><td>—</td></tr>
+        <tr><td>SSH gestione</td><td>2222 (o diverso)</td><td>22</td><td>Porta esterna diversa per sicurezza</td></tr>
+        <tr><td>Mail SMTP</td><td>25</td><td>25</td><td>—</td></tr>
+        <tr><td>RDP</td><td>3389</td><td>3389</td><td>Cambiare porta esterna consigliato</td></tr>
+      </tbody>
+    </table>
+    <div class="callout orange"><p><strong>Sicurezza:</strong> il port forwarding espone servizi interni. Limitare sempre gli IP sorgenti ammessi quando possibile. Preferire VPN rispetto al port forwarding diretto per l'accesso remoto alla rete interna.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>NAT e IPv6</h2>
+    <p>IPv6 ha abbastanza indirizzi (2¹²⁸) per assegnarne uno pubblico a ogni dispositivo → in teoria NAT non è necessario. Tuttavia, molte reti aziendali usano ancora NAT per privacy e sicurezza.</p>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="subnetting-ip.html">Indirizzi privati RFC 1918 →</a>
+      <a href="firewall.html">Firewall e port forwarding →</a>
+      <a href="vpn.html">VPN vs port forwarding →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

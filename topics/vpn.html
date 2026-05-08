@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPN — connessioni sicure tra sedi — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">VPN — connessioni sicure tra sedi</span>
+  <span class="topbar-section">Sezione 8</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 8 — VPN</div>
+    <h1>VPN — Virtual Private Network</h1>
+    <p class="hero-desc">La VPN crea un <strong>tunnel cifrato</strong> su una rete pubblica (Internet), rendendo la comunicazione sicura come se i due endpoint fossero sulla stessa rete privata. Argomento teorico molto richiesto nella seconda parte degli esami.</p>
+    <div class="badges">
+      <span class="badge badge-green">Alta frequenza</span>
+      <span class="badge badge-blue">Site-to-site</span>
+      <span class="badge badge-blue">Client-to-site</span>
+      <span class="badge badge-orange">IPsec</span>
+      <span class="badge badge-blue">SSL VPN</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>VPN site-to-site</h2>
+    <p>Connessione <strong>permanente</strong> tra due sedi (es. sede principale ↔ filiale). Il tunnel è stabilito tra i due gateway (router/firewall) ed è trasparente per gli utenti: i PC si comportano come se fossero sulla stessa LAN.</p>
+    <div class="diagram">
+Sede A                                    Sede B
+192.168.1.0/24                            192.168.2.0/24
+  [PC] ── [Router A] ─── Internet ─── [Router B] ── [PC]
+               └──── tunnel IPsec cifrato ────┘
+    </div>
+    <ul>
+      <li>Usata per connettere filiali distanti geograficamente</li>
+      <li>Il router A conosce la rete 192.168.2.0/24 via tunnel</li>
+      <li>Tutto il traffico tra le due reti transita cifrato su Internet</li>
+      <li>Configurazione una tantum, sempre attiva</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>VPN client-to-site (remote access)</h2>
+    <p>Un singolo utente (dipendente in smart working) si connette alla rete aziendale tramite <strong>client VPN</strong> installato sul dispositivo.</p>
+    <div class="diagram">
+Casa/Albergo                              Rete aziendale
+[Laptop] ─── Internet ─── [VPN Gateway] ── [Server interni]
+  client VPN                                192.168.1.0/24
+    </div>
+    <ul>
+      <li>L'utente riceve un indirizzo IP della rete aziendale (IP virtuale)</li>
+      <li>Può accedere a risorse interne come se fosse in ufficio</li>
+      <li>Richiede autenticazione (username+password, certificato, MFA)</li>
+      <li>La connessione è on-demand (attivata dall'utente)</li>
+    </ul>
+    <div class="callout"><p><strong>All'esame:</strong> il contesto "smart working" o "dipendenti da remoto" → risposta = VPN client-to-site.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>IPsec — protocollo standard</h2>
+    <p>IPsec (Internet Protocol Security) opera a <strong>livello 3 (rete)</strong> e fornisce autenticazione, integrità e cifratura dei pacchetti IP.</p>
+
+    <h3>Due protocolli IPsec</h3>
+    <table>
+      <thead><tr><th>Protocollo</th><th>Funzione</th><th>Header</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AH</strong> (Authentication Header)</td><td>Autenticazione + integrità (NO cifratura)</td><td>Protocollo IP 51</td></tr>
+        <tr><td><strong>ESP</strong> (Encapsulating Security Payload)</td><td>Cifratura + autenticazione + integrità</td><td>Protocollo IP 50</td></tr>
+      </tbody>
+    </table>
+    <p>In pratica si usa quasi sempre <strong>ESP</strong> perché fornisce anche la cifratura.</p>
+
+    <h3>Due modalità IPsec</h3>
+    <table>
+      <thead><tr><th>Modalità</th><th>Cosa viene cifrato</th><th>Uso tipico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tunnel</strong></td><td>Intero pacchetto IP originale (header + payload) incapsulato in nuovo pacchetto IP</td><td>VPN site-to-site tra gateway</td></tr>
+        <tr><td><strong>Transport</strong></td><td>Solo il payload (dati) del pacchetto IP originale</td><td>Host-to-host (end-to-end)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>IKE (Internet Key Exchange)</h3>
+    <p>Prima di cifrare, i due endpoint devono concordare le chiavi. IKE (porta UDP 500) gestisce questo scambio in due fasi:</p>
+    <ol>
+      <li><strong>IKE Phase 1:</strong> autenticazione degli endpoint, creazione di un canale sicuro (IKE SA)</li>
+      <li><strong>IKE Phase 2:</strong> negoziazione dei parametri IPsec (algoritmi, chiavi) per il tunnel dati</li>
+    </ol>
+    <div class="callout orange"><p><strong>Algoritmi tipici:</strong> cifratura AES-256, integrità SHA-256, scambio chiavi Diffie-Hellman (DH group 14+).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>SSL/TLS VPN e OpenVPN</h2>
+    <p>Le VPN basate su SSL/TLS operano a <strong>livello 4–7</strong> e usano la stessa porta HTTPS (443). Questo le rende molto difficili da bloccare con i firewall aziendali o degli ISP.</p>
+
+    <h3>Vantaggi rispetto a IPsec</h3>
+    <ul>
+      <li><strong>Traversal firewall:</strong> porta 443 aperta quasi ovunque</li>
+      <li><strong>Clientless:</strong> alcune implementazioni funzionano via browser (no client da installare)</li>
+      <li><strong>Flessibilità:</strong> supporta NAT facilmente</li>
+    </ul>
+
+    <h3>OpenVPN</h3>
+    <p><strong>OpenVPN</strong> è l'implementazione open source più diffusa di SSL VPN. Caratteristiche:</p>
+    <ul>
+      <li>Usa TLS per lo scambio di chiavi e il controllo del canale</li>
+      <li>Traffico dati su UDP/TCP porta <strong>1194</strong> (default) — oppure TCP 443 per mascherarsi da HTTPS</li>
+      <li>Certificati X.509 per l'autenticazione</li>
+      <li>Multipiattaforma: Windows, Linux, macOS, Android, iOS</li>
+    </ul>
+
+    <h3>Confronto IPsec vs SSL VPN</h3>
+    <table>
+      <thead><tr><th></th><th>IPsec</th><th>SSL/TLS VPN</th></tr></thead>
+      <tbody>
+        <tr><td>Livello OSI</td><td>L3 (rete)</td><td>L4–L7 (trasporto–applicazione)</td></tr>
+        <tr><td>Porta</td><td>UDP 500 (IKE), IP 50/51</td><td>TCP/UDP 443 o 1194</td></tr>
+        <tr><td>Firewall traversal</td><td>Difficile (richiede porte specifiche)</td><td>Facile (porta 443)</td></tr>
+        <tr><td>Performance</td><td>Più efficiente (kernel space)</td><td>Leggermente più lento</td></tr>
+        <tr><td>Uso tipico</td><td>Site-to-site aziendale</td><td>Remote access, clientless</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Come compare all'esame</h2>
+    <ul>
+      <li><strong>Progetto multi-sede:</strong> connettere filiale a sede principale → VPN site-to-site IPsec</li>
+      <li><strong>Smart working:</strong> dipendenti da casa → VPN client-to-site</li>
+      <li><strong>Quesito teorico:</strong> "Descrivere il funzionamento di una VPN IPsec in modalità tunnel" → spiega ESP + modalità tunnel + IKE</li>
+      <li><strong>Confronto:</strong> "Differenza tra VPN site-to-site e client-to-site" → permanente/on-demand, gateway/singolo client</li>
+    </ul>
+    <div class="callout green"><p><strong>Parole chiave da usare:</strong> tunnel cifrato, confidenzialità, integrità, autenticazione, canale sicuro su rete pubblica, trasparente per gli utenti.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="crittografia.html">Crittografia e chiavi →</a>
+      <a href="ssl-tls.html">SSL/TLS in dettaglio →</a>
+      <a href="firewall.html">Firewall e regole VPN →</a>
+      <a href="schema-rete.html">Progettazione multi-sede →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

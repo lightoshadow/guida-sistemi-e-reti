@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VLAN e LAN Ethernet — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}
+.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">VLAN e LAN Ethernet</span>
+  <span class="topbar-section">Sezione 3</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 3 — Reti Locali</div>
+    <h1>VLAN (802.1Q) e LAN Ethernet</h1>
+    <p class="hero-desc">Le VLAN permettono di <strong>segmentare logicamente una rete fisica</strong>: dispositivi su porte diverse dello stesso switch parlano come se fossero su reti separate. Presente in almeno 8 esami.</p>
+    <div class="badges">
+      <span class="badge badge-blue">IEEE 802.1Q</span>
+      <span class="badge badge-blue">Trunk / Access</span>
+      <span class="badge badge-orange">Inter-VLAN routing</span>
+      <span class="badge badge-green">Alta frequenza</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>LAN Ethernet — basi</h2>
+    <p>Lo standard <strong>IEEE 802.3</strong> definisce Ethernet. Le velocità principali:</p>
+    <table>
+      <thead><tr><th>Standard</th><th>Velocità</th><th>Cavo tipico</th><th>Distanza max</th></tr></thead>
+      <tbody>
+        <tr><td>Fast Ethernet (802.3u)</td><td>100 Mbps</td><td>CAT5e</td><td>100 m</td></tr>
+        <tr><td>Gigabit (802.3ab)</td><td>1 Gbps</td><td>CAT5e/CAT6</td><td>100 m</td></tr>
+        <tr><td>10 Gigabit (802.3an)</td><td>10 Gbps</td><td>CAT6A</td><td>100 m</td></tr>
+        <tr><td>10 Gigabit (fibra, 802.3ae)</td><td>10 Gbps</td><td>SMF/MMF</td><td>10 km / 300 m</td></tr>
+      </tbody>
+    </table>
+    <p>Lo <strong>switch</strong> opera a livello 2 (Data Link). Ogni porta è un collision domain separato; tutte le porte condividono lo stesso broadcast domain (senza VLAN).</p>
+  </div>
+
+  <div class="block">
+    <h2>Cos'è una VLAN</h2>
+    <p>Una <strong>VLAN (Virtual LAN)</strong> è un raggruppamento logico di porte switch che formano un broadcast domain indipendente, indipendentemente dalla posizione fisica dei dispositivi.</p>
+    <p>Vantaggi delle VLAN:</p>
+    <ul>
+      <li><strong>Sicurezza:</strong> separazione del traffico (es. VLAN amministrativa, VLAN ospiti, VLAN IoT)</li>
+      <li><strong>Performance:</strong> riduzione del broadcast domain → meno traffico broadcast</li>
+      <li><strong>Flessibilità:</strong> riorganizzare la rete senza spostare cavi fisici</li>
+      <li><strong>Conformità:</strong> isolamento richiesto da policy (es. GDPR, PCI-DSS)</li>
+    </ul>
+
+    <h3>Tipi di porta sullo switch</h3>
+    <table>
+      <thead><tr><th>Tipo</th><th>Uso</th><th>Tag 802.1Q</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Access port</strong></td><td>Collegata a un dispositivo finale (PC, stampante)</td><td>Frame NON taggati (il dispositivo non sa della VLAN)</td></tr>
+        <tr><td><strong>Trunk port</strong></td><td>Collegata a un altro switch o router</td><td>Frame taggati con VLAN ID (IEEE 802.1Q, 4 byte nell'header)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="diagram">
+Switch A:
+  Porta 1-5   → VLAN 10 (Uffici)       [access]
+  Porta 6-10  → VLAN 20 (Laboratorio)  [access]
+  Porta 24    → VLAN 10,20,30 trunk    [trunk, uplink al router]
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Tag 802.1Q — struttura</h2>
+    <p>Il tag IEEE 802.1Q è inserito nell'header Ethernet tra Source MAC e EtherType:</p>
+    <pre><code>| Dst MAC | Src MAC | 0x8100 | PCP(3) | DEI(1) | VID(12) | EtherType | Payload | FCS |
+                     ←─────── 802.1Q Tag (4 byte) ──────→</code></pre>
+    <p>Il campo <strong>VLAN ID (VID)</strong> è a 12 bit → supporta da 1 a <strong>4094 VLAN</strong> (0 e 4095 riservati).</p>
+    <div class="callout"><p><strong>Native VLAN:</strong> la VLAN associata ai frame non taggati su una porta trunk. Di default è la VLAN 1. Cambiare la native VLAN è buona pratica di sicurezza.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Inter-VLAN routing (router-on-a-stick)</h2>
+    <p>Le VLAN sono isolate: un host su VLAN 10 non può comunicare con uno su VLAN 20 senza un dispositivo di livello 3 (router o layer-3 switch).</p>
+
+    <h3>Router-on-a-stick</h3>
+    <p>Un singolo link trunk dal router allo switch. Sul router si configurano <strong>sub-interfacce</strong> per ogni VLAN:</p>
+    <pre><code># Cisco IOS — esempio configurazione
+interface GigabitEthernet0/0.10
+  encapsulation dot1Q 10
+  ip address 192.168.10.1 255.255.255.0
+
+interface GigabitEthernet0/0.20
+  encapsulation dot1Q 20
+  ip address 192.168.20.1 255.255.255.0</code></pre>
+    <p>Il traffico tra VLAN sale al router via trunk, viene instradato, e scende di nuovo verso la VLAN di destinazione.</p>
+
+    <h3>Layer-3 Switch (alternativa)</h3>
+    <p>Uno switch gestito di fascia alta con capacità di routing IP può fare inter-VLAN routing internamente senza router esterno — più veloce (hardware) e più semplice da cablare.</p>
+
+    <div class="callout green"><p><strong>All'esame:</strong> se viene chiesto di far comunicare due VLAN, la risposta standard è "router-on-a-stick" con sub-interfacce + trunk sul link switch-router.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Scenari VLAN tipici all'esame</h2>
+    <table>
+      <thead><tr><th>Scenario</th><th>VLAN suggerite</th></tr></thead>
+      <tbody>
+        <tr><td>Scuola</td><td>VLAN 10 Personale, VLAN 20 Alunni, VLAN 30 Ospiti Wi-Fi, VLAN 40 VoIP, VLAN 50 IoT/Telecamere</td></tr>
+        <tr><td>Azienda</td><td>VLAN 10 Amministrazione, VLAN 20 Produzione, VLAN 30 Ospiti, VLAN 40 Gestione (management)</td></tr>
+        <tr><td>Ospedale</td><td>VLAN 10 Clinica, VLAN 20 Amministrativa, VLAN 30 Ospiti, VLAN 40 Dispositivi medici, VLAN 50 VoIP</td></tr>
+      </tbody>
+    </table>
+    <div class="callout orange"><p><strong>Best practice:</strong> creare sempre una VLAN di management separata per l'accesso agli switch/router. Non usare la VLAN 1 di default per il traffico utente.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="routing.html">Routing e inter-VLAN →</a>
+      <a href="wifi.html">VLAN per Wi-Fi e BYOD →</a>
+      <a href="schema-rete.html">Progettazione della rete →</a>
+      <a href="subnetting-ip.html">Piano di indirizzamento →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

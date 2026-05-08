@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoT e MQTT — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">IoT e MQTT</span>
+  <span class="topbar-section">Sezione 11</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 11 — Internet of Things</div>
+    <h1>IoT — Internet of Things</h1>
+    <p class="hero-desc">L'IoT riguarda sensori e dispositivi fisici connessi in rete. Compare spesso in scenari di automazione industriale, edifici intelligenti, monitoraggio ambientale. MQTT è il protocollo di comunicazione da conoscere.</p>
+    <div class="badges">
+      <span class="badge badge-blue">Architettura IoT</span>
+      <span class="badge badge-blue">MQTT</span>
+      <span class="badge badge-orange">Sensori</span>
+      <span class="badge badge-green">Sicurezza IoT</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Architettura IoT a tre livelli</h2>
+    <div class="diagram">
+Livello 1 — Perception Layer (percezione)
+  [Sensori] [Attuatori] [Telecamere] [RFID]
+           ↓ dati grezzi
+Livello 2 — Network/Gateway Layer
+  [Gateway locale] ← raccoglie, pre-elabora, aggrega
+  [Edge computing] ← elaborazione locale (riduce latenza)
+           ↓ dati elaborati
+Livello 3 — Application/Cloud Layer
+  [Server cloud] [Dashboard] [Applicazioni] [Analytics]
+    </div>
+
+    <h3>Microcontrollori e piattaforme</h3>
+    <table>
+      <thead><tr><th>Piattaforma</th><th>Tipo</th><th>Caratteristiche</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Arduino Uno/Nano</strong></td><td>Microcontrollore</td><td>ATmega328P, no OS, programmazione C/C++, basso consumo, no Wi-Fi nativo</td></tr>
+        <tr><td><strong>ESP32 / ESP8266</strong></td><td>Microcontrollore</td><td>Wi-Fi + Bluetooth integrati, basso costo, ideale per IoT connesso</td></tr>
+        <tr><td><strong>Raspberry Pi</strong></td><td>Single-board computer</td><td>Linux completo, USB, HDMI, GPIO, più potente ma più consumo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Protocollo MQTT</h2>
+    <p><strong>MQTT (Message Queuing Telemetry Transport)</strong> è un protocollo publish/subscribe leggero progettato per dispositivi con risorse limitate (poca banda, bassa potenza).</p>
+
+    <h3>Architettura publish/subscribe</h3>
+    <div class="diagram">
+[Sensore T°] ── publish("edificio/piano2/temperatura", "22.5") ──→ [BROKER]
+[Sensore umid] ── publish("edificio/piano2/umidita", "65") ──────→ [BROKER]
+                                                                       │
+                                              subscribe("edificio/#") ↓
+                                                             [Dashboard]
+                                                             [Controller]
+    </div>
+    <ul>
+      <li><strong>Publisher:</strong> il sensore che invia dati su un topic</li>
+      <li><strong>Subscriber:</strong> l'applicazione che riceve i dati iscrivendosi a un topic</li>
+      <li><strong>Broker:</strong> il server centrale che smista i messaggi (es. Mosquitto, HiveMQ)</li>
+      <li><strong>Topic:</strong> canale gerarchico separato da "/" (es. <code>casa/soggiorno/temperatura</code>)</li>
+    </ul>
+    <p>Wildcard nei topic: <code>#</code> = tutti i sottolivelli, <code>+</code> = un solo livello.</p>
+
+    <h3>Quality of Service (QoS)</h3>
+    <table>
+      <thead><tr><th>QoS</th><th>Garanzia</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td><strong>QoS 0</strong></td><td>At most once — "fire and forget", nessuna conferma</td><td>Dati non critici (es. temperatura aggiornata frequentemente)</td></tr>
+        <tr><td><strong>QoS 1</strong></td><td>At least once — ACK, possibili duplicati</td><td>Dati importanti che possono essere duplicati (es. allarmi)</td></tr>
+        <tr><td><strong>QoS 2</strong></td><td>Exactly once — handshake a 4 fasi, nessun duplicato</td><td>Comandi critici (es. apertura valvole, attuatori)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p>MQTT usa TCP porta <strong>1883</strong> (non cifrato) o porta <strong>8883</strong> con TLS (MQTT over SSL). In produzione usare sempre TLS.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Sensori tipici all'esame</h2>
+    <table>
+      <thead><tr><th>Grandezza</th><th>Sensore</th><th>Interfaccia</th></tr></thead>
+      <tbody>
+        <tr><td>Temperatura</td><td>NTC/PTC (analogico), PT100, DHT11/DHT22 (digitale), DS18B20</td><td>ADC, 1-Wire, I²C</td></tr>
+        <tr><td>Umidità</td><td>DHT11 (±5%), DHT22 (±2%), SHT31</td><td>Digitale (1-Wire o I²C)</td></tr>
+        <tr><td>Gas/CO</td><td>MQ-series (MQ-2 gas, MQ-7 CO)</td><td>Analogico (resistivo)</td></tr>
+        <tr><td>Rilevamento fumo/incendio</td><td>Fotoelettrico, ionizzazione</td><td>Digitale (soglia)</td></tr>
+        <tr><td>Presenza/movimento</td><td>PIR (infrarosso passivo), ultrasonico HC-SR04</td><td>Digitale, PWM</td></tr>
+        <tr><td>Luminosità</td><td>LDR (fotoresistenza), BH1750</td><td>Analogico, I²C</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Sicurezza IoT</h2>
+    <p>I dispositivi IoT sono spesso il punto più debole della rete:</p>
+    <ul>
+      <li>Firmware raramente aggiornato</li>
+      <li>Credenziali di default non cambiate</li>
+      <li>Comunicazioni non cifrate</li>
+      <li>Spesso connessi direttamente a Internet</li>
+    </ul>
+    <h3>Misure di sicurezza</h3>
+    <ul>
+      <li><strong>VLAN dedicata per IoT</strong> — isolata dalla rete dati aziendale</li>
+      <li><strong>Firewall</strong> tra VLAN IoT e rete interna — solo porte/protocolli necessari</li>
+      <li>Cambiare le credenziali di default</li>
+      <li>Aggiornare il firmware regolarmente</li>
+      <li>Usare MQTT over TLS (porta 8883)</li>
+      <li>Autenticazione dei dispositivi con certificati X.509</li>
+    </ul>
+    <div class="callout orange"><p><strong>All'esame:</strong> quando il progetto include dispositivi IoT, specificare sempre la VLAN separata e motivare: "I dispositivi IoT hanno firmware raramente aggiornato e superficie d'attacco elevata — isolarli dalla rete dati protegge l'intera infrastruttura."</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="vlan.html">VLAN IoT dedicata →</a>
+      <a href="socket.html">Programmazione di rete e protocolli →</a>
+      <a href="ssl-tls.html">MQTT over TLS →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

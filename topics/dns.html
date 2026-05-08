@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNS — risoluzione nomi — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout.red{border-left-color:var(--red);background:rgba(248,113,113,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">DNS — risoluzione nomi</span>
+  <span class="topbar-section">Sezione 7</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 7 — Protocolli applicativi</div>
+    <h1>DNS — Domain Name System</h1>
+    <p class="hero-desc">Il DNS traduce i nomi di dominio (<code>www.esempio.it</code>) in indirizzi IP. È l'infrastruttura che rende navigabile Internet. Richiesto in molti esami, specialmente per i record e la configurazione server.</p>
+    <div class="badges">
+      <span class="badge badge-blue">UDP/TCP 53</span>
+      <span class="badge badge-blue">Record A, MX, CNAME</span>
+      <span class="badge badge-orange">Risoluzione ricorsiva</span>
+      <span class="badge badge-green">Alta frequenza</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Struttura gerarchica del DNS</h2>
+    <p>Il DNS è un database distribuito organizzato ad albero. Ogni livello è separato da un punto:</p>
+    <div class="diagram">
+.                           ← Root (gestito da IANA, 13 root server)
+├── com.
+├── it.                     ← Top-Level Domain (TLD) — gestito da NIC.it
+│   └── esempio.it.         ← Second-Level Domain — gestito dall'azienda
+│       └── www.esempio.it. ← sottodominio/host
+└── edu.
+    </div>
+    <ul>
+      <li><strong>Root nameservers:</strong> 13 cluster (a-m.root-servers.net) che conoscono i TLD</li>
+      <li><strong>TLD servers:</strong> sanno quali nameserver gestiscono ogni dominio di secondo livello</li>
+      <li><strong>Authoritative nameserver:</strong> ha l'authority per un dominio specifico — conosce tutti i record</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Tipi di risoluzione DNS</h2>
+    <h3>Risoluzione ricorsiva (client → resolver)</h3>
+    <p>Il client chiede al proprio <strong>resolver DNS</strong> (solitamente fornito via DHCP) di risolvere il nome. Il resolver fa tutto il lavoro e restituisce la risposta finale.</p>
+
+    <h3>Risoluzione iterativa (resolver → nameserver)</h3>
+    <p>Il resolver esegue la risoluzione passo dopo passo interrogando i nameserver in sequenza:</p>
+    <div class="diagram">
+Client → Resolver: "Qual è l'IP di www.esempio.it?"
+Resolver → Root NS: "Chi gestisce .it?"  → risposta: "ns1.nic.it"
+Resolver → ns1.nic.it: "Chi gestisce esempio.it?"  → risposta: "ns.esempio.it"
+Resolver → ns.esempio.it: "Qual è l'IP di www?"  → risposta: "203.0.113.10"
+Resolver → Client: "203.0.113.10"
+    </div>
+    <div class="callout"><p><strong>Cache DNS:</strong> i resolver salvano le risposte per il periodo definito dal TTL (Time To Live) del record. Riduce il carico sui nameserver e accelera le risposte.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Record DNS principali</h2>
+    <table>
+      <thead><tr><th>Record</th><th>Funzione</th><th>Esempio</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A</strong></td><td>Nome → IPv4</td><td><code>www.esempio.it. 3600 IN A 203.0.113.10</code></td></tr>
+        <tr><td><strong>AAAA</strong></td><td>Nome → IPv6</td><td><code>www.esempio.it. 3600 IN AAAA 2001:db8::1</code></td></tr>
+        <tr><td><strong>CNAME</strong></td><td>Alias → nome canonico</td><td><code>mail.esempio.it. CNAME esempio.it.</code></td></tr>
+        <tr><td><strong>MX</strong></td><td>Mail exchanger (server email)</td><td><code>esempio.it. MX 10 mail.esempio.it.</code></td></tr>
+        <tr><td><strong>NS</strong></td><td>Nameserver autorevole per la zona</td><td><code>esempio.it. NS ns1.esempio.it.</code></td></tr>
+        <tr><td><strong>PTR</strong></td><td>IP → nome (reverse lookup)</td><td><code>10.113.0.203.in-addr.arpa. PTR www.esempio.it.</code></td></tr>
+        <tr><td><strong>SOA</strong></td><td>Start of Authority — parametri zona</td><td>Serial, refresh, retry, expire, TTL minimo</td></tr>
+        <tr><td><strong>TXT</strong></td><td>Testo libero — usato per SPF, DKIM</td><td><code>esempio.it. TXT "v=spf1 mx -all"</code></td></tr>
+        <tr><td><strong>SRV</strong></td><td>Servizio + porta + host</td><td>Usato da SIP, XMPP, Active Directory</td></tr>
+      </tbody>
+    </table>
+    <div class="callout orange"><p><strong>Record MX e priorità:</strong> il numero dopo MX è la priorità (più basso = più preferito). Con priorità 10 e 20, il server con priorità 10 riceve la posta per primo.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Zone DNS — primaria e secondaria</h2>
+    <p>Una <strong>zona</strong> è un insieme di record DNS per un dominio, memorizzata in un nameserver.</p>
+    <ul>
+      <li><strong>Zona primaria (master):</strong> copia modificabile dei record. L'amministratore modifica qui.</li>
+      <li><strong>Zona secondaria (slave):</strong> copia di sola lettura, sincronizzata dalla primaria tramite <em>zone transfer</em> (AXFR/IXFR su porta TCP 53). Fornisce ridondanza.</li>
+    </ul>
+    <h3>DNS interno vs DNS pubblico</h3>
+    <p>Nelle reti aziendali spesso si separa:</p>
+    <ul>
+      <li><strong>DNS interno:</strong> risolve nomi interni (<code>fileserver.azienda.local</code>, <code>intranet</code>) — non accessibile dall'esterno</li>
+      <li><strong>DNS pubblico:</strong> risolve nomi raggiungibili da Internet (<code>www.azienda.it</code>) — collocato in DMZ o delegato a provider</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Sicurezza DNS — attacchi e contromisure</h2>
+    <table>
+      <thead><tr><th>Attacco</th><th>Meccanismo</th><th>Contromisura</th></tr></thead>
+      <tbody>
+        <tr><td><strong>DNS Poisoning (Cache Poisoning)</strong></td><td>Inserimento di record falsi nella cache del resolver → reindirizzamento a siti malevoli</td><td>DNSSEC (firma crittografica dei record)</td></tr>
+        <tr><td><strong>DNS Hijacking</strong></td><td>Compromissione del resolver o del registrar → risposta sempre errata</td><td>DNSSEC, monitoraggio del resolver</td></tr>
+        <tr><td><strong>DNS Spoofing</strong></td><td>Invio di risposte DNS false prima del nameserver legittimo</td><td>Randomizzazione porta sorgente, DNSSEC</td></tr>
+        <tr><td><strong>DNS Amplification (DDoS)</strong></td><td>Query DNS con IP sorgente falsificato verso open resolver → amplificazione traffico verso vittima</td><td>Bloccare open resolver, rate limiting</td></tr>
+      </tbody>
+    </table>
+    <div class="callout red"><p><strong>DNSSEC</strong> firma crittograficamente i record DNS — il resolver può verificare l'autenticità della risposta. Non cifra i dati, protegge solo dall'integrità/autenticità.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="dhcp.html">DHCP — assegnazione DNS →</a>
+      <a href="ssl-tls.html">Certificati e nomi di dominio →</a>
+      <a href="attacchi.html">Attacchi DNS →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

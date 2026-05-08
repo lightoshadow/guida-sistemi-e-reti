@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHCP — sequenza DORA — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+.dora-step{display:flex;gap:14px;margin-bottom:12px;align-items:flex-start}
+.dora-letter{min-width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.dora-content strong{display:block;color:var(--text);font-size:14px;margin-bottom:2px}
+.dora-content span{color:var(--text2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">DHCP — sequenza DORA</span>
+  <span class="topbar-section">Sezione 7</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 7 — Protocolli applicativi</div>
+    <h1>DHCP — Sequenza DORA</h1>
+    <p class="hero-desc">Il DHCP assegna automaticamente gli indirizzi IP ai dispositivi della rete. La sequenza DORA (Discover → Offer → Request → Acknowledge) è un classico all'esame.</p>
+    <div class="badges">
+      <span class="badge badge-blue">UDP 67/68</span>
+      <span class="badge badge-orange">DORA</span>
+      <span class="badge badge-blue">Lease</span>
+      <span class="badge badge-green">Relay agent</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Sequenza DORA</h2>
+    <p>Quando un dispositivo si collega alla rete e non ha ancora un indirizzo IP, avvia la procedura DORA (comunicazione in <strong>broadcast</strong> perché non conosce ancora il server):</p>
+
+    <div style="margin:20px 0">
+      <div class="dora-step">
+        <div class="dora-letter">D</div>
+        <div class="dora-content">
+          <strong>Discover — DHCP Discover</strong>
+          <span>Il client invia in broadcast (<code>255.255.255.255</code>) sulla porta UDP 67. "Qualcuno può darmi un indirizzo IP?" — usa MAC address come identificatore.</span>
+        </div>
+      </div>
+      <div class="dora-step">
+        <div class="dora-letter">O</div>
+        <div class="dora-content">
+          <strong>Offer — DHCP Offer</strong>
+          <span>Il server risponde (ancora in broadcast) con una proposta: "Ti offro l'IP 192.168.1.50 per 24 ore, il tuo gateway è 192.168.1.1, DNS 8.8.8.8".</span>
+        </div>
+      </div>
+      <div class="dora-step">
+        <div class="dora-letter">R</div>
+        <div class="dora-content">
+          <strong>Request — DHCP Request</strong>
+          <span>Il client accetta l'offerta e lo comunica in broadcast (altri server DHCP vedono che la loro offerta è stata rifiutata). "Accetto l'offerta del server X."</span>
+        </div>
+      </div>
+      <div class="dora-step">
+        <div class="dora-letter">A</div>
+        <div class="dora-content">
+          <strong>Acknowledge — DHCP Acknowledge</strong>
+          <span>Il server conferma l'assegnazione e imposta il lease time. Il client può ora usare l'indirizzo.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout"><p><strong>Porte:</strong> il server DHCP ascolta su UDP 67. Il client usa la porta UDP 68. I messaggi broadcast usano indirizzo sorgente <code>0.0.0.0</code> (il client non ha ancora IP).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Parametri assegnati dal DHCP</h2>
+    <p>Il DHCP non assegna solo l'indirizzo IP. Con ogni lease vengono forniti:</p>
+    <table>
+      <thead><tr><th>Opzione DHCP</th><th>N°</th><th>Descrizione</th></tr></thead>
+      <tbody>
+        <tr><td><strong>IP Address</strong></td><td>—</td><td>L'indirizzo IP assegnato al client</td></tr>
+        <tr><td><strong>Subnet Mask</strong></td><td>1</td><td>La maschera della rete (es. 255.255.255.0)</td></tr>
+        <tr><td><strong>Default Gateway</strong></td><td>3</td><td>Il router della rete locale</td></tr>
+        <tr><td><strong>DNS Server</strong></td><td>6</td><td>Uno o più server DNS</td></tr>
+        <tr><td><strong>Lease Time</strong></td><td>51</td><td>Durata del lease (es. 86400 secondi = 24 ore)</td></tr>
+        <tr><td><strong>Domain Name</strong></td><td>15</td><td>Suffisso DNS del dominio locale</td></tr>
+        <tr><td><strong>NTP Server</strong></td><td>42</td><td>Server di sincronizzazione orario</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Scope, esclusioni e riserve</h2>
+    <h3>Scope</h3>
+    <p>Il pool di indirizzi che il server DHCP può assegnare. Esempio:</p>
+    <pre><code>Scope: 192.168.1.0/24
+Range assegnabile: 192.168.1.10 – 192.168.1.200
+Gateway: 192.168.1.1
+DNS: 192.168.1.2, 8.8.8.8
+Lease time: 24 ore</code></pre>
+
+    <h3>Esclusioni (exclusions)</h3>
+    <p>Indirizzi nel range dello scope che NON devono essere assegnati (perché usati per dispositivi statici):</p>
+    <pre><code>Esclusioni: 192.168.1.1 – 192.168.1.9  (gateway, server, stampanti)</code></pre>
+
+    <h3>Riserve (reservations)</h3>
+    <p>Associazione MAC address → IP fisso: il server assegna sempre lo stesso IP a uno specifico dispositivo (in base al MAC). Utile per stampanti e server che necessitano di IP prevedibile ma gestito dal DHCP.</p>
+
+    <div class="callout orange"><p><strong>Best practice:</strong> assegna staticamente solo i pochi dispositivi critici (router, server). Per stampanti e AP usa le riserve DHCP — più semplice da gestire centralmente.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>DHCP Relay Agent</h2>
+    <p>Il DHCP usa messaggi broadcast, ma i broadcast non attraversano i router. Nelle reti con più subnet, ogni subnet dovrebbe avere un server DHCP — soluzione poco scalabile.</p>
+    <p>Il <strong>DHCP Relay Agent</strong> (configurato sul router) ascolta i broadcast DHCP locali e li inoltra in <em>unicast</em> al server DHCP centralizzato in un'altra subnet.</p>
+    <div class="diagram">
+VLAN 10 (192.168.10.0/24)     VLAN 20 (192.168.20.0/24)
+  [PC] ─── broadcast DORA ─→ [Router]  ─── unicast ──→ [DHCP Server]
+                              relay agent                192.168.1.100
+    </div>
+    <p>Configurazione del relay su un router Cisco:</p>
+    <pre><code>interface Vlan10
+  ip helper-address 192.168.1.100   ← indirizzo del server DHCP</code></pre>
+    <div class="callout green"><p><strong>All'esame:</strong> se si chiede come un singolo server DHCP serve più VLAN, la risposta è DHCP Relay Agent (<code>ip helper-address</code>).</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="subnetting-ip.html">Piano di indirizzamento →</a>
+      <a href="dns.html">DNS — risoluzione nomi →</a>
+      <a href="vlan.html">DHCP e VLAN →</a>
+      <a href="tcp-udp.html">UDP — protocollo di trasporto →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

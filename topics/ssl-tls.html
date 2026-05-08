@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSL/TLS e HTTPS — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">SSL/TLS e HTTPS</span>
+  <span class="topbar-section">Sezione 6</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 6 — Sicurezza delle reti</div>
+    <h1>SSL/TLS e HTTPS</h1>
+    <p class="hero-desc">TLS è il protocollo che protegge quasi tutte le comunicazioni moderne: HTTPS, email sicura, VPN SSL, autenticazione 802.1X. Devi sapere come funziona l'handshake e cosa garantisce.</p>
+    <div class="badges">
+      <span class="badge badge-blue">TLS 1.2 / 1.3</span>
+      <span class="badge badge-blue">Handshake</span>
+      <span class="badge badge-orange">HTTPS</span>
+      <span class="badge badge-green">Certificati X.509</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Da SSL a TLS — evoluzione</h2>
+    <table>
+      <thead><tr><th>Versione</th><th>Anno</th><th>Stato</th></tr></thead>
+      <tbody>
+        <tr><td>SSL 1.0</td><td>—</td><td>Mai rilasciato pubblicamente</td></tr>
+        <tr><td>SSL 2.0</td><td>1995</td><td>Obsoleto — vulnerabile</td></tr>
+        <tr><td>SSL 3.0</td><td>1996</td><td>Obsoleto — vulnerabile (POODLE)</td></tr>
+        <tr><td>TLS 1.0</td><td>1999</td><td>Deprecato (2021)</td></tr>
+        <tr><td>TLS 1.1</td><td>2006</td><td>Deprecato (2021)</td></tr>
+        <tr><td><strong>TLS 1.2</strong></td><td>2008</td><td>Ancora usato — sicuro se configurato bene</td></tr>
+        <tr><td><strong>TLS 1.3</strong></td><td>2018</td><td>Standard attuale — più veloce e sicuro</td></tr>
+      </tbody>
+    </table>
+    <div class="callout orange"><p><strong>All'esame:</strong> SSL è tecnicamente obsoleto — si chiama ancora SSL per abitudine, ma nella realtà si usa TLS. Menziona sempre TLS 1.2/1.3.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>TLS Handshake (TLS 1.2)</h2>
+    <p>L'handshake stabilisce un canale sicuro prima di trasmettere dati. Avviene in chiaro inizialmente, poi diventa tutto cifrato.</p>
+    <div class="diagram">
+Client                                    Server
+  │                                         │
+  │── ClientHello ────────────────────────→ │  (versioni TLS, cipher suites, client random)
+  │                                         │
+  │ ←──────────────────────── ServerHello ──│  (versione scelta, cipher suite, server random)
+  │ ←──────────────────────── Certificate ──│  (certificato X.509 del server)
+  │ ←────────────────────── ServerHelloDone─│
+  │                                         │
+  │  [verifica certificato contro CA]        │
+  │                                         │
+  │── ClientKeyExchange ──────────────────→ │  (pre-master secret cifrato con chiave pubblica server)
+  │── ChangeCipherSpec ─────────────────── →│  (da ora si usa la chiave di sessione)
+  │── Finished ──────────────────────────→ │  (HMAC di tutto l'handshake)
+  │                                         │
+  │ ←──────────────────── ChangeCipherSpec ─│
+  │ ←───────────────────────────── Finished─│
+  │                                         │
+  │════════ Dati applicativi cifrati ════════│
+    </div>
+    <h3>Derivazione della chiave di sessione</h3>
+    <ol>
+      <li><strong>pre-master secret:</strong> generato dal client, cifrato con la chiave pubblica del server (RSA) — o negoziato via Diffie-Hellman</li>
+      <li><strong>master secret:</strong> derivato da pre-master secret + client random + server random con PRF</li>
+      <li><strong>session keys:</strong> derivate dal master secret — chiavi AES separate per cifratura e HMAC in entrambe le direzioni</li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <h2>TLS 1.3 — miglioramenti</h2>
+    <p>TLS 1.3 semplifica e velocizza l'handshake:</p>
+    <ul>
+      <li><strong>1-RTT handshake</strong> (vs 2-RTT di TLS 1.2) → connessione più rapida</li>
+      <li><strong>0-RTT resumption:</strong> per sessioni riprese, i dati possono essere inviati subito (con limitazioni di sicurezza)</li>
+      <li>Eliminati algoritmi deboli: RSA key exchange, RC4, 3DES, MD5, SHA-1</li>
+      <li><strong>Forward Secrecy obbligatoria:</strong> solo Diffie-Hellman efimero (DHE/ECDHE) → se la chiave privata viene compromessa in futuro, le sessioni passate restano sicure</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>HTTPS</h2>
+    <p><strong>HTTPS = HTTP sopra TLS</strong>. Il browser apre una connessione TCP sulla porta <strong>443</strong>, esegue l'handshake TLS, poi comunica in HTTP cifrato.</p>
+    <h3>Cosa garantisce HTTPS</h3>
+    <table>
+      <thead><tr><th>Proprietà</th><th>Meccanismo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Autenticità</strong></td><td>Il certificato del server è firmato da una CA affidabile → sei davvero sul sito giusto</td></tr>
+        <tr><td><strong>Confidenzialità</strong></td><td>I dati sono cifrati con AES → nessuno può leggere il traffico in transito</td></tr>
+        <tr><td><strong>Integrità</strong></td><td>HMAC su ogni record TLS → nessuno può modificare i dati senza che se ne accorga</td></tr>
+      </tbody>
+    </table>
+
+    <h3>HTTP vs HTTPS — differenze all'esame</h3>
+    <table>
+      <thead><tr><th></th><th>HTTP</th><th>HTTPS</th></tr></thead>
+      <tbody>
+        <tr><td>Porta</td><td>80</td><td>443</td></tr>
+        <tr><td>Cifratura</td><td>No — traffico in chiaro</td><td>Sì — TLS</td></tr>
+        <tr><td>Autenticazione server</td><td>No</td><td>Sì — certificato X.509</td></tr>
+        <tr><td>Velocità</td><td>Leggermente più veloce</td><td>Overhead minimo (hardware moderno)</td></tr>
+        <tr><td>Uso</td><td>Solo reti interne di test</td><td>Tutto il web moderno</td></tr>
+      </tbody>
+    </table>
+    <div class="callout green"><p><strong>Best practice:</strong> tutto il traffico web deve usare HTTPS. HTTP Strict Transport Security (HSTS) forza il browser a usare sempre HTTPS per un dominio.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Cipher suite — come si legge</h2>
+    <p>Una cipher suite specifica gli algoritmi usati nella sessione TLS. Formato:</p>
+    <pre><code>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+ │    │      │         │        │   └─ algoritmo HMAC (SHA-384)
+ │    │      │         └─────────── cifratura simmetrica (AES-256-GCM)
+ │    │      └─────────────────── autenticazione (RSA)
+ │    └────────────────────────── scambio chiavi (ECDHE = forward secrecy)
+ └─────────────────────────────── protocollo (TLS)</code></pre>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="crittografia.html">Crittografia simmetrica e asimmetrica →</a>
+      <a href="vpn.html">SSL VPN →</a>
+      <a href="dhcp.html">DNS e certificati →</a>
+      <a href="attacchi.html">Attacchi MitM e SSL stripping →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

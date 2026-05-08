@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud e Virtualizzazione — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">Cloud e Virtualizzazione</span>
+  <span class="topbar-section">Sezione 10</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 10 — Cloud e Virtualizzazione</div>
+    <h1>Cloud computing e Virtualizzazione</h1>
+    <p class="hero-desc">Il cloud e la virtualizzazione sono argomenti frequenti nella seconda parte degli esami. Devi sapere distinguere IaaS/PaaS/SaaS, i tipi di cloud e hypervisor tipo 1 vs tipo 2.</p>
+    <div class="badges">
+      <span class="badge badge-blue">IaaS / PaaS / SaaS</span>
+      <span class="badge badge-blue">Hypervisor tipo 1 e 2</span>
+      <span class="badge badge-orange">Cloud ibrido</span>
+      <span class="badge badge-green">Docker</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Modelli di servizio cloud</h2>
+    <table>
+      <thead><tr><th>Modello</th><th>Cosa fornisce il provider</th><th>Cosa gestisce il cliente</th><th>Esempi</th></tr></thead>
+      <tbody>
+        <tr><td><strong>IaaS</strong><br>Infrastructure as a Service</td><td>Hardware virtuale: VM, storage, rete, datacenter fisico</td><td>OS, middleware, runtime, applicazioni, dati</td><td>AWS EC2, Azure VMs, GCP Compute</td></tr>
+        <tr><td><strong>PaaS</strong><br>Platform as a Service</td><td>IaaS + OS + runtime + middleware</td><td>Applicazioni e dati</td><td>Heroku, Azure App Service, Google App Engine</td></tr>
+        <tr><td><strong>SaaS</strong><br>Software as a Service</td><td>Tutto: infrastruttura + piattaforma + applicazione</td><td>Solo i propri dati e configurazione utente</td><td>Gmail, Microsoft 365, Salesforce, Zoom</td></tr>
+      </tbody>
+    </table>
+    <div class="diagram">
+Responsabilità crescente del cliente →
+─────────────────────────────────────────────
+         SaaS        PaaS        IaaS
+App      Provider    Cliente     Cliente
+Data     Provider    Cliente     Cliente
+Runtime  Provider    Provider    Cliente
+OS       Provider    Provider    Cliente
+VM       Provider    Provider    Provider
+Server   Provider    Provider    Provider
+─────────────────────────────────────────────
+    </div>
+    <div class="callout"><p><strong>Mnemonica:</strong> SaaS = "Sei a casa a usare", PaaS = "Piattaforma per applicazioni", IaaS = "Infrastruttura affittata a scalinata".</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Tipi di cloud</h2>
+    <table>
+      <thead><tr><th>Tipo</th><th>Proprietà</th><th>Pro</th><th>Contro</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Pubblico</strong></td><td>Provider terzo (AWS, Azure, GCP)</td><td>Scalabilità illimitata, pay-per-use, nessun hardware da gestire</td><td>Dipendenza dal provider, latenza, dati fuori sede</td></tr>
+        <tr><td><strong>Privato</strong></td><td>Datacenter interno dell'organizzazione</td><td>Controllo totale, sicurezza dati, bassa latenza</td><td>Costo fisso elevato, scalabilità limitata, gestione hardware</td></tr>
+        <tr><td><strong>Ibrido</strong></td><td>Combinazione pubblico + privato</td><td>Flessibilità: dati sensibili on-premise, carichi variabili sul cloud</td><td>Complessità di gestione e integrazione</td></tr>
+        <tr><td><strong>Community</strong></td><td>Condiviso tra organizzazioni simili</td><td>Costi condivisi, requisiti comuni</td><td>Meno diffuso</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Virtualizzazione — hypervisor tipo 1 e tipo 2</h2>
+    <p>Un <strong>hypervisor</strong> (o Virtual Machine Monitor) è il software che crea e gestisce le macchine virtuali (VM), virtualizzando CPU, RAM, storage e rete.</p>
+
+    <h3>Hypervisor tipo 1 (bare-metal)</h3>
+    <p>Gira <strong>direttamente sull'hardware fisico</strong>, senza OS sottostante. Le VM girano sopra l'hypervisor.</p>
+    <div class="diagram">
+Hardware fisico
+└── Hypervisor tipo 1 (es. VMware ESXi, Microsoft Hyper-V, KVM, Xen)
+    ├── VM 1 (Windows Server)
+    ├── VM 2 (Ubuntu Linux)
+    └── VM 3 (CentOS)
+    </div>
+    <ul>
+      <li><strong>Vantaggi:</strong> massima performance (accesso diretto hardware), alta densità di VM, usato in produzione</li>
+      <li><strong>Esempi:</strong> VMware ESXi/vSphere, Microsoft Hyper-V, KVM (Linux), Citrix Hypervisor</li>
+    </ul>
+
+    <h3>Hypervisor tipo 2 (hosted)</h3>
+    <p>Gira come applicazione <strong>sopra un OS host</strong>. Le VM sono processi dell'OS host.</p>
+    <div class="diagram">
+Hardware fisico
+└── OS host (Windows 10, macOS, Ubuntu)
+    └── Hypervisor tipo 2 (VirtualBox, VMware Workstation)
+        ├── VM 1 (Ubuntu)
+        └── VM 2 (Windows Server)
+    </div>
+    <ul>
+      <li><strong>Vantaggi:</strong> facile da installare, ideale per sviluppo/test, nessuna dedicazione hardware</li>
+      <li><strong>Svantaggi:</strong> overhead doppio (OS host + hypervisor), performance minore</li>
+      <li><strong>Esempi:</strong> Oracle VirtualBox, VMware Workstation/Fusion, QEMU</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>Container — Docker</h2>
+    <p>I container sono un'alternativa leggera alle VM: isolano un'applicazione e le sue dipendenze senza virtualizzare l'hardware.</p>
+    <table>
+      <thead><tr><th></th><th>VM</th><th>Container</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Isolamento</strong></td><td>Hardware virtuale completo</td><td>Processo isolato, stesso kernel dell'host</td></tr>
+        <tr><td><strong>Dimensione</strong></td><td>GB (include OS completo)</td><td>MB (solo app + dipendenze)</td></tr>
+        <tr><td><strong>Avvio</strong></td><td>Minuti</td><td>Secondi</td></tr>
+        <tr><td><strong>Overhead</strong></td><td>Alto</td><td>Minimo</td></tr>
+        <tr><td><strong>Sicurezza isolamento</strong></td><td>Forte (kernel separato)</td><td>Minore (stesso kernel)</td></tr>
+        <tr><td><strong>Uso tipico</strong></td><td>Ambienti produzione completi, OS diversi</td><td>Microservizi, CI/CD, applicazioni cloud-native</td></tr>
+      </tbody>
+    </table>
+    <div class="callout green"><p><strong>Docker:</strong> il motore di container più diffuso. Un'immagine Docker definisce l'applicazione + dipendenze. Il container è un'istanza in esecuzione dell'immagine. <code>Dockerfile</code> → <code>docker build</code> → immagine → <code>docker run</code> → container.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="backup-dr.html">Backup e disaster recovery →</a>
+      <a href="schema-rete.html">Infrastruttura datacenter →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

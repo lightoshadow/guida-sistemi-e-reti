@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCP vs UDP — Sistemi e Reti</title>
+<style>
+:root{--bg:#0f1117;--bg2:#1a1d2e;--bg3:#242740;--border:#2e3250;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#34d399;--orange:#f59e0b;--red:#f87171;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--radius:10px;--font:'Segoe UI',system-ui,-apple-system,sans-serif;--mono:'Cascadia Code','Fira Code','Consolas',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;flex-wrap:wrap}.topbar a{color:var(--text3);text-decoration:none;font-size:13px;transition:color .15s}.topbar a:hover{color:var(--accent)}.topbar-sep{color:var(--border)}.topbar-title{font-size:14px;font-weight:600;color:var(--text2)}.topbar-section{font-size:12px;color:var(--text3);margin-left:auto}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.hero{margin-bottom:40px}.hero-section{font-size:12px;font-weight:600;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero-desc{color:var(--text2);font-size:15px;max-width:680px;margin-bottom:16px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}.badge-blue{background:rgba(79,142,247,.15);color:var(--accent);border:1px solid rgba(79,142,247,.3)}.badge-green{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}.block h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}.block h2::before{content:'';display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:2px;flex-shrink:0}.block h3{font-size:15px;font-weight:600;color:var(--text);margin:20px 0 8px}.block p{color:var(--text2);font-size:14px;margin-bottom:12px}.block ul,.block ol{color:var(--text2);font-size:14px;padding-left:20px;margin-bottom:12px}.block li{margin-bottom:6px}.block strong{color:var(--text)}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--orange)}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0}pre code{background:none;padding:0;color:var(--green);font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{background:var(--bg3);color:var(--text);padding:10px 14px;text-align:left;font-size:13px;font-weight:600}td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}tr:last-child td{border-bottom:none}
+.callout{border-left:3px solid var(--accent);background:rgba(79,142,247,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:16px 0}.callout.green{border-left-color:var(--green);background:rgba(52,211,153,.08)}.callout.orange{border-left-color:var(--orange);background:rgba(245,158,11,.08)}.callout p{margin:0;font-size:13.5px}
+.related{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.related a{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);text-decoration:none;font-size:13px;transition:all .15s}.related a:hover{border-color:var(--accent);color:var(--accent)}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;color:var(--text2);line-height:1.8}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="../index.html">← Guida principale</a>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-title">TCP vs UDP</span>
+  <span class="topbar-section">Sezione 7</span>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-section">Sezione 7 — Protocolli di trasporto</div>
+    <h1>TCP vs UDP — livello di trasporto</h1>
+    <p class="hero-desc">TCP e UDP sono i due protocolli fondamentali del livello 4 (trasporto). Ogni servizio di rete usa uno dei due — devi sapere quale e perché.</p>
+    <div class="badges">
+      <span class="badge badge-green">★ Base teorica di tutti gli esami</span>
+      <span class="badge badge-blue">Three-way handshake</span>
+      <span class="badge badge-blue">Porte</span>
+      <span class="badge badge-orange">ICMP</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Confronto TCP vs UDP</h2>
+    <table>
+      <thead><tr><th></th><th>TCP</th><th>UDP</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Connessione</strong></td><td>Connection-oriented (3-way handshake)</td><td>Connectionless (no handshake)</td></tr>
+        <tr><td><strong>Affidabilità</strong></td><td>Garantita: ACK, ritrasmissione, ordine</td><td>Best-effort: nessuna garanzia</td></tr>
+        <tr><td><strong>Ordine</strong></td><td>Pacchetti riordinati a destinazione</td><td>Nessun riordinamento</td></tr>
+        <tr><td><strong>Controllo flusso</strong></td><td>Sì (finestra scorrevole)</td><td>No</td></tr>
+        <tr><td><strong>Controllo congestione</strong></td><td>Sì (slow start, congestion avoidance)</td><td>No</td></tr>
+        <tr><td><strong>Header</strong></td><td>20 byte (minimo)</td><td>8 byte</td></tr>
+        <tr><td><strong>Velocità</strong></td><td>Più lento (overhead)</td><td>Più veloce</td></tr>
+        <tr><td><strong>Uso tipico</strong></td><td>HTTP/S, FTP, SSH, SMTP, IMAP</td><td>DNS, DHCP, VoIP, streaming, gaming</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>Three-way handshake TCP</h2>
+    <p>Prima di trasmettere dati, TCP stabilisce la connessione con tre messaggi:</p>
+    <div class="diagram">
+Client                    Server
+  │                          │
+  │── SYN ─────────────────→ │   (client chiede connessione, seq=x)
+  │                          │
+  │ ←──────────── SYN-ACK ───│   (server accetta, seq=y, ack=x+1)
+  │                          │
+  │── ACK ─────────────────→ │   (client conferma, ack=y+1)
+  │                          │
+  │════ Dati TCP ════════════│
+    </div>
+    <p>La connessione viene terminata con un <strong>four-way handshake</strong>: FIN → ACK → FIN → ACK.</p>
+    <div class="callout"><p><strong>SYN flood attack:</strong> un attaccante invia molti SYN senza completare l'handshake, esaurendo le risorse del server. Contromisura: SYN cookies.</p></div>
+
+    <h3>Numero di sequenza e ACK</h3>
+    <p>TCP numera ogni byte trasmesso. Il ricevitore invia ACK per ogni segmento ricevuto, specificando il numero del prossimo byte atteso. Se un segmento non viene confermato entro il timeout, viene ritrasmesso.</p>
+  </div>
+
+  <div class="block">
+    <h2>Porte TCP/UDP</h2>
+    <p>Le porte (0–65535) identificano il servizio/applicazione su un host:</p>
+    <ul>
+      <li><strong>Well-known ports (0–1023):</strong> assegnate a servizi standard (HTTP 80, HTTPS 443, SSH 22…)</li>
+      <li><strong>Registered ports (1024–49151):</strong> registrate per applicazioni specifiche</li>
+      <li><strong>Dynamic/ephemeral ports (49152–65535):</strong> assegnate dal SO ai client per le connessioni in uscita</li>
+    </ul>
+    <p>Una connessione TCP è identificata da 4 valori (socket): <code>IP sorgente : porta sorgente → IP destinazione : porta destinazione</code></p>
+
+    <h3>Servizi e protocollo di trasporto</h3>
+    <table>
+      <thead><tr><th>Servizio</th><th>Porta</th><th>TCP/UDP</th></tr></thead>
+      <tbody>
+        <tr><td>DNS</td><td>53</td><td>UDP (query), TCP (zone transfer)</td></tr>
+        <tr><td>DHCP</td><td>67 (server), 68 (client)</td><td>UDP</td></tr>
+        <tr><td>TFTP</td><td>69</td><td>UDP</td></tr>
+        <tr><td>HTTP</td><td>80</td><td>TCP</td></tr>
+        <tr><td>HTTPS</td><td>443</td><td>TCP</td></tr>
+        <tr><td>SSH</td><td>22</td><td>TCP</td></tr>
+        <tr><td>SMTP</td><td>25</td><td>TCP</td></tr>
+        <tr><td>NTP</td><td>123</td><td>UDP</td></tr>
+        <tr><td>SNMP</td><td>161</td><td>UDP</td></tr>
+        <tr><td>RIP</td><td>520</td><td>UDP</td></tr>
+        <tr><td>IKE/IPsec</td><td>500</td><td>UDP</td></tr>
+        <tr><td>OpenVPN</td><td>1194</td><td>UDP</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="block">
+    <h2>ICMP — Internet Control Message Protocol</h2>
+    <p>ICMP opera a livello 3 (rete), non è un protocollo di trasporto ma di diagnostica. Non usa porte — usa <em>type</em> e <em>code</em>.</p>
+    <h3>Comandi diagnostici</h3>
+    <table>
+      <thead><tr><th>Comando</th><th>Messaggi ICMP usati</th><th>Funzione</th></tr></thead>
+      <tbody>
+        <tr><td><code>ping</code></td><td>Echo Request (type 8) / Echo Reply (type 0)</td><td>Verifica raggiungibilità di un host</td></tr>
+        <tr><td><code>traceroute</code></td><td>Time Exceeded (type 11)</td><td>Mostra il percorso hop-by-hop</td></tr>
+      </tbody>
+    </table>
+    <h3>Come funziona traceroute</h3>
+    <ol>
+      <li>Invia pacchetti con TTL = 1. Il primo router decrementa TTL a 0 → scarta e risponde con "Time Exceeded"</li>
+      <li>Invia con TTL = 2 → il secondo router risponde</li>
+      <li>Continua aumentando TTL finché non si raggiunge la destinazione</li>
+    </ol>
+    <p>Ogni hop risponde con il suo IP → si costruisce il percorso completo.</p>
+    <div class="callout green"><p><strong>All'esame (troubleshooting):</strong> <code>ping</code> per testare connettività, <code>traceroute</code> per localizzare dove si interrompe il percorso.</p></div>
+  </div>
+
+  <div class="block">
+    <h2>Argomenti correlati</h2>
+    <div class="related">
+      <a href="socket.html">Programmazione con socket TCP/UDP →</a>
+      <a href="dhcp.html">DHCP su UDP →</a>
+      <a href="ssl-tls.html">TLS sopra TCP →</a>
+      <a href="attacchi.html">DoS/DDoS e SYN flood →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
