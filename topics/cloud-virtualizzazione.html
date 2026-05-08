@@ -50,18 +50,62 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
         <tr><td><strong>SaaS</strong><br>Software as a Service</td><td>Tutto: infrastruttura + piattaforma + applicazione</td><td>Solo i propri dati e configurazione utente</td><td>Gmail, Microsoft 365, Salesforce, Zoom</td></tr>
       </tbody>
     </table>
-    <div class="diagram">
-Responsabilità crescente del cliente →
-─────────────────────────────────────────────
-         SaaS        PaaS        IaaS
-App      Provider    Cliente     Cliente
-Data     Provider    Cliente     Cliente
-Runtime  Provider    Provider    Cliente
-OS       Provider    Provider    Cliente
-VM       Provider    Provider    Provider
-Server   Provider    Provider    Provider
-─────────────────────────────────────────────
-    </div>
+    <svg viewBox="0 0 560 220" width="100%" style="max-width:560px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <!-- Column headers -->
+      <text x="230" y="18" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">SaaS</text>
+      <text x="370" y="18" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">PaaS</text>
+      <text x="500" y="18" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">IaaS</text>
+      <!-- Row labels -->
+      <text x="90" y="50"  text-anchor="middle" fill="#94a3b8" font-size="11">Applicazioni</text>
+      <text x="90" y="82"  text-anchor="middle" fill="#94a3b8" font-size="11">Dati</text>
+      <text x="90" y="114" text-anchor="middle" fill="#94a3b8" font-size="11">Runtime/Middleware</text>
+      <text x="90" y="146" text-anchor="middle" fill="#94a3b8" font-size="11">Sistema Operativo</text>
+      <text x="90" y="178" text-anchor="middle" fill="#94a3b8" font-size="11">Virtualizzazione</text>
+      <text x="90" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">Hardware/Server</text>
+      <!-- SaaS column: all Provider -->
+      <rect x="164" y="28" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="230" y="45" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="164" y="60" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="230" y="77" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="164" y="92" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="230" y="109" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="164" y="124" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="230" y="141" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="164" y="156" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="230" y="173" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="164" y="188" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="230" y="205" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <!-- PaaS column: top 2 rows Cliente, rest Provider -->
+      <rect x="304" y="28" width="132" height="26" rx="5" fill="rgba(79,142,247,.25)" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="370" y="45" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">Cliente</text>
+      <rect x="304" y="60" width="132" height="26" rx="5" fill="rgba(79,142,247,.25)" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="370" y="77" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">Cliente</text>
+      <rect x="304" y="92" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="370" y="109" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="304" y="124" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="370" y="141" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="304" y="156" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="370" y="173" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="304" y="188" width="132" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="370" y="205" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <!-- IaaS column: top 4 rows Cliente, rest Provider -->
+      <rect x="444" y="28"  width="112" height="26" rx="5" fill="rgba(79,142,247,.25)" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="500" y="45"  text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">Cliente</text>
+      <rect x="444" y="60"  width="112" height="26" rx="5" fill="rgba(79,142,247,.25)" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="500" y="77"  text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">Cliente</text>
+      <rect x="444" y="92"  width="112" height="26" rx="5" fill="rgba(79,142,247,.25)" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="500" y="109" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">Cliente</text>
+      <rect x="444" y="124" width="112" height="26" rx="5" fill="rgba(79,142,247,.25)" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="500" y="141" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">Cliente</text>
+      <rect x="444" y="156" width="112" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="500" y="173" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <rect x="444" y="188" width="112" height="26" rx="5" fill="rgba(124,92,252,.25)" stroke="#7c5cfc" stroke-width="1"/>
+      <text x="500" y="205" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="600">Provider</text>
+      <!-- Responsibility arrow -->
+      <line x1="164" y1="218" x2="556" y2="218" stroke="#94a3b8" stroke-width="1"/>
+      <polygon points="556,214 564,218 556,222" fill="#94a3b8"/>
+      <text x="360" y="218" text-anchor="middle" fill="#64748b" font-size="9" dy="0">responsabilità del cliente cresce →</text>
+    </svg>
     <div class="callout"><p><strong>Mnemonica:</strong> SaaS = "Sei a casa a usare", PaaS = "Piattaforma per applicazioni", IaaS = "Infrastruttura affittata a scalinata".</p></div>
   </div>
 
@@ -84,13 +128,28 @@ Server   Provider    Provider    Provider
 
     <h3>Hypervisor tipo 1 (bare-metal)</h3>
     <p>Gira <strong>direttamente sull'hardware fisico</strong>, senza OS sottostante. Le VM girano sopra l'hypervisor.</p>
-    <div class="diagram">
-Hardware fisico
-└── Hypervisor tipo 1 (es. VMware ESXi, Microsoft Hyper-V, KVM, Xen)
-    ├── VM 1 (Windows Server)
-    ├── VM 2 (Ubuntu Linux)
-    └── VM 3 (CentOS)
-    </div>
+    <svg viewBox="0 0 560 170" width="100%" style="max-width:560px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <!-- Hardware layer -->
+      <rect x="4" y="126" width="552" height="36" rx="6" fill="rgba(94,234,212,.08)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="280" y="149" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">Hardware fisico (CPU · RAM · Storage · Rete)</text>
+      <!-- Hypervisor layer -->
+      <rect x="4" y="82" width="552" height="36" rx="6" fill="rgba(245,158,11,.12)" stroke="#f59e0b" stroke-width="2"/>
+      <text x="280" y="100" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">Hypervisor Tipo 1</text>
+      <text x="280" y="113" text-anchor="middle" fill="#94a3b8" font-size="10">VMware ESXi · Microsoft Hyper-V · KVM · Xen</text>
+      <!-- VM boxes -->
+      <rect x="4"   y="10" width="174" height="64" rx="6" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="91"  y="30" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="700">VM 1</text>
+      <text x="91"  y="46" text-anchor="middle" fill="#e2e8f0" font-size="10">Windows Server</text>
+      <text x="91"  y="60" text-anchor="middle" fill="#64748b" font-size="9">vCPU · vRAM · vDisk</text>
+      <rect x="193" y="10" width="174" height="64" rx="6" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="280" y="30" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="700">VM 2</text>
+      <text x="280" y="46" text-anchor="middle" fill="#e2e8f0" font-size="10">Ubuntu Linux</text>
+      <text x="280" y="60" text-anchor="middle" fill="#64748b" font-size="9">vCPU · vRAM · vDisk</text>
+      <rect x="382" y="10" width="174" height="64" rx="6" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="469" y="30" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="700">VM 3</text>
+      <text x="469" y="46" text-anchor="middle" fill="#e2e8f0" font-size="10">CentOS</text>
+      <text x="469" y="60" text-anchor="middle" fill="#64748b" font-size="9">vCPU · vRAM · vDisk</text>
+    </svg>
     <ul>
       <li><strong>Vantaggi:</strong> massima performance (accesso diretto hardware), alta densità di VM, usato in produzione</li>
       <li><strong>Esempi:</strong> VMware ESXi/vSphere, Microsoft Hyper-V, KVM (Linux), Citrix Hypervisor</li>
@@ -98,13 +157,28 @@ Hardware fisico
 
     <h3>Hypervisor tipo 2 (hosted)</h3>
     <p>Gira come applicazione <strong>sopra un OS host</strong>. Le VM sono processi dell'OS host.</p>
-    <div class="diagram">
-Hardware fisico
-└── OS host (Windows 10, macOS, Ubuntu)
-    └── Hypervisor tipo 2 (VirtualBox, VMware Workstation)
-        ├── VM 1 (Ubuntu)
-        └── VM 2 (Windows Server)
-    </div>
+    <svg viewBox="0 0 560 200" width="100%" style="max-width:560px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <!-- Hardware layer -->
+      <rect x="4" y="156" width="552" height="36" rx="6" fill="rgba(94,234,212,.08)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="280" y="179" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">Hardware fisico (CPU · RAM · Storage · Rete)</text>
+      <!-- Host OS layer -->
+      <rect x="4" y="112" width="552" height="36" rx="6" fill="rgba(79,142,247,.10)" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="280" y="130" text-anchor="middle" fill="#4f8ef7" font-size="12" font-weight="700">OS Host</text>
+      <text x="280" y="143" text-anchor="middle" fill="#94a3b8" font-size="10">Windows 10/11 · macOS · Ubuntu</text>
+      <!-- Hypervisor type 2 layer -->
+      <rect x="4" y="68" width="552" height="36" rx="6" fill="rgba(245,158,11,.10)" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="280" y="86" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">Hypervisor Tipo 2</text>
+      <text x="280" y="99" text-anchor="middle" fill="#94a3b8" font-size="10">VirtualBox · VMware Workstation · VMware Fusion</text>
+      <!-- VM boxes -->
+      <rect x="60"  y="8" width="190" height="52" rx="6" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="155" y="28" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="700">VM 1</text>
+      <text x="155" y="44" text-anchor="middle" fill="#e2e8f0" font-size="10">Ubuntu Linux</text>
+      <text x="155" y="56" text-anchor="middle" fill="#64748b" font-size="9">overhead doppio</text>
+      <rect x="310" y="8" width="190" height="52" rx="6" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="405" y="28" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="700">VM 2</text>
+      <text x="405" y="44" text-anchor="middle" fill="#e2e8f0" font-size="10">Windows Server</text>
+      <text x="405" y="56" text-anchor="middle" fill="#64748b" font-size="9">overhead doppio</text>
+    </svg>
     <ul>
       <li><strong>Vantaggi:</strong> facile da installare, ideale per sviluppo/test, nessuna dedicazione hardware</li>
       <li><strong>Svantaggi:</strong> overhead doppio (OS host + hypervisor), performance minore</li>

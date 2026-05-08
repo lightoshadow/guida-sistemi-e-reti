@@ -120,23 +120,84 @@ DENY   ANY  any          → any              # Blocca tutto il resto</code></pr
     <p>La DMZ è una <strong>zona di rete intermedia</strong> tra Internet (untrusted) e la rete interna (trusted), dove si collocano i server accessibili dall'esterno (web server, mail server, DNS pubblico).</p>
 
     <h3>Architettura a due firewall (consigliata)</h3>
-    <div class="diagram">
-Internet
-    │
-  [FW esterno]   ← blocca tutto tranne HTTP/HTTPS verso DMZ
-    │
-  [DMZ: Web Server, Mail Server, DNS]
-    │
-  [FW interno]   ← blocca tutto tranne traffico legittimo DMZ→LAN
-    │
-  [Rete interna: PC, Server interni, DB]
-    </div>
+    <svg viewBox="0 0 520 398" width="100%" style="max-width:520px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="fw1-ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f8ef7"/></marker>
+        <marker id="fw1-ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker>
+        <marker id="fw1-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+        <marker id="fw1-ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+      </defs>
+      <!-- Internet -->
+      <rect x="110" y="10" width="300" height="44" rx="7" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="260" y="29" text-anchor="middle" fill="#4f8ef7" font-size="13" font-weight="600">Internet (untrusted)</text>
+      <text x="260" y="46" text-anchor="middle" fill="#94a3b8" font-size="10">traffico esterno non filtrato</text>
+      <line x1="260" y1="54" x2="260" y2="82" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#fw1-ab)"/>
+      <text x="340" y="72" fill="#94a3b8" font-size="10">ALLOW HTTP/HTTPS → DMZ</text>
+      <!-- FW esterno -->
+      <rect x="110" y="82" width="300" height="44" rx="7" fill="#1a1d2e" stroke="#f87171" stroke-width="2"/>
+      <text x="260" y="102" text-anchor="middle" fill="#f87171" font-size="13" font-weight="700">FW Esterno</text>
+      <text x="260" y="118" text-anchor="middle" fill="#94a3b8" font-size="10">blocca tutto tranne porte 80/443/25 verso DMZ</text>
+      <line x1="260" y1="126" x2="260" y2="154" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#fw1-ao)"/>
+      <!-- DMZ zone -->
+      <rect x="60" y="154" width="400" height="90" rx="7" fill="rgba(245,158,11,.06)" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="260" y="173" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">DMZ — Zona Demilitarizzata</text>
+      <rect x="76" y="182" width="108" height="26" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="130" y="199" text-anchor="middle" fill="#e2e8f0" font-size="11">Web Server</text>
+      <rect x="196" y="182" width="108" height="26" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="250" y="199" text-anchor="middle" fill="#e2e8f0" font-size="11">Mail Server</text>
+      <rect x="316" y="182" width="108" height="26" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="370" y="199" text-anchor="middle" fill="#e2e8f0" font-size="11">DNS Pubblico</text>
+      <text x="260" y="234" text-anchor="middle" fill="#64748b" font-size="10">server accessibili dall'esterno · isolati dalla rete interna</text>
+      <line x1="260" y1="244" x2="260" y2="272" stroke="#f87171" stroke-width="1.5" marker-end="url(#fw1-ar)"/>
+      <text x="340" y="262" fill="#94a3b8" font-size="10">DENY (solo traffico autorizzato)</text>
+      <!-- FW interno -->
+      <rect x="110" y="272" width="300" height="44" rx="7" fill="#1a1d2e" stroke="#f87171" stroke-width="2"/>
+      <text x="260" y="292" text-anchor="middle" fill="#f87171" font-size="13" font-weight="700">FW Interno</text>
+      <text x="260" y="308" text-anchor="middle" fill="#94a3b8" font-size="10">blocca accessi non autorizzati da DMZ a LAN</text>
+      <line x1="260" y1="316" x2="260" y2="344" stroke="#34d399" stroke-width="1.5" marker-end="url(#fw1-ag)"/>
+      <!-- Rete interna -->
+      <rect x="110" y="344" width="300" height="44" rx="7" fill="#1a1d2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="260" y="364" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">Rete Interna (trusted)</text>
+      <text x="260" y="380" text-anchor="middle" fill="#94a3b8" font-size="10">PC, server interni, database</text>
+    </svg>
 
     <h3>Architettura a un firewall con 3 interfacce</h3>
-    <div class="diagram">
-Internet  ─── eth0 ─── [FIREWALL] ─── eth1 ─── Rete interna (192.168.1.0/24)
-                               └──── eth2 ─── DMZ (10.0.0.0/24)
-    </div>
+    <svg viewBox="0 0 660 280" width="100%" style="max-width:660px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="fw2-ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f8ef7"/></marker>
+        <marker id="fw2-ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+        <marker id="fw2-ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker>
+      </defs>
+      <!-- Internet -->
+      <rect x="10" y="74" width="150" height="46" rx="7" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="85" y="95" text-anchor="middle" fill="#4f8ef7" font-size="13" font-weight="600">Internet</text>
+      <text x="85" y="111" text-anchor="middle" fill="#94a3b8" font-size="10">untrusted</text>
+      <line x1="160" y1="97" x2="228" y2="97" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#fw2-ab)"/>
+      <text x="194" y="91" text-anchor="middle" fill="#94a3b8" font-size="10">eth0</text>
+      <!-- Firewall -->
+      <rect x="228" y="64" width="184" height="66" rx="7" fill="#1a1d2e" stroke="#f87171" stroke-width="2"/>
+      <text x="320" y="88" text-anchor="middle" fill="#f87171" font-size="14" font-weight="700">FIREWALL</text>
+      <text x="320" y="106" text-anchor="middle" fill="#94a3b8" font-size="11">3 interfacce</text>
+      <text x="320" y="122" text-anchor="middle" fill="#64748b" font-size="10">eth0 · eth1 · eth2</text>
+      <!-- Firewall → Rete interna -->
+      <line x1="412" y1="97" x2="480" y2="97" stroke="#34d399" stroke-width="1.5" marker-end="url(#fw2-ag)"/>
+      <text x="446" y="91" text-anchor="middle" fill="#94a3b8" font-size="10">eth1</text>
+      <rect x="480" y="72" width="170" height="50" rx="7" fill="#1a1d2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="565" y="94" text-anchor="middle" fill="#34d399" font-size="12" font-weight="600">Rete interna</text>
+      <text x="565" y="111" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.1.0/24</text>
+      <!-- Firewall → DMZ downward -->
+      <line x1="320" y1="130" x2="320" y2="178" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#fw2-ao)"/>
+      <text x="330" y="158" fill="#94a3b8" font-size="10">eth2</text>
+      <!-- DMZ -->
+      <rect x="170" y="178" width="300" height="80" rx="7" fill="rgba(245,158,11,.06)" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="320" y="197" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">DMZ — 10.0.0.0/24</text>
+      <rect x="186" y="207" width="120" height="26" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="246" y="224" text-anchor="middle" fill="#e2e8f0" font-size="11">Web Server</text>
+      <rect x="314" y="207" width="120" height="26" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="374" y="224" text-anchor="middle" fill="#e2e8f0" font-size="11">Mail Server</text>
+      <!-- Rules legend -->
+      <text x="320" y="272" text-anchor="middle" fill="#64748b" font-size="10">Internet→DMZ: ALLOW 80/443  ·  DMZ→LAN: DENY  ·  LAN→DMZ: ALLOW</text>
+    </svg>
     <p>Il firewall gestisce 3 zone: <em>untrust</em> (Internet), <em>DMZ</em>, <em>trust</em> (rete interna). Le regole tipiche:</p>
     <ul>
       <li>Internet → DMZ: ALLOW solo porte specifiche (80, 443, 25)</li>

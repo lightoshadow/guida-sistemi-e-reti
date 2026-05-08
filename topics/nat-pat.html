@@ -44,12 +44,40 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
   <div class="block">
     <h2>Perché esiste il NAT</h2>
     <p>Gli indirizzi IPv4 pubblici sono scarsi (~4 miliardi totali, meno di 1 per persona). Il NAT permette di usare indirizzi <strong>privati</strong> (RFC 1918) nella rete interna e un singolo IP pubblico verso Internet.</p>
-    <div class="diagram">
-Rete privata                         Internet
-192.168.1.10 ─┐
-192.168.1.11 ─┼─→ [Router NAT] ──→  203.0.113.1  ──→ Server
-192.168.1.12 ─┘    IP pubblico
-    </div>
+    <svg viewBox="0 0 660 130" width="100%" style="max-width:660px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="nat-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+      </defs>
+      <!-- Private hosts -->
+      <rect x="4" y="10" width="140" height="110" rx="7" fill="rgba(79,142,247,.05)" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="74" y="28" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="700">Rete privata</text>
+      <rect x="14" y="36" width="120" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="74" y="50" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.1.10</text>
+      <rect x="14" y="60" width="120" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="74" y="74" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.1.11</text>
+      <rect x="14" y="84" width="120" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="74" y="98" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.1.12</text>
+      <!-- Arrows to router -->
+      <line x1="144" y1="46" x2="238" y2="60" stroke="#2e3250" stroke-width="1"/>
+      <line x1="144" y1="70" x2="238" y2="65" stroke="#2e3250" stroke-width="1"/>
+      <line x1="144" y1="94" x2="238" y2="70" stroke="#2e3250" stroke-width="1"/>
+      <!-- Router NAT -->
+      <rect x="238" y="42" width="152" height="56" rx="7" fill="#1a1d2e" stroke="#f59e0b" stroke-width="2"/>
+      <text x="314" y="64" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">Router NAT/PAT</text>
+      <text x="314" y="80" text-anchor="middle" fill="#94a3b8" font-size="10">IP pubblico: 203.0.113.1</text>
+      <text x="314" y="92" text-anchor="middle" fill="#64748b" font-size="9">traduzione indirizzi + porte</text>
+      <!-- Arrow to internet -->
+      <line x1="390" y1="70" x2="460" y2="70" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#nat-a)"/>
+      <text x="425" y="64" text-anchor="middle" fill="#94a3b8" font-size="10">203.0.113.1</text>
+      <!-- Internet cloud -->
+      <ellipse cx="520" cy="70" rx="66" ry="28" fill="#1a1d2e" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="520" y="67" text-anchor="middle" fill="#94a3b8" font-size="12">Internet</text>
+      <text x="520" y="82" text-anchor="middle" fill="#64748b" font-size="9">unico IP pubblico</text>
+      <!-- Arrow to server -->
+      <line x1="586" y1="70" x2="616" y2="70" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#nat-a)"/>
+      <rect x="616" y="56" width="40" height="28" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="636" y="74" text-anchor="middle" fill="#e2e8f0" font-size="10">Server</text>
+    </svg>
     <p>Tutti i dispositivi privati navigano "come se" avessero lo stesso IP pubblico. Il router tiene traccia delle connessioni per girare le risposte al dispositivo corretto.</p>
   </div>
 

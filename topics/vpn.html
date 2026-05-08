@@ -45,12 +45,39 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
   <div class="block">
     <h2>VPN site-to-site</h2>
     <p>Connessione <strong>permanente</strong> tra due sedi (es. sede principale ↔ filiale). Il tunnel è stabilito tra i due gateway (router/firewall) ed è trasparente per gli utenti: i PC si comportano come se fossero sulla stessa LAN.</p>
-    <div class="diagram">
-Sede A                                    Sede B
-192.168.1.0/24                            192.168.2.0/24
-  [PC] ── [Router A] ─── Internet ─── [Router B] ── [PC]
-               └──── tunnel IPsec cifrato ────┘
-    </div>
+    <svg viewBox="0 0 680 130" width="100%" style="max-width:680px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="vpn1-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+      </defs>
+      <!-- Sede A -->
+      <rect x="4" y="14" width="160" height="68" rx="7" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="84" y="34" text-anchor="middle" fill="#4f8ef7" font-size="12" font-weight="700">Sede A</text>
+      <text x="84" y="50" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.1.0/24</text>
+      <rect x="16" y="58" width="60" height="18" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="46"  y="71" text-anchor="middle" fill="#e2e8f0" font-size="10">PC</text>
+      <rect x="88" y="58" width="68" height="18" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="122" y="71" text-anchor="middle" fill="#e2e8f0" font-size="10">Router A</text>
+      <line x1="76" y1="67" x2="88" y2="67" stroke="#94a3b8" stroke-width="1" marker-end="url(#vpn1-a)"/>
+      <!-- Internet cloud -->
+      <ellipse cx="340" cy="48" rx="80" ry="28" fill="#1a1d2e" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="340" y="45" text-anchor="middle" fill="#94a3b8" font-size="12">Internet</text>
+      <text x="340" y="60" text-anchor="middle" fill="#64748b" font-size="10">traffico cifrato</text>
+      <!-- IPsec tunnel line -->
+      <line x1="164" y1="67" x2="258" y2="67" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="422" y1="67" x2="516" y2="67" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+      <!-- Tunnel highlight -->
+      <rect x="164" y="84" width="352" height="28" rx="6" fill="rgba(79,142,247,.10)" stroke="#4f8ef7" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="340" y="102" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="600">tunnel IPsec cifrato (ESP)</text>
+      <!-- Sede B -->
+      <rect x="516" y="14" width="160" height="68" rx="7" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="596" y="34" text-anchor="middle" fill="#7c5cfc" font-size="12" font-weight="700">Sede B</text>
+      <text x="596" y="50" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.2.0/24</text>
+      <rect x="524" y="58" width="68" height="18" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="558" y="71" text-anchor="middle" fill="#e2e8f0" font-size="10">Router B</text>
+      <rect x="604" y="58" width="60" height="18" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="634" y="71" text-anchor="middle" fill="#e2e8f0" font-size="10">PC</text>
+      <line x1="592" y1="67" x2="604" y2="67" stroke="#94a3b8" stroke-width="1" marker-end="url(#vpn1-a)"/>
+    </svg>
     <ul>
       <li>Usata per connettere filiali distanti geograficamente</li>
       <li>Il router A conosce la rete 192.168.2.0/24 via tunnel</li>
@@ -62,11 +89,36 @@ Sede A                                    Sede B
   <div class="block">
     <h2>VPN client-to-site (remote access)</h2>
     <p>Un singolo utente (dipendente in smart working) si connette alla rete aziendale tramite <strong>client VPN</strong> installato sul dispositivo.</p>
-    <div class="diagram">
-Casa/Albergo                              Rete aziendale
-[Laptop] ─── Internet ─── [VPN Gateway] ── [Server interni]
-  client VPN                                192.168.1.0/24
-    </div>
+    <svg viewBox="0 0 680 110" width="100%" style="max-width:680px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="vpn2-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+      </defs>
+      <!-- Laptop (remote) -->
+      <rect x="4" y="22" width="120" height="56" rx="7" fill="#1a1d2e" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="64" y="42" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">Laptop</text>
+      <text x="64" y="57" text-anchor="middle" fill="#94a3b8" font-size="10">client VPN</text>
+      <text x="64" y="70" text-anchor="middle" fill="#64748b" font-size="9">casa / albergo</text>
+      <!-- Internet cloud -->
+      <ellipse cx="280" cy="50" rx="78" ry="28" fill="#1a1d2e" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="280" y="47" text-anchor="middle" fill="#94a3b8" font-size="12">Internet</text>
+      <text x="280" y="62" text-anchor="middle" fill="#64748b" font-size="10">rete pubblica</text>
+      <!-- VPN tunnel line -->
+      <line x1="124" y1="50" x2="202" y2="50" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="358" y1="50" x2="424" y2="50" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="124" y="66" width="300" height="24" rx="5" fill="rgba(245,158,11,.10)" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="274" y="82" text-anchor="middle" fill="#f59e0b" font-size="10" font-weight="600">tunnel cifrato (IP virtuale assegnato al client)</text>
+      <!-- VPN Gateway -->
+      <rect x="424" y="22" width="110" height="56" rx="7" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="479" y="42" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="700">VPN Gateway</text>
+      <text x="479" y="57" text-anchor="middle" fill="#94a3b8" font-size="10">concentratore</text>
+      <text x="479" y="70" text-anchor="middle" fill="#64748b" font-size="9">autentica il client</text>
+      <line x1="534" y1="50" x2="548" y2="50" stroke="#94a3b8" stroke-width="1" marker-end="url(#vpn2-a)"/>
+      <!-- Rete aziendale -->
+      <rect x="548" y="22" width="128" height="56" rx="7" fill="#1a1d2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="612" y="42" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700">Rete aziendale</text>
+      <text x="612" y="57" text-anchor="middle" fill="#94a3b8" font-size="10">192.168.1.0/24</text>
+      <text x="612" y="70" text-anchor="middle" fill="#64748b" font-size="9">server, risorse interne</text>
+    </svg>
     <ul>
       <li>L'utente riceve un indirizzo IP della rete aziendale (IP virtuale)</li>
       <li>Può accedere a risorse interne come se fosse in ufficio</li>

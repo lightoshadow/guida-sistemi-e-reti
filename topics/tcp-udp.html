@@ -61,17 +61,41 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
   <div class="block">
     <h2>Three-way handshake TCP</h2>
     <p>Prima di trasmettere dati, TCP stabilisce la connessione con tre messaggi:</p>
-    <div class="diagram">
-Client                    Server
-  │                          │
-  │── SYN ─────────────────→ │   (client chiede connessione, seq=x)
-  │                          │
-  │ ←──────────── SYN-ACK ───│   (server accetta, seq=y, ack=x+1)
-  │                          │
-  │── ACK ─────────────────→ │   (client conferma, ack=y+1)
-  │                          │
-  │════ Dati TCP ════════════│
-    </div>
+    <svg viewBox="0 0 620 270" width="100%" style="max-width:620px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="tcp-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f8ef7"/></marker>
+        <marker id="tcp-al" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M10,0 L0,5 L10,10 z" fill="#7c5cfc"/></marker>
+        <marker id="tcp-ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+      </defs>
+      <!-- Column headers -->
+      <text x="120" y="22" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="700">Client</text>
+      <text x="500" y="22" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="700">Server</text>
+      <!-- Vertical lifelines -->
+      <line x1="120" y1="28" x2="120" y2="262" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <line x1="500" y1="28" x2="500" y2="262" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- Step 1: SYN →  -->
+      <line x1="120" y1="60" x2="490" y2="60" stroke="#4f8ef7" stroke-width="2" marker-end="url(#tcp-ar)"/>
+      <rect x="200" y="44" width="220" height="22" rx="4" fill="#1a1d2e"/>
+      <text x="310" y="59" text-anchor="middle" fill="#4f8ef7" font-size="12" font-weight="700">SYN</text>
+      <text x="310" y="73" text-anchor="middle" fill="#94a3b8" font-size="10">seq=x  (client chiede connessione)</text>
+      <!-- Step 2: ← SYN-ACK -->
+      <line x1="130" y1="120" x2="500" y2="120" stroke="#7c5cfc" stroke-width="2" marker-end="url(#tcp-al)"/>
+      <rect x="200" y="104" width="220" height="22" rx="4" fill="#1a1d2e"/>
+      <text x="310" y="119" text-anchor="middle" fill="#7c5cfc" font-size="12" font-weight="700">SYN-ACK</text>
+      <text x="310" y="133" text-anchor="middle" fill="#94a3b8" font-size="10">seq=y, ack=x+1  (server accetta)</text>
+      <!-- Step 3: ACK → -->
+      <line x1="120" y1="180" x2="490" y2="180" stroke="#4f8ef7" stroke-width="2" marker-end="url(#tcp-ar)"/>
+      <rect x="200" y="164" width="220" height="22" rx="4" fill="#1a1d2e"/>
+      <text x="310" y="179" text-anchor="middle" fill="#4f8ef7" font-size="12" font-weight="700">ACK</text>
+      <text x="310" y="193" text-anchor="middle" fill="#94a3b8" font-size="10">ack=y+1  (client conferma)</text>
+      <!-- Data flow double arrow -->
+      <rect x="100" y="214" width="420" height="36" rx="6" fill="rgba(52,211,153,.08)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="310" y="237" text-anchor="middle" fill="#34d399" font-size="12" font-weight="600">Dati TCP — connessione stabilita</text>
+      <!-- Step labels on left -->
+      <text x="10" y="64"  fill="#64748b" font-size="11">①</text>
+      <text x="10" y="124" fill="#64748b" font-size="11">②</text>
+      <text x="10" y="184" fill="#64748b" font-size="11">③</text>
+    </svg>
     <p>La connessione viene terminata con un <strong>four-way handshake</strong>: FIN → ACK → FIN → ACK.</p>
     <div class="callout"><p><strong>SYN flood attack:</strong> un attaccante invia molti SYN senza completare l'handshake, esaurendo le risorse del server. Contromisura: SYN cookies.</p></div>
 

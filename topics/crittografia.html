@@ -44,10 +44,31 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
   <div class="block">
     <h2>Crittografia simmetrica</h2>
     <p>Si usa <strong>una sola chiave</strong> sia per cifrare che per decifrare. Mittente e destinatario devono condividere la stessa chiave segreta.</p>
-    <div class="diagram">
-Testo in chiaro → [CIFRATURA con chiave K] → Testo cifrato
-Testo cifrato  → [DECIFRATURA con chiave K] → Testo in chiaro
-    </div>
+    <svg viewBox="0 0 560 90" width="100%" style="max-width:560px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="sym-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+      </defs>
+      <!-- Row 1: Encryption -->
+      <rect x="4"   y="8"  width="110" height="28" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="59"  y="26" text-anchor="middle" fill="#e2e8f0" font-size="11">Testo in chiaro</text>
+      <line x1="114" y1="22" x2="164" y2="22" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sym-a)"/>
+      <rect x="164" y="8"  width="160" height="28" rx="5" fill="rgba(245,158,11,.12)" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="244" y="26" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">CIFRATURA  (chiave K)</text>
+      <line x1="324" y1="22" x2="374" y2="22" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sym-a)"/>
+      <rect x="374" y="8"  width="182" height="28" rx="5" fill="rgba(248,113,113,.12)" stroke="#f87171" stroke-width="1.5"/>
+      <text x="465" y="26" text-anchor="middle" fill="#f87171" font-size="11">Testo cifrato 🔒</text>
+      <!-- Row 2: Decryption -->
+      <rect x="374" y="54" width="182" height="28" rx="5" fill="rgba(248,113,113,.12)" stroke="#f87171" stroke-width="1.5"/>
+      <text x="465" y="72" text-anchor="middle" fill="#f87171" font-size="11">Testo cifrato 🔒</text>
+      <line x1="374" y1="68" x2="324" y2="68" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sym-a)"/>
+      <rect x="164" y="54" width="160" height="28" rx="5" fill="rgba(52,211,153,.12)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="244" y="72" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600">DECIFRATURA  (chiave K)</text>
+      <line x1="164" y1="68" x2="114" y2="68" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sym-a)"/>
+      <rect x="4"   y="54" width="110" height="28" rx="5" fill="#242740" stroke="#2e3250"/>
+      <text x="59"  y="72" text-anchor="middle" fill="#e2e8f0" font-size="11">Testo in chiaro</text>
+      <!-- Same key label -->
+      <text x="244" y="46" text-anchor="middle" fill="#f59e0b" font-size="9" font-style="italic">stessa chiave K per cifrare e decifrare</text>
+    </svg>
     <h3>Algoritmi principali</h3>
     <table>
       <thead><tr><th>Algoritmo</th><th>Dimensione chiave</th><th>Stato</th></tr></thead>
@@ -67,13 +88,33 @@ Testo cifrato  → [DECIFRATURA con chiave K] → Testo in chiaro
   <div class="block">
     <h2>Crittografia asimmetrica</h2>
     <p>Si usa una <strong>coppia di chiavi</strong>: <em>chiave pubblica</em> (distribuibile a tutti) e <em>chiave privata</em> (segreta, mai condivisa). Quello che si cifra con una si decifra solo con l'altra.</p>
-    <div class="diagram">
-Cifratura verso A:   testo → [chiave pubblica di A] → cifrato
-Decifratura da A:   cifrato → [chiave privata di A] → testo
-
-Firma da A:          hash → [chiave privata di A] → firma
-Verifica firma:      firma → [chiave pubblica di A] → verifica hash
-    </div>
+    <svg viewBox="0 0 620 110" width="100%" style="max-width:620px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="asy-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+      </defs>
+      <!-- Encryption row -->
+      <text x="4" y="22" fill="#64748b" font-size="10" font-weight="600">CIFRATURA</text>
+      <rect x="4"   y="28" width="80"  height="24" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="44"  y="44" text-anchor="middle" fill="#e2e8f0" font-size="10">testo</text>
+      <line x1="84" y1="40" x2="108" y2="40" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#asy-a)"/>
+      <rect x="108" y="28" width="160" height="24" rx="4" fill="rgba(79,142,247,.12)" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="188" y="44" text-anchor="middle" fill="#4f8ef7" font-size="10">chiave pubblica di A</text>
+      <line x1="268" y1="40" x2="292" y2="40" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#asy-a)"/>
+      <rect x="292" y="28" width="80" height="24" rx="4" fill="rgba(248,113,113,.12)" stroke="#f87171" stroke-width="1.5"/>
+      <text x="332" y="44" text-anchor="middle" fill="#f87171" font-size="10">cifrato 🔒</text>
+      <text x="390" y="44" fill="#64748b" font-size="9">→ solo A può decifrare</text>
+      <!-- Signature row -->
+      <text x="4" y="74" fill="#64748b" font-size="10" font-weight="600">FIRMA DIGITALE</text>
+      <rect x="4"   y="80" width="80"  height="24" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="44"  y="96" text-anchor="middle" fill="#e2e8f0" font-size="10">hash doc</text>
+      <line x1="84" y1="92" x2="108" y2="92" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#asy-a)"/>
+      <rect x="108" y="80" width="160" height="24" rx="4" fill="rgba(245,158,11,.12)" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="188" y="96" text-anchor="middle" fill="#f59e0b" font-size="10">chiave privata di A</text>
+      <line x1="268" y1="92" x2="292" y2="92" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#asy-a)"/>
+      <rect x="292" y="80" width="80" height="24" rx="4" fill="rgba(52,211,153,.12)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="332" y="96" text-anchor="middle" fill="#34d399" font-size="10">firma ✍</text>
+      <text x="390" y="96" fill="#64748b" font-size="9">→ tutti possono verificare con pub(A)</text>
+    </svg>
     <h3>Algoritmi principali</h3>
     <table>
       <thead><tr><th>Algoritmo</th><th>Basato su</th><th>Uso tipico</th></tr></thead>
@@ -93,13 +134,46 @@ Verifica firma:      firma → [chiave pubblica di A] → verifica hash
   <div class="block">
     <h2>Crittografia ibrida — come funziona in pratica</h2>
     <p>Nella pratica (TLS, PGP, SSH) si usano <strong>entrambi i tipi</strong>: l'asimmetrica per scambiare in modo sicuro una chiave simmetrica, poi la simmetrica per cifrare i dati.</p>
-    <div class="diagram">
-1. Alice genera una chiave simmetrica casuale (session key)
-2. Alice cifra la session key con la chiave pubblica di Bob
-3. Alice invia la session key cifrata a Bob
-4. Bob decifra con la sua chiave privata → ottiene la session key
-5. Alice e Bob usano AES con la session key per comunicare
-    </div>
+    <svg viewBox="0 0 680 200" width="100%" style="max-width:680px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="cry-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f8ef7"/></marker>
+      </defs>
+      <!-- Alice box -->
+      <rect x="4" y="60" width="130" height="80" rx="7" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="69" y="82" text-anchor="middle" fill="#7c5cfc" font-size="13" font-weight="700">Alice</text>
+      <rect x="14" y="92" width="110" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="69" y="106" text-anchor="middle" fill="#34d399" font-size="10">genera session key</text>
+      <rect x="14" y="116" width="110" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="69" y="130" text-anchor="middle" fill="#94a3b8" font-size="10">cifra con pub(Bob)</text>
+      <!-- Step labels -->
+      <text x="340" y="16" text-anchor="middle" fill="#64748b" font-size="10" font-style="italic">Scambio chiave asimmetrico (RSA/DH) → poi cifratura simmetrica (AES)</text>
+      <!-- Arrow 1: send encrypted session key -->
+      <line x1="134" y1="100" x2="278" y2="100" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#cry-a)"/>
+      <rect x="152" y="82" width="110" height="20" rx="4" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1"/>
+      <text x="207" y="95" text-anchor="middle" fill="#4f8ef7" font-size="10" font-weight="600">session key cifrata</text>
+      <text x="207" y="112" text-anchor="middle" fill="#64748b" font-size="9">con chiave pubblica Bob</text>
+      <!-- Bob box -->
+      <rect x="278" y="50" width="130" height="100" rx="7" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="343" y="72" text-anchor="middle" fill="#4f8ef7" font-size="13" font-weight="700">Bob</text>
+      <rect x="288" y="82" width="110" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="343" y="96" text-anchor="middle" fill="#f59e0b" font-size="10">decifra con priv(Bob)</text>
+      <rect x="288" y="106" width="110" height="20" rx="4" fill="#242740" stroke="#2e3250"/>
+      <text x="343" y="120" text-anchor="middle" fill="#34d399" font-size="10">ottiene session key</text>
+      <rect x="288" y="130" width="110" height="14" rx="3" fill="rgba(52,211,153,.15)" stroke="#34d399" stroke-width="1"/>
+      <text x="343" y="141" text-anchor="middle" fill="#34d399" font-size="9">stessa key di Alice ✓</text>
+      <!-- Arrow 2: AES encrypted data -->
+      <line x1="408" y1="100" x2="548" y2="100" stroke="#34d399" stroke-width="2" marker-end="url(#cry-a)"/>
+      <line x1="548" y1="100" x2="408" y2="100" stroke="#34d399" stroke-width="2" marker-end="url(#cry-a)"/>
+      <rect x="426" y="82" width="104" height="20" rx="4" fill="#1a1d2e" stroke="#34d399" stroke-width="1"/>
+      <text x="478" y="95" text-anchor="middle" fill="#34d399" font-size="10" font-weight="600">dati cifrati AES</text>
+      <text x="478" y="112" text-anchor="middle" fill="#64748b" font-size="9">veloce · sicuro</text>
+      <!-- Communication zone -->
+      <rect x="548" y="60" width="128" height="80" rx="7" fill="#1a1d2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="612" y="84" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700">Canale cifrato</text>
+      <text x="612" y="100" text-anchor="middle" fill="#94a3b8" font-size="10">AES-256</text>
+      <text x="612" y="116" text-anchor="middle" fill="#64748b" font-size="9">~1000× più veloce</text>
+      <text x="612" y="130" text-anchor="middle" fill="#64748b" font-size="9">di RSA</text>
+    </svg>
     <div class="callout green"><p><strong>Vantaggio:</strong> si ottiene la velocità della crittografia simmetrica e la sicurezza dello scambio di chiavi asimmetrico.</p></div>
   </div>
 
@@ -144,11 +218,29 @@ Verifica firma:      firma → [chiave pubblica di A] → verifica hash
       <li>Numero seriale e algoritmo di firma</li>
     </ul>
     <h3>Catena di fiducia</h3>
-    <div class="diagram">
-Root CA (fiducia assoluta, pre-installata nel browser/OS)
-  └── Intermediate CA (firmata dalla Root CA)
-        └── Certificato sito web (firmato dall'Intermediate CA)
-    </div>
+    <svg viewBox="0 0 560 160" width="100%" style="max-width:560px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="pki-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+      </defs>
+      <!-- Root CA -->
+      <rect x="180" y="8" width="200" height="44" rx="7" fill="#1a1d2e" stroke="#34d399" stroke-width="2"/>
+      <text x="280" y="27" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">Root CA</text>
+      <text x="280" y="43" text-anchor="middle" fill="#94a3b8" font-size="10">fiducia assoluta · pre-installata in OS/browser</text>
+      <!-- Line -->
+      <line x1="280" y1="52" x2="280" y2="68" stroke="#34d399" stroke-width="1.5" marker-end="url(#pki-a)"/>
+      <text x="290" y="64" fill="#64748b" font-size="9">firma</text>
+      <!-- Intermediate CA -->
+      <rect x="155" y="68" width="250" height="40" rx="7" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="280" y="86" text-anchor="middle" fill="#4f8ef7" font-size="12" font-weight="700">Intermediate CA</text>
+      <text x="280" y="100" text-anchor="middle" fill="#94a3b8" font-size="10">firmata dalla Root CA</text>
+      <!-- Line -->
+      <line x1="280" y1="108" x2="280" y2="124" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#pki-a)"/>
+      <text x="290" y="120" fill="#64748b" font-size="9">firma</text>
+      <!-- Site certificate -->
+      <rect x="130" y="124" width="300" height="30" rx="7" fill="#1a1d2e" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="280" y="138" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">Certificato sito web (esempio.it)</text>
+      <text x="280" y="150" text-anchor="middle" fill="#94a3b8" font-size="9">firmato dall'Intermediate CA · contiene chiave pubblica del sito</text>
+    </svg>
     <p>Il browser verifica la catena: il certificato del sito è firmato da un'Intermediate CA che è firmata da una Root CA già presente nel trust store del browser.</p>
     <div class="callout"><p><strong>CRL e OCSP:</strong> meccanismi per verificare se un certificato è stato revocato prima della scadenza (es. compromissione della chiave privata).</p></div>
   </div>

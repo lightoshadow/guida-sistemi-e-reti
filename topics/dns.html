@@ -44,14 +44,40 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
   <div class="block">
     <h2>Struttura gerarchica del DNS</h2>
     <p>Il DNS è un database distribuito organizzato ad albero. Ogni livello è separato da un punto:</p>
-    <div class="diagram">
-.                           ← Root (gestito da IANA, 13 root server)
-├── com.
-├── it.                     ← Top-Level Domain (TLD) — gestito da NIC.it
-│   └── esempio.it.         ← Second-Level Domain — gestito dall'azienda
-│       └── www.esempio.it. ← sottodominio/host
-└── edu.
-    </div>
+    <svg viewBox="0 0 560 190" width="100%" style="max-width:560px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="dh-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2e3250"/></marker>
+      </defs>
+      <!-- Root -->
+      <rect x="216" y="4" width="128" height="32" rx="6" fill="#1a1d2e" stroke="#f59e0b" stroke-width="2"/>
+      <text x="280" y="16" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">. (root)</text>
+      <text x="280" y="29" text-anchor="middle" fill="#94a3b8" font-size="9">IANA · 13 root server</text>
+      <!-- Lines to TLDs -->
+      <line x1="216" y1="36" x2="90"  y2="68" stroke="#2e3250" stroke-width="1.5" marker-end="url(#dh-a)"/>
+      <line x1="280" y1="36" x2="280" y2="68" stroke="#2e3250" stroke-width="1.5" marker-end="url(#dh-a)"/>
+      <line x1="344" y1="36" x2="470" y2="68" stroke="#2e3250" stroke-width="1.5" marker-end="url(#dh-a)"/>
+      <!-- TLDs -->
+      <rect x="30"  y="68" width="120" height="28" rx="5" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="90"  y="82" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="700">com.</text>
+      <text x="90"  y="92" text-anchor="middle" fill="#64748b" font-size="9">Verisign</text>
+      <rect x="220" y="68" width="120" height="28" rx="5" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="2"/>
+      <text x="280" y="82" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="700">it.</text>
+      <text x="280" y="92" text-anchor="middle" fill="#64748b" font-size="9">NIC.it</text>
+      <rect x="410" y="68" width="120" height="28" rx="5" fill="#1a1d2e" stroke="#4f8ef7" stroke-width="1.5"/>
+      <text x="470" y="82" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="700">edu.</text>
+      <text x="470" y="92" text-anchor="middle" fill="#64748b" font-size="9">Educause</text>
+      <!-- Line to second level -->
+      <line x1="280" y1="96" x2="280" y2="124" stroke="#2e3250" stroke-width="1.5" marker-end="url(#dh-a)"/>
+      <!-- Second-level domain -->
+      <rect x="186" y="124" width="188" height="28" rx="5" fill="#1a1d2e" stroke="#7c5cfc" stroke-width="1.5"/>
+      <text x="280" y="138" text-anchor="middle" fill="#7c5cfc" font-size="11" font-weight="700">esempio.it.</text>
+      <text x="280" y="150" text-anchor="middle" fill="#64748b" font-size="9">autorità del dominio</text>
+      <!-- Line to host -->
+      <line x1="280" y1="152" x2="280" y2="172" stroke="#2e3250" stroke-width="1.5" marker-end="url(#dh-a)"/>
+      <!-- Host -->
+      <rect x="174" y="172" width="212" height="14" rx="4" fill="#242740" stroke="#34d399" stroke-width="1"/>
+      <text x="280" y="183" text-anchor="middle" fill="#34d399" font-size="10">www.esempio.it.  ← host/record A</text>
+    </svg>
     <ul>
       <li><strong>Root nameservers:</strong> 13 cluster (a-m.root-servers.net) che conoscono i TLD</li>
       <li><strong>TLD servers:</strong> sanno quali nameserver gestiscono ogni dominio di secondo livello</li>
@@ -66,13 +92,47 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}th{back
 
     <h3>Risoluzione iterativa (resolver → nameserver)</h3>
     <p>Il resolver esegue la risoluzione passo dopo passo interrogando i nameserver in sequenza:</p>
-    <div class="diagram">
-Client → Resolver: "Qual è l'IP di www.esempio.it?"
-Resolver → Root NS: "Chi gestisce .it?"  → risposta: "ns1.nic.it"
-Resolver → ns1.nic.it: "Chi gestisce esempio.it?"  → risposta: "ns.esempio.it"
-Resolver → ns.esempio.it: "Qual è l'IP di www?"  → risposta: "203.0.113.10"
-Resolver → Client: "203.0.113.10"
-    </div>
+    <svg viewBox="0 0 680 240" width="100%" style="max-width:680px;display:block;margin:8px auto;font-family:'Segoe UI',system-ui,sans-serif">
+      <defs>
+        <marker id="dns-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f8ef7"/></marker>
+        <marker id="dns-ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+      </defs>
+      <!-- 4 entities across the top -->
+      <!-- Client x=60, Resolver x=210, Root NS x=380, TLD NS x=530, Auth NS x=650? Too many for 680 -->
+      <!-- Use: Client x=50, Resolver x=190, Root NS x=350, Auth NS(TLD+Auth combined description) x=530 -->
+      <text x="50"  y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Client</text>
+      <text x="210" y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Resolver</text>
+      <text x="380" y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Root NS</text>
+      <text x="540" y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">TLD NS (.it)</text>
+      <text x="660" y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Auth NS</text>
+      <!-- Lifelines -->
+      <line x1="50"  y1="24" x2="50"  y2="230" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <line x1="210" y1="24" x2="210" y2="230" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <line x1="380" y1="24" x2="380" y2="230" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <line x1="540" y1="24" x2="540" y2="230" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <line x1="660" y1="24" x2="660" y2="230" stroke="#2e3250" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <!-- Step 1: Client → Resolver (query) -->
+      <line x1="50" y1="50" x2="200" y2="50" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#dns-ar)"/>
+      <text x="125" y="44" text-anchor="middle" fill="#4f8ef7" font-size="10">www.esempio.it?</text>
+      <!-- Step 2: Resolver → Root NS -->
+      <line x1="210" y1="80" x2="370" y2="80" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#dns-ar)"/>
+      <text x="290" y="74" text-anchor="middle" fill="#4f8ef7" font-size="10">chi gestisce .it?</text>
+      <line x1="380" y1="96" x2="220" y2="96" stroke="#34d399" stroke-width="1.5" marker-end="url(#dns-ag)"/>
+      <text x="300" y="110" text-anchor="middle" fill="#34d399" font-size="10">ns1.nic.it</text>
+      <!-- Step 3: Resolver → TLD NS -->
+      <line x1="210" y1="132" x2="530" y2="132" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#dns-ar)"/>
+      <text x="370" y="126" text-anchor="middle" fill="#4f8ef7" font-size="10">chi gestisce esempio.it?</text>
+      <line x1="540" y1="148" x2="220" y2="148" stroke="#34d399" stroke-width="1.5" marker-end="url(#dns-ag)"/>
+      <text x="380" y="162" text-anchor="middle" fill="#34d399" font-size="10">ns.esempio.it</text>
+      <!-- Step 4: Resolver → Auth NS -->
+      <line x1="210" y1="184" x2="650" y2="184" stroke="#4f8ef7" stroke-width="1.5" marker-end="url(#dns-ar)"/>
+      <text x="430" y="178" text-anchor="middle" fill="#4f8ef7" font-size="10">IP di www?</text>
+      <line x1="660" y1="200" x2="220" y2="200" stroke="#34d399" stroke-width="1.5" marker-end="url(#dns-ag)"/>
+      <text x="440" y="214" text-anchor="middle" fill="#34d399" font-size="10">203.0.113.10 (A record, TTL 300)</text>
+      <!-- Final reply to client -->
+      <line x1="210" y1="224" x2="60" y2="224" stroke="#34d399" stroke-width="2" marker-end="url(#dns-ag)"/>
+      <text x="130" y="218" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">203.0.113.10 ✓</text>
+    </svg>
     <div class="callout"><p><strong>Cache DNS:</strong> i resolver salvano le risposte per il periodo definito dal TTL (Time To Live) del record. Riduce il carico sui nameserver e accelera le risposte.</p></div>
   </div>
 
